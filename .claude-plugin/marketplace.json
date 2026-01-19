@@ -1,0 +1,15 @@
+{
+  "name": "claude-automate",
+  "owner": {
+    "name": "yhyuntak",
+    "url": "https://github.com/yhyuntak"
+  },
+  "plugins": [
+    {
+      "name": "claude-automate",
+      "source": "./",
+      "description": "Self-Evolving Development System - 메타 레이어 자동화",
+      "version": "1.0.0"
+    }
+  ]
+}
