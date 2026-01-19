@@ -1,0 +1,20 @@
+{
+  "name": "claude-automate",
+  "version": "1.0.0",
+  "description": "Self-Evolving Development System - 메타 레이어 자동화",
+  "author": {
+    "name": "yhyuntak",
+    "url": "https://github.com/yhyuntak"
+  },
+  "repository": "https://github.com/yhyuntak/claude-automate",
+  "license": "MIT",
+  "keywords": [
+    "meta-automation",
+    "pattern-checker",
+    "session-continuity",
+    "doc-sync",
+    "til",
+    "claude-code",
+    "self-evolving"
+  ]
+}
