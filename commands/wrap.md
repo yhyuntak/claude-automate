@@ -1,5 +1,5 @@
 ---
-description: 세션 마무리 - 패턴 체크, 사용 분석, 문서 동기화, TIL 추출, 컨텍스트 업데이트
+description: 세션 마무리 - 패턴 체크, 사용 분석, 문서 동기화, 세션 컨텍스트 저장
 ---
 
 [WRAP MODE ACTIVATED]
@@ -12,7 +12,7 @@ $ARGUMENTS
 1. **패턴 체크**: 코드가 프로젝트 규칙을 따르는지 확인
 2. **사용 분석**: 반복 패턴 감지 및 자동화 제안 (최근 10세션 중 3회 이상만)
 3. **문서 동기화**: 코드-문서 불일치 감지
-4. **컨텍스트 업데이트**: 다음 세션을 위한 context.md 갱신
+4. **세션 저장**: `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md` 파일 생성
 
 **NOTE**: 평범한 세션에서는 "특별한 거 없음"을 반환할 수 있습니다.
 
@@ -40,12 +40,10 @@ After Layer 1 completes, launch analysis agents:
 parallel {
     pattern_analysis = Task(wrap:pattern-checker, {diff_data, rules_data})
     usage_analysis = Task(wrap:usage-analyzer, {session_data, session_history})  # Uses multi-session
-    context_update = Task(wrap:context-builder, {session_data})
+    context_file = Task(wrap:context-builder, {session_data, session_id})  # Creates dated file
     doc_sync = Task(wrap:doc-sync-checker, {diff_data, doc_catalog})
 }
 ```
-
-**NOTE**: til-extractor has been removed. TIL functionality is deprecated.
 
 ### Layer 3: Integration
 
@@ -55,22 +53,51 @@ Combine all results:
 final_summary = Task(wrap:result-integrator, {
     pattern_analysis,
     usage_analysis,
-    context_update,
+    context_file,
     doc_sync
 })
 
 # NOTE: result-integrator may return "특별한 거 없음" if no significant findings
 ```
 
-### Layer 4: User Interaction
-
-Present choices and execute approved actions:
+### Layer 4: Save Context & User Interaction
 
 ```
+# 1. Save context file
+mkdir -p .claude/context/YYYY-MM/
+write(context_file.path, context_file.content)
+
+# 2. Present choices
 user_choices = present_choices(final_summary)
 for choice in user_choices:
     if choice.approved:
         execute(choice.action)
+```
+
+## Context File Structure
+
+`/wrap` 실행 시 세션 컨텍스트가 자동 저장됩니다:
+
+```
+.claude/context/
+├── 2026-01/
+│   ├── 2026-01-20-abc123.md   ← 세션 1
+│   ├── 2026-01-20-def456.md   ← 같은 날 다른 세션
+│   └── 2026-01-21-xyz789.md
+└── 2026-02/
+    └── ...
+```
+
+**세션 파일 포맷:**
+```markdown
+# Session: YYYY-MM-DD HH:mm
+
+## 맥락
+## 작업 요약
+## 문제 → 해결
+## 결정사항
+## 미완료/TODO
+## 다음 세션 제안
 ```
 
 ## Quick Mode
@@ -80,7 +107,7 @@ For faster execution, use specific flags:
 ```
 /wrap --pattern    # Pattern check only
 /wrap --usage      # Usage analysis only
-/wrap --context    # Context update only
+/wrap --context    # Context save only
 /wrap --docs       # Doc sync only
 /wrap --all        # Full analysis (default)
 ```
@@ -96,6 +123,8 @@ After analysis, you will see one of:
 이번 세션은 특별히 기록하거나 자동화할 내용이 없습니다.
 평범한 작업 세션이었습니다.
 
+✅ 세션 컨텍스트 저장됨: .claude/context/2026-01/2026-01-20-abc123.md
+
 ---
 *다음 세션에서 패턴이 축적되면 다시 분석합니다.*
 ```
@@ -109,12 +138,29 @@ After analysis, you will see one of:
 - Usage: [count] automation opportunities (only if 3+ in last 10 sessions)
 - Docs: [count] sync issues
 
+### Session Saved
+✅ .claude/context/2026-01/2026-01-20-abc123.md
+
 ### Actions
 1. [ ] [Action 1]
 2. [ ] [Action 2]
 ...
 
 Enter numbers to approve (e.g., "1,3") or "all" / "none"
+```
+
+## Session Workflow
+
+```
+┌─────────────────────────────────────────┐
+│  /session-start                         │  ← 이전 세션 컨텍스트 로드
+│     ↓                                   │
+│  [작업 수행]                             │
+│     ↓                                   │
+│  /wrap                                  │  ← 세션 저장 + 분석
+│     ↓                                   │
+│  .claude/context/YYYY-MM/file.md 저장   │
+└─────────────────────────────────────────┘
 ```
 
 ## Integration with Sisyphus
@@ -124,9 +170,9 @@ Enter numbers to approve (e.g., "1,3") or "all" / "none"
 - **/wrap**: 메타 자동화 (작업 방식을 개선)
 
 사용 순서:
-1. 작업 시작: sisyphus 모드로 실행
-2. 작업 완료: `/wrap`으로 세션 마무리
-3. 다음 세션: context.md로 컨텍스트 복원
+1. 작업 시작: `/session-start`로 컨텍스트 로드
+2. 작업 수행: sisyphus 모드로 실행
+3. 작업 완료: `/wrap`으로 세션 마무리 및 저장
 
 ## The Boulder Keeps Rolling
 
@@ -134,6 +180,6 @@ Enter numbers to approve (e.g., "1,3") or "all" / "none"
 매 세션마다 실행하면, 시스템이 점점 더 똑똑해집니다:
 - 반복 패턴 (10세션 중 3회+) → 자동화 스킬
 - 새 패턴 → 규칙 자동 추가
-- 컨텍스트 → 연속성 유지
+- 세션 히스토리 → 연속성 유지
 
 **평범한 세션에서는 "특별한 거 없음"이 정상입니다.**
