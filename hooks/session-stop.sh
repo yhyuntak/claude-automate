@@ -1,16 +1,22 @@
 #!/bin/bash
 
-# /wrap Session Stop Hook
+# claude-automate Session Stop Hook
 # Reminds user to run /wrap before ending session
+# Output format: JSON { "continue": true, "message": "..." }
 
-echo ""
-echo "🔔 Session ending reminder:"
-echo ""
-echo "Consider running /wrap to:"
-echo "  • Check code patterns"
-echo "  • Analyze usage patterns"
-echo "  • Sync documentation"
-echo "  • Extract TILs"
-echo "  • Update context for next session"
-echo ""
-echo "Type '/wrap' to run, or continue to exit."
+MESSAGE="<system-reminder>
+
+[SESSION END REMINDER]
+
+Consider running /wrap to:
+• Check code patterns
+• Analyze usage patterns
+• Sync documentation
+• Update context for next session
+
+Type '/wrap' to run, or continue to exit.
+
+</system-reminder>"
+
+ESCAPED=$(echo "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+echo "{\"continue\": true, \"message\": $ESCAPED}"

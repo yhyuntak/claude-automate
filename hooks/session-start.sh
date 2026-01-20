@@ -1,19 +1,30 @@
 #!/bin/bash
 
-# /wrap Session Start Hook
+# claude-automate Session Start Hook
 # Loads context.md and displays session continuity information
+# Output format: JSON { "continue": true, "message": "..." }
 
 CONTEXT_FILE=".claude/context.md"
 
 if [ -f "$CONTEXT_FILE" ]; then
-    echo "📋 Context Loaded from previous session"
-    echo ""
-    echo "---"
-    cat "$CONTEXT_FILE"
-    echo "---"
-    echo ""
-    echo "💡 Run /wrap at the end of this session to update context"
+    CONTENT=$(cat "$CONTEXT_FILE" | sed 's/"/\\"/g' | tr '\n' ' ')
+    MESSAGE="<session-restore>
+
+[CONTEXT LOADED]
+
+Previous session context found:
+
+---
+$(cat "$CONTEXT_FILE")
+---
+
+💡 Run /wrap at the end of this session to update context
+
+</session-restore>"
+
+    # Escape for JSON
+    ESCAPED=$(echo "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+    echo "{\"continue\": true, \"message\": $ESCAPED}"
 else
-    echo "📋 No previous context found"
-    echo "💡 Run /wrap at the end of this session to create context.md"
+    echo '{"continue": true}'
 fi
