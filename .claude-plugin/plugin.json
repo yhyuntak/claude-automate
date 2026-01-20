@@ -1,8 +1,7 @@
 {
   "name": "claude-automate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Self-Evolving Development System - 메타 레이어 자동화",
-  "hooks": "../hooks.json",
   "author": {
     "name": "yhyuntak",
     "url": "https://github.com/yhyuntak"
