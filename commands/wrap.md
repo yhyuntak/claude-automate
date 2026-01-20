@@ -6,6 +6,28 @@ description: 세션 마무리 - 패턴 체크, 사용 분석, 문서 동기화, 
 
 $ARGUMENTS
 
+---
+
+## ⚠️ CRITICAL: MANDATORY AGENT DELEGATION
+
+**YOU MUST USE THE TASK TOOL TO INVOKE SUB-AGENTS.**
+
+DO NOT:
+- ❌ Directly read files and summarize yourself
+- ❌ Run git commands and analyze yourself
+- ❌ Write context files without using context-builder agent
+- ❌ Skip any layer of the execution protocol
+
+YOU MUST:
+- ✅ Use `Task(subagent_type="claude-automate:agent-name", prompt="...")` for EVERY step
+- ✅ Follow the Layer 1 → 2 → 3 → 4 protocol exactly
+- ✅ Launch parallel agents simultaneously where indicated
+- ✅ Wait for agent results before proceeding to next layer
+
+**If you do the work directly instead of delegating to agents, you are violating this protocol.**
+
+---
+
 ## What is /wrap?
 
 세션을 마무리하며 메타 레이어 자동화를 실행합니다:
@@ -20,45 +42,42 @@ $ARGUMENTS
 
 ### Layer 1: Data Collection (Parallel)
 
-Launch these agents SIMULTANEOUSLY:
+Launch these agents SIMULTANEOUSLY using Task tool:
 
 ```
-parallel {
-    diff_data = Task(wrap:diff-reader, "Collect git diff data")
-    session_data = Task(wrap:session-reader, "Parse current session logs")
-    session_history = Task(wrap:session-reader, "Parse session history --history")  # Multi-session
-    rules_data = Task(wrap:rules-reader, "Collect project rules")
-    doc_catalog = Task(wrap:doc-scanner, "Scan documentation files")
-}
+// ACTUALLY INVOKE THESE - DO NOT SKIP
+Task(subagent_type="claude-automate:diff-reader", prompt="Collect git diff data for this session")
+Task(subagent_type="claude-automate:session-reader", prompt="Parse current session logs")
+Task(subagent_type="claude-automate:rules-reader", prompt="Collect project rules from .claude/rules/")
+Task(subagent_type="claude-automate:doc-scanner", prompt="Scan documentation files in this project")
 ```
+
+**Send all 4 Task calls in a SINGLE message for parallel execution.**
 
 ### Layer 2: Analysis (Parallel)
 
-After Layer 1 completes, launch analysis agents:
+After Layer 1 completes, launch analysis agents with the collected data:
 
 ```
-parallel {
-    pattern_analysis = Task(wrap:pattern-checker, {diff_data, rules_data})
-    usage_analysis = Task(wrap:usage-analyzer, {session_data, session_history})  # Uses multi-session
-    context_file = Task(wrap:context-builder, {session_data, session_id})  # Creates dated file
-    doc_sync = Task(wrap:doc-sync-checker, {diff_data, doc_catalog})
-}
+// ACTUALLY INVOKE THESE WITH LAYER 1 RESULTS
+Task(subagent_type="claude-automate:pattern-checker", prompt="Analyze patterns. Diff: {diff_data}, Rules: {rules_data}")
+Task(subagent_type="claude-automate:usage-analyzer", prompt="Analyze usage patterns. Session: {session_data}")
+Task(subagent_type="claude-automate:context-builder", prompt="Create session context file. Session: {session_data}")
+Task(subagent_type="claude-automate:doc-sync-checker", prompt="Check doc sync. Diff: {diff_data}, Docs: {doc_catalog}")
 ```
+
+**Send all 4 Task calls in a SINGLE message for parallel execution.**
 
 ### Layer 3: Integration
 
-Combine all results:
+Combine all Layer 2 results:
 
 ```
-final_summary = Task(wrap:result-integrator, {
-    pattern_analysis,
-    usage_analysis,
-    context_file,
-    doc_sync
-})
-
-# NOTE: result-integrator may return "특별한 거 없음" if no significant findings
+// ACTUALLY INVOKE THIS WITH LAYER 2 RESULTS
+Task(subagent_type="claude-automate:result-integrator", prompt="Integrate results. Pattern: {pattern_analysis}, Usage: {usage_analysis}, Context: {context_file}, DocSync: {doc_sync}")
 ```
+
+**NOTE**: result-integrator may return "특별한 거 없음" if no significant findings.
 
 ### Layer 4: Save Context & User Interaction
 
