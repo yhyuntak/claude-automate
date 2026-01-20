@@ -1,14 +1,27 @@
 {
-  "hooks": [
-    {
-      "event": "session_start",
-      "script": "hooks/session-start.sh",
-      "description": "Load context.md and display session continuity info"
-    },
-    {
-      "event": "session_stop",
-      "script": "hooks/session-stop.sh",
-      "description": "Prompt user to run /wrap before ending session"
-    }
-  ]
+  "description": "claude-automate session hooks",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-stop.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
