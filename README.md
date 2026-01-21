@@ -39,22 +39,20 @@ claude-automate/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── commands/
-│   └── wrap.md           # /wrap 커맨드
+│   ├── wrap.md           # /wrap 커맨드 (기존)
+│   ├── wrap-v2.md        # /wrap-v2 커맨드 (3-에이전트 구조)
+│   ├── session-start.md  # 세션 시작 시 컨텍스트 로드
+│   └── feedback.md       # /feedback 피드백 저장
 ├── agents/
-│   ├── diff-reader.md    # Layer 1: 데이터 수집
-│   ├── session-reader.md
-│   ├── rules-reader.md
-│   ├── doc-scanner.md
-│   ├── pattern-checker.md  # Layer 2: 분석
-│   ├── usage-analyzer.md
-│   ├── context-builder.md
-│   ├── doc-sync-checker.md
-│   ├── til-extractor.md
-│   └── result-integrator.md  # Layer 3: 통합
-├── hooks.json
-└── hooks/
-    ├── session-start.sh
-    └── session-stop.sh
+│   ├── wrap-reader.md    # Phase 1: 데이터 수집 (haiku)
+│   ├── wrap-analyzer.md  # Phase 2: 분석 (sonnet)
+│   ├── wrap-reporter.md  # Phase 3: 리포팅 (opus)
+│   └── ...               # 기타 에이전트
+├── hooks/
+│   ├── hooks.json        # 훅 설정
+│   ├── session-stop.sh   # 세션 종료 리마인더
+│   └── feedback-hint.sh  # 피드백 키워드 감지
+└── .gitignore
 ```
 
 ## 모델 티어링

@@ -18,5 +18,5 @@ Type '/wrap' to run, or continue to exit.
 
 </system-reminder>"
 
-ESCAPED=$(echo "$MESSAGE" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
 echo "{\"continue\": true, \"message\": $ESCAPED}"
