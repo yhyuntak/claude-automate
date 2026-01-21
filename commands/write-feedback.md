@@ -1,5 +1,5 @@
 ---
-description: 플러그인 피드백 저장 (일반화)
+description: 피드백 저장 (일반화)
 ---
 
 [FEEDBACK MODE]

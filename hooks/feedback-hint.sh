@@ -17,7 +17,7 @@ elif echo "$PROMPT" | grep -qiE "(피드백|feedback)"; then
 
 대화 맥락을 파악하여:
 1. 피드백으로 저장할 내용이 있는지 판단
-2. 있다면 사용자에게 '/feedback' 사용을 안내하거나
+2. 있다면 사용자에게 '/write-feedback' 사용을 안내하거나
 3. 사용자 동의 후 직접 ~/.claude/feedback/에 저장
 
 저장 경로: ~/.claude/feedback/{YYYY-MM-DD}.jsonl
