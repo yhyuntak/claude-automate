@@ -1,6 +1,9 @@
 # Sisyphus state files
 .sisyphus/ultrawork-state.json
 
+# Local Claude rules (not part of plugin)
+.claude/rules/
+
 # OS files
 .DS_Store
 
