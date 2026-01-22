@@ -95,6 +95,7 @@ type에 맞게 유연하게 구성:
   "project": "{현재 프로젝트명}",
   "user_feedback": "$ARGUMENTS",
   "type": "wrap|idea|improvement|bug|general",
+  "status": "open",
   "context": {...},
   "tags": ["tag1", "tag2"]
 }
