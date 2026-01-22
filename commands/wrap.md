@@ -1,140 +1,189 @@
 ---
-description: 세션 마무리 - 패턴 체크, 사용 분석, 문서 동기화, 세션 컨텍스트 저장
+description: 세션 마무리 - 규칙 체크, 문서 동기화, 세션 컨텍스트 저장
 ---
 
-[WRAP MODE ACTIVATED]
+[WRAP V3 MODE ACTIVATED]
 
 $ARGUMENTS
 
 ---
 
-## ⚠️ MANDATORY AGENT DELEGATION
+## WRAP V3: Goal-first 구조
 
-You are now in **WRAP MODE**. This mode requires MANDATORY delegation to specialist agents.
+메인이 판단 → 필요한 에이전트만 스코프 지정해서 호출 → 결과 통합 → 세션 저장
 
-**CRITICAL RULES:**
-- ❌ NEVER do analysis yourself - ALWAYS delegate to agents
-- ❌ NEVER write context files directly - use `context-builder`
-- ❌ NEVER run git commands directly - use `diff-reader`
-- ✅ MUST use Task tool to invoke agents
-- ✅ MUST launch parallel agents in a SINGLE message
-
-**If you do the work directly instead of delegating, you are VIOLATING this protocol.**
+**핵심 원칙:**
+- 메인은 `git diff --stat`만 보고 판단
+- 상세 수집/분석은 에이전트가 직접
+- 메인 컨텍스트 최소화
 
 ---
 
-## DELEGATE TO SPECIALISTS
+## STEP 1: Diff 확인 및 판단
 
-Route tasks to these agents IMMEDIATELY:
-
-| Agent | Purpose | When to Use |
-|-------|---------|-------------|
-| `diff-reader` | Git diff 데이터 수집 | 코드 변경사항 분석 시 |
-| `session-reader` | 세션 로그 파싱 | 현재 세션 내용 추출 시 |
-| `rules-reader` | 프로젝트 규칙 수집 | 패턴 체크 시 |
-| `doc-scanner` | 문서 파일 스캔 | 문서 동기화 체크 시 |
-| `pattern-checker` | 코드 패턴 분석 | 규칙 준수 확인 시 |
-| `usage-analyzer` | 사용 패턴 분석 | 자동화 기회 탐지 시 |
-| `context-builder` | 세션 컨텍스트 생성 | 세션 파일 저장 시 |
-| `doc-sync-checker` | 문서-코드 동기화 | 불일치 감지 시 |
-| `result-integrator` | 결과 통합 | 최종 요약 생성 시 |
-
----
-
-## EXECUTION FLOW
-
-### Phase 1: Data Collection (PARALLEL)
-
-Launch ALL of these agents in a **SINGLE message**:
-- `diff-reader` - git diff 수집
-- `session-reader` - 세션 로그 파싱
-- `rules-reader` - 프로젝트 규칙 수집
-- `doc-scanner` - 문서 파일 스캔
-
-### Phase 2: Analysis (PARALLEL)
-
-After Phase 1 results return, launch ALL of these:
-- `pattern-checker` - 패턴 분석 (diff + rules 전달)
-- `usage-analyzer` - 사용 분석 (session data 전달)
-- `context-builder` - 컨텍스트 생성 (session data 전달)
-- `doc-sync-checker` - 문서 동기화 (diff + docs 전달)
-
-### Phase 3: Integration
-
-Launch `result-integrator` with all Phase 2 results.
-
-### Phase 4: Save & Present
-
-1. Save context file from `context-builder` output
-2. Present findings to user
-3. Offer action choices
-
----
-
-## Context File Structure
-
-`/wrap` 실행 시 세션 컨텍스트가 저장됩니다:
-
-```
-.claude/context/
-├── 2026-01/
-│   ├── 2026-01-20-abc123.md
-│   └── 2026-01-20-def456.md
-└── 2026-02/
+```bash
+git diff --stat
+git diff --cached --stat
 ```
 
-**세션 파일 포맷:**
+파일 목록만 보고 판단:
+
+| 변경 유형 | pattern-checker | doc-sync-checker |
+|----------|-----------------|------------------|
+| 코드 파일 (.ts, .py 등) | ✅ | △ (API면) |
+| 문서 파일 (.md) | △ (규칙 관련이면) | ❌ |
+| 설정 파일 | △ | ❌ |
+| 새 기능 추가 | ✅ | ✅ |
+
+---
+
+## STEP 2: 스코프 결정
+
+변경 파일 기반으로 스코프 힌트 생성:
+
+```
+예시:
+- commands/feedback.md 변경 → scope: "commands 관련 규칙"
+- src/api/user.ts 변경 → scope: "backend, api 규칙" + "API 문서"
+- frontend/components/* 변경 → scope: "frontend 규칙"
+```
+
+---
+
+## STEP 3: 에이전트 호출 (필요한 것만, 병렬)
+
+### pattern-checker 호출 (규칙 체크 필요시)
+
+```
+Task(
+  subagent_type="claude-automate:pattern-checker",
+  prompt="""
+## 변경 파일
+{파일 목록}
+
+## 스코프
+{카테고리} 관련 규칙만 체크
+
+## 지시사항
+1. 위 파일들의 상세 diff 확인
+2. .claude/rules/에서 관련 규칙만 읽기
+3. 위반 여부 체크
+4. 결과 반환
+"""
+)
+```
+
+### doc-sync-checker 호출 (문서 동기화 필요시)
+
+```
+Task(
+  subagent_type="claude-automate:doc-sync-checker",
+  prompt="""
+## 변경 파일
+{파일 목록}
+
+## 스코프
+{문서 유형} 관련 문서만 확인
+
+## 지시사항
+1. 위 파일들의 변경 내용 확인
+2. 관련 문서 찾기
+3. 불일치 여부 체크
+4. 결과 반환
+"""
+)
+```
+
+---
+
+## STEP 4: 결과 통합
+
+에이전트 결과를 받아서 통합:
+
 ```markdown
-# Session: YYYY-MM-DD HH:mm
-
-## 맥락
-## 작업 요약
-## 문제 → 해결
-## 결정사항
-## 미완료/TODO
-## 다음 세션 제안
-```
-
----
-
-## Output Format
-
-### When No Significant Findings:
-```
-## Session Analysis Complete
-
-이번 세션은 특별히 기록하거나 자동화할 내용이 없습니다.
-
-✅ 세션 컨텍스트 저장됨: .claude/context/2026-01/2026-01-20-abc123.md
-```
-
-### When Findings Exist:
-```
 ## /wrap Summary
 
-### Findings
-- Patterns: [count] issues
-- Usage: [count] automation opportunities
-- Docs: [count] sync issues
+### 규칙 체크
+- [위반 사항 또는 "이상 없음"]
+
+### 문서 동기화
+- [불일치 사항 또는 "이상 없음"]
+
+### 권장 액션
+1. [ ] [액션 1]
+2. [ ] [액션 2]
+```
+
+---
+
+## STEP 5: 세션 컨텍스트 저장 (항상 마지막에)
+
+```
+Task(
+  subagent_type="claude-automate:context-builder",
+  prompt="""
+## 세션 정보
+- 날짜: {오늘 날짜}
+- 주요 작업: {이번 세션에서 한 일 요약}
+- 변경 파일: {파일 목록}
+
+## 분석 결과
+{pattern-checker, doc-sync-checker 결과 요약}
+
+## 지시사항
+세션 컨텍스트 파일 생성해줘
+"""
+)
+```
+
+컨텍스트 파일 경로: `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md`
+
+---
+
+## STEP 6: 최종 출력
+
+```markdown
+## /wrap Complete
+
+### Summary
+[간단 요약]
+
+### Actions (선택)
+1. [ ] [액션]
 
 ### Session Saved
-✅ .claude/context/2026-01/2026-01-20-abc123.md
+✅ .claude/context/2026-01/2026-01-22-abc123.md
+```
 
-### Actions
-1. [ ] [Action 1]
-2. [ ] [Action 2]
+---
 
-Enter numbers to approve (e.g., "1,3") or "all" / "none"
+## 판단 가이드
+
+### 단순 케이스 (에이전트 최소 호출)
+```
+문서 1개만 수정 → context-builder만
+설정 파일만 수정 → context-builder만
+```
+
+### 일반 케이스
+```
+코드 수정 → pattern-checker + context-builder
+API 수정 → pattern-checker + doc-sync-checker + context-builder
+```
+
+### 복잡 케이스 (에스컬레이션)
+```
+규칙 충돌 → pattern-checker-high로 에스컬레이션
+문서 구조 변경 필요 → doc-sync-checker-high로 에스컬레이션
 ```
 
 ---
 
 ## THE WRAP PROMISE
 
-Before completing, verify:
-- [ ] ALL agents were invoked (not done directly)
-- [ ] Context file was saved via `context-builder`
-- [ ] Results were integrated via `result-integrator`
-- [ ] User was presented with findings
-
-**If you did ANY work directly instead of delegating, START OVER.**
+완료 전 확인:
+- [ ] diff --stat으로 변경 파일 확인함
+- [ ] 필요한 에이전트만 호출함 (불필요한 에이전트 호출 X)
+- [ ] 스코프를 명확히 지정함
+- [ ] context-builder로 세션 저장함
+- [ ] 사용자에게 결과 보여줌
