@@ -1,79 +1,79 @@
 ---
 name: feedback
-description: 사용자가 피드백, 개선점, 버그, 아이디어를 남기고 싶어할 때 사용. "피드백 남기고 싶어", "이거 기록해둬", "나중에 개선할 내용", "버그 발견" 등의 의도 감지 시 자동 활성화
+description: User feedback system for recording improvements, bugs, and ideas. Auto-activates on keywords like "feedback", "save this", "improvement", "bug found", etc.
 user-invocable: true
-argument-hint: "[check|옵션]"
+argument-hint: "[check|options]"
 ---
 
 # Feedback System
 
 $ARGUMENTS
 
-사용자의 피드백 의도를 감지하면 이 skill이 활성화됩니다.
-`/feedback` 으로 명시적 호출도 가능합니다.
+This skill activates automatically when it detects user feedback intent.
+Explicit invocation via `/feedback` is also supported.
 
 ---
 
-## 의도 판단
+## Intent Detection
 
-| 사용자 의도 | 액션 |
-|-------------|------|
-| 피드백 저장 ("남겨둬", "기록해", "피드백 추가") | 대화 맥락에서 내용 파악 → 저장 |
-| 피드백 확인 ("뭐 있어?", "목록", "체크") | 피드백 목록 테이블로 표시 |
-| 피드백 완료 ("done 처리해", "완료됐어") | 대화 맥락에서 해당 피드백 찾아 status 변경 |
-
----
-
-## 피드백 저장
-
-1. 대화 맥락에서 피드백 내용 파악
-2. schema.md 참고하여 JSON 구성
-3. 파일에 저장
-
-**저장 경로**: `~/.claude/feedback/{YYYY-MM-DD}.jsonl`
+| User Intent | Action |
+|-------------|--------|
+| Save feedback ("save this", "record it", "add feedback") | Extract content from context → save |
+| View feedback ("what do I have?", "list", "check") | Display feedback list as table |
+| Mark feedback done ("mark done", "completed") | Find feedback in context → update status |
 
 ---
 
-## 피드백 확인
+## Save Feedback
 
-피드백 목록을 테이블로 표시:
+1. Extract feedback content from conversation context
+2. Construct JSON using schema.md
+3. Save to file
 
-| # | 상태 | 날짜 | 프로젝트 | 타입 | 내용 (요약) | 태그 |
-|---|------|------|----------|------|-------------|------|
-
-**필터 옵션** (자연어 또는 인자로):
-- `open` / `done` - 상태별
-- `today` - 오늘만
-- `bug` / `idea` / `improvement` - 타입별
+**Save path**: `~/.claude/feedback/{YYYY-MM-DD}.jsonl`
 
 ---
 
-## 피드백 완료 처리
+## View Feedback
 
-"방금 작업한 피드백 done 처리해" 또는 "백로그 피드백 완료됐어"
+Display feedback list as table:
 
-1. 대화 맥락에서 어떤 피드백인지 파악
-2. `~/.claude/feedback/` 에서 해당 피드백 찾기
-3. `"status": "open"` → `"status": "done"` 변경
-4. 파일 저장
+| # | Status | Date | Project | Type | Content (Summary) | Tags |
+|---|--------|------|---------|------|-------------------|------|
 
----
-
-## 사용 예시
-
-자연어:
-- "이거 피드백으로 남겨둬"
-- "피드백 뭐 있어?"
-- "방금 한 거 done 처리해"
-
-명시적:
-- `/feedback` - 피드백 목록 확인
-- `/feedback check open` - open 상태만
-- `/feedback today` - 오늘 피드백만
+**Filter options** (natural language or arguments):
+- `open` / `done` - by status
+- `today` - today only
+- `bug` / `idea` / `improvement` - by type
 
 ---
 
-## 참고 파일
+## Mark Feedback Done
 
-- 스키마: schema.md
-- 예시: examples.md
+"Mark the feedback I just worked on as done" or "Complete the backlog feedback"
+
+1. Identify which feedback from conversation context
+2. Find feedback in `~/.claude/feedback/`
+3. Change `"status": "open"` → `"status": "done"`
+4. Save file
+
+---
+
+## Usage Examples
+
+Natural language:
+- "Save this as feedback"
+- "What feedback do I have?"
+- "Mark this one done"
+
+Explicit commands:
+- `/feedback` - view feedback list
+- `/feedback check open` - open items only
+- `/feedback today` - today's feedback only
+
+---
+
+## Reference Files
+
+- Schema: schema.md
+- Examples: examples.md

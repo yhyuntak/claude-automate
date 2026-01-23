@@ -1,68 +1,239 @@
 # claude-automate
 
-> Self-Evolving Development System - Claude Code 메타 레이어 자동화 플러그인
+> Self-Evolving Development System - Automation Plugin for Claude Code Meta Layer
 
-## 설치
+## Overview
+
+**claude-automate** is a comprehensive automation plugin for Claude Code that streamlines your development workflow. It automatically enforces project patterns, maintains session continuity, synchronizes documentation with code changes, and extracts learning insights from your development sessions.
+
+## Features
+
+### 1. Project Pattern Checker
+Automatically validates that code changes follow your project's rules and conventions.
+
+### 2. Usage Pattern Analysis
+Detects repeated prompt patterns in your workflow and suggests automatic skill generation to streamline repetitive tasks.
+
+### 3. Session Continuity
+Automatically manages `context.md` files to maintain context across development sessions, so you can pick up exactly where you left off.
+
+### 4. Automatic Documentation Sync
+Monitors code changes and suggests documentation updates to keep your docs in sync with your implementation.
+
+### 5. Learning Extraction (TIL)
+Automatically extracts and records insights and lessons learned from each development session.
+
+## Installation
 
 ```bash
 /plugin marketplace add yhyuntak/claude-automate
 /plugin install claude-automate@claude-automate
 ```
 
-## 기능
+## Usage
 
-### 1. 프로젝트 패턴 체커
-코드가 프로젝트 규칙을 따르는지 자동 검사
-
-### 2. 사용 패턴 분석
-반복되는 프롬프트 패턴 감지 → 스킬 자동 생성 제안
-
-### 3. 세션 연속성
-`context.md` 자동 관리로 세션 간 컨텍스트 유지
-
-### 4. 문서 자동 동기화
-코드 변경 시 관련 문서 자동 업데이트 제안
-
-### 5. TIL 추출
-세션에서 학습한 내용을 자동 추출하여 기록
-
-## 사용법
+The main command is `/wrap`, which concludes your development session:
 
 ```bash
-/claude-automate:wrap
+/wrap
 ```
 
-## 구조
+This command:
+- Verifies code follows project patterns
+- Checks if documentation needs updates
+- Saves your session context automatically
+
+Other useful commands:
+- `/start-work` - Begin a work session with context loading and worktree setup
+- `/session-start` - Load previous session summary
+- `/backlog` - View and manage your project backlog
+- `/check-feedback` - View feedback from previous sessions
+- `/write-feedback` - Save notes and feedback for future sessions
+
+## Project Structure
 
 ```
 claude-automate/
 ├── .claude-plugin/
-│   └── plugin.json
+│   ├── plugin.json              # Plugin metadata and version
+│   └── marketplace.json         # Marketplace configuration
+│
 ├── commands/
-│   ├── wrap.md           # /wrap 커맨드 (기존)
-│   ├── wrap-v2.md        # /wrap-v2 커맨드 (3-에이전트 구조)
-│   ├── session-start.md  # 세션 시작 시 컨텍스트 로드
-│   └── feedback.md       # /feedback 피드백 저장
+│   ├── wrap.md                  # /wrap command - session wrap-up with goal-first architecture
+│   ├── start-work.md            # /start-work command - integrated workflow for session setup
+│   ├── session-start.md         # Session context loading
+│   └── feedback.md              # Feedback management commands
+│
 ├── agents/
-│   ├── wrap-reader.md    # Phase 1: 데이터 수집 (haiku)
-│   ├── wrap-analyzer.md  # Phase 2: 분석 (sonnet)
-│   ├── wrap-reporter.md  # Phase 3: 리포팅 (opus)
-│   └── ...               # 기타 에이전트
-├── hooks/
-│   ├── hooks.json        # 훅 설정
-│   ├── session-stop.sh   # 세션 종료 리마인더
-│   └── feedback-hint.sh  # 피드백 키워드 감지
+│   ├── pattern-checker.md       # Validates code against project rules
+│   ├── pattern-checker-high.md  # Complex rule conflict resolution (Opus)
+│   ├── doc-sync-checker.md      # Monitors documentation consistency
+│   ├── doc-sync-checker-high.md # Complex doc structure changes (Opus)
+│   └── context-builder.md       # Creates session context files
+│
+├── skills/
+│   ├── explain-skills/          # Skill system documentation and references
+│   ├── feedback/                # Feedback system with schema and examples
+│   ├── backlog/                 # Project backlog management
+│   ├── interaction-rules/       # System interaction guidelines
+│   └── [other skills]/
+│
+├── .claude/
+│   ├── rules/                   # Project-specific rules (versioning, interaction)
+│   ├── context/                 # Session context files (auto-generated)
+│   └── CLAUDE.md                # Main Claude configuration
+│
 └── .gitignore
 ```
 
-## 모델 티어링
+## How It Works: WRAP Architecture
 
-| 모델 | 용도 |
-|------|------|
-| Haiku | 데이터 수집, 단순 작업 |
-| Sonnet | 분석, 판단 |
-| Opus | 복잡한 충돌/전략 |
+The `/wrap` command uses a **Goal-first** (WRAP V3) architecture optimized for efficiency:
 
-## 라이선스
+### Step 1: Analyze Changes
+Review only file changes with `git diff --stat` to understand what was modified.
+
+### Step 2: Route to Agents
+Based on change types, dispatch to specialized agents:
+
+| File Type | Pattern Checker | Doc Sync Checker |
+|-----------|-----------------|------------------|
+| Code files (.ts, .py, etc.) | ✅ Check | △ If API |
+| Documentation (.md) | △ If rules-related | ❌ Skip |
+| Configuration files | △ Check | ❌ Skip |
+| New features | ✅ Check | ✅ Check |
+
+### Step 3: Parallel Execution
+Agents collect and analyze in parallel - you wait for the slowest, not the sum.
+
+### Step 4: Integrated Results
+Results are combined into a single summary with recommended actions.
+
+### Step 5: Session Saved
+Context is automatically saved to `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md` for future reference.
+
+## Model Tiering Strategy
+
+The plugin optimizes cost and latency by using the right model for each task:
+
+| Model | Primary Use |
+|-------|------------|
+| **Haiku** | Data collection, simple pattern matching |
+| **Sonnet** | Analysis, decision-making, standard agent work |
+| **Opus** | Complex conflict resolution, strategic decisions |
+
+## Key Commands
+
+### `/start-work`
+Unified workflow for starting your development session:
+1. Shows previous session summary
+2. Displays project backlog
+3. Sets up optional git worktree for branch isolation
+4. Prepares your working environment
+
+Options:
+- `/start-work --skip-session` - Skip previous session summary
+- `/start-work --no-worktree` - Skip worktree setup
+
+### `/wrap`
+Concludes your development session with comprehensive checks:
+1. Validates code against project rules
+2. Checks documentation consistency
+3. Saves session context
+4. Provides recommended next actions
+
+### `/check-feedback` & `/write-feedback`
+Session feedback system for recording learnings and notes between sessions.
+
+### `/backlog`
+View and manage project tasks organized by phase.
+
+## Session Context System
+
+Each development session is automatically tracked in `.claude/context/`:
+
+```
+.claude/context/
+├── 2026-01/
+│   ├── 2026-01-20-a8013.md      # Session from Jan 20
+│   ├── 2026-01-22-f7bf0.md      # Session from Jan 22
+│   └── 2026-01-23-session.md    # Current session
+```
+
+Session files contain:
+- **Date and session ID** for unique identification
+- **Summary of work done** during the session
+- **Files changed** in the session
+- **Analysis results** from pattern and doc sync checks
+- **Recommended actions** for next session
+
+This context is automatically loaded at the start of your next session with `/start-work`.
+
+## Configuration
+
+### Project Rules
+
+Create `.claude/rules/` files to define your project's conventions:
+
+- `versioning.md` - Semantic versioning strategy
+- `interaction.md` - Communication and interaction patterns
+- Add custom rules as needed
+
+### Custom Skills
+
+Skills are defined in the `skills/` directory and extend the plugin's functionality. Each skill includes:
+- `SKILL.md` - Skill description and usage
+- `schema.md` - Input/output specifications
+- `templates.md` - Usage examples
+
+### Hooks Configuration
+
+Configure automation hooks in `.claude/hooks/hooks.json` to trigger actions at specific points in your workflow.
+
+## Development Workflow Example
+
+Here's a typical development session:
+
+```bash
+# 1. Start your session
+/start-work
+
+# 2. Choose your task from backlog or start freely
+# 3. Make your code changes
+# 4. When finished, wrap up the session
+/wrap
+
+# /wrap will:
+# ✅ Check code follows project patterns
+# ✅ Verify documentation is up-to-date
+# ✅ Save your session context
+# ✅ Suggest next steps
+```
+
+## Extensibility
+
+The plugin is designed to be extended with new:
+- **Agents**: Custom specialized agents in `agents/`
+- **Skills**: New capabilities in `skills/`
+- **Commands**: New commands in `commands/`
+- **Hooks**: Automated triggers in `.claude/hooks/`
+
+Each component is modular and can be developed independently.
+
+## Requirements
+
+- Claude Code (Claude API client)
+- Git (for version control and worktree support)
+- Bash/Shell environment
+
+## License
 
 MIT
+
+## Author
+
+[yhyuntak](https://github.com/yhyuntak)
+
+---
+
+For more detailed documentation on specific features, see the command files in the `commands/` directory and skill documentation in `skills/`.

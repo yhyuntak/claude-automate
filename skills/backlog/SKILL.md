@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: 프로젝트 백로그를 조회하고 관리합니다. 할 일 목록, 진행 상태, 아이디어 필터링 지원. "백로그 보여줘", "할 일 뭐야", "진행 중인 거", "아이디어 목록" 등의 요청에 자동 활성화.
+description: Query and manage project backlog. Supports task lists, progress tracking, and idea filtering. Auto-activates on keywords like "show backlog", "what needs to be done", "in progress", "idea list", etc.
 argument-hint: "[todo|doing|done|ideas|phase N]"
 ---
 
@@ -8,113 +8,113 @@ argument-hint: "[todo|doing|done|ideas|phase N]"
 
 $ARGUMENTS
 
-백로그 관련 요청을 감지하면 이 skill이 활성화됩니다.
+This skill activates when it detects backlog-related requests.
 
 ---
 
-## 백로그 위치
+## Backlog Locations
 
-| 폴더 | 상태 | 설명 |
-|------|------|------|
-| `docs/backlog/todo/` | 할 일 | 이번 스코프 내 작업 |
-| `docs/backlog/doing/` | 진행 중 | **1개만!** (집중) |
-| `docs/backlog/done/` | 완료 | 완료된 작업 |
-| `docs/backlog/ideas/` | 아이디어 | 스코프 밖 |
-
----
-
-## 조회 패턴
-
-| 쿼리 | 액션 |
-|------|------|
-| "백로그 전체" / "할 일 뭐야" | todo 폴더 조회 |
-| "Phase 1 작업" | `phase1-*` 필터 |
-| "Phase 2 작업" | `phase2-*` 필터 |
-| "진행 중인 거" | doing 폴더 조회 |
-| "완료된 거" | done 폴더 조회 |
-| "아이디어 목록" | ideas 폴더 조회 |
+| Folder | Status | Description |
+|--------|--------|-------------|
+| `docs/backlog/todo/` | To Do | Work within current scope |
+| `docs/backlog/doing/` | In Progress | **1 item only!** (focus) |
+| `docs/backlog/done/` | Completed | Finished work |
+| `docs/backlog/ideas/` | Ideas | Out of scope |
 
 ---
 
-## 조회 결과 포맷 (테이블)
+## Query Patterns
 
-**중요**: 파일 목록이 아닌 **테이블 형태**로 출력
+| Query | Action |
+|-------|--------|
+| "show all backlog" / "what needs to be done" | list todo folder |
+| "Phase 1 tasks" | filter `phase1-*` |
+| "Phase 2 tasks" | filter `phase2-*` |
+| "what's in progress" | list doing folder |
+| "completed items" | list done folder |
+| "idea list" | list ideas folder |
+
+---
+
+## Query Results Format (Table)
+
+**Important**: Output as **table**, not file list
 
 ```bash
-# 파일 목록 가져오기
+# Get file list
 ls docs/backlog/todo/
 
-# 각 파일의 첫 번째 인용문(>) 파싱하여 설명 추출
+# Extract descriptions by parsing first blockquote (>) from each file
 ```
 
-### 출력 포맷
+### Output Format
 
-| Phase | ID | 제목 | 설명 |
-|-------|-----|------|------|
-| 1 | 001 | immersion-mode | 몰입 모드 구현 |
-| 1 | 002 | session-feedback | 세션 피드백 시스템 |
+| Phase | ID | Title | Description |
+|-------|-----|-------|-------------|
+| 1 | 001 | immersion-mode | Implement immersion mode |
+| 1 | 002 | session-feedback | Session feedback system |
 
-**파싱 규칙**:
-- 파일명: `phase{N}-{ID}-{slug}.md`
-- 설명: 파일 내 첫 번째 `> ` 인용문 (한 줄 요약)
+**Parsing rules**:
+- Filename: `phase{N}-{ID}-{slug}.md`
+- Description: First `> ` blockquote in file (one-line summary)
 
-### 설명 추출 방법
+### Extract Description Method
 
 ```bash
-# 각 파일에서 첫 번째 > 라인 추출
+# Extract first > line from each file
 head -5 docs/backlog/todo/phase1-001-xxx.md | grep "^>" | head -1 | sed 's/^> //'
 ```
 
 ---
 
-## 상태 변경
+## Status Changes
 
-### 스토리 시작
-> 트리거: "진행한다", "시작하자", "이거 할게"
+### Start Story
+> Trigger: "start", "begin", "I'll do this"
 
 ```bash
 mv docs/backlog/todo/phase1-xxx.md docs/backlog/doing/
-# README.md 업데이트 (🔄 이모지)
+# Update README.md (🔄 emoji)
 ```
 
-### 스토리 완료
-> 트리거: "완료", "끝", "done"
+### Complete Story
+> Trigger: "done", "finished", "complete"
 
 ```bash
 mv docs/backlog/doing/phase1-xxx.md docs/backlog/done/
-# README.md 업데이트 (✅ 이모지, 완료일)
+# Update README.md (✅ emoji, completion date)
 ```
 
-### 아이디어 추가
-> 트리거: "나중에", "아이디어", "이건 일단 기록"
+### Add Idea
+> Trigger: "later", "idea", "record this for now"
 
-templates.md의 아이디어 템플릿으로 파일 생성
-
----
-
-## 새 백로그 추가
-
-`/backlog add` 또는 "새 백로그 추가해줘"
-
-→ templates.md의 스토리 템플릿으로 `docs/backlog/todo/`에 파일 생성
+Create file using idea template from templates.md
 
 ---
 
-## 명시적 호출
+## Add New Backlog
 
-| 명령 | 동작 |
-|------|------|
-| `/backlog` | 전체 현황 (테이블) |
-| `/backlog todo` | todo만 |
-| `/backlog doing` | doing만 |
-| `/backlog done` | done만 |
-| `/backlog ideas` | ideas만 |
-| `/backlog phase 1` | Phase 1만 |
-| `/backlog add` | 새 백로그 추가 |
+`/backlog add` or "add new backlog item"
+
+→ Create file in `docs/backlog/todo/` using story template from templates.md
 
 ---
 
-## 참고 파일
+## Explicit Commands
 
-- 스키마: schema.md
-- 템플릿: templates.md
+| Command | Action |
+|---------|--------|
+| `/backlog` | Full status (table) |
+| `/backlog todo` | To do items only |
+| `/backlog doing` | In progress items only |
+| `/backlog done` | Completed items only |
+| `/backlog ideas` | Ideas only |
+| `/backlog phase 1` | Phase 1 items only |
+| `/backlog add` | Add new backlog item |
+
+---
+
+## Reference Files
+
+- Schema: schema.md
+- Templates: templates.md

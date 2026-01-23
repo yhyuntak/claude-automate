@@ -1,130 +1,130 @@
 # Feedback Examples
 
-## 의도 감지 예시
+## Intent Detection Examples
 
-| 사용자 발화 | 감지 의도 | 실행 |
-|-------------|-----------|------|
-| "이거 피드백으로 남겨둬" | write | `/write-feedback` |
-| "버그 발견했어" | write (bug) | `/write-feedback` |
-| "나중에 개선할 내용인데 기록해둬" | write | `/write-feedback` |
-| "피드백 뭐 있어?" | check | `/check-feedback` |
-| "2번 피드백 처리됐어" | done | status 변경 |
-| "open된 피드백만 봐줘" | check open | `/check-feedback open` |
+| User Statement | Detected Intent | Action |
+|----------------|-----------------|--------|
+| "Save this as feedback" | write | `/write-feedback` |
+| "Found a bug" | write (bug) | `/write-feedback` |
+| "This needs improvement later, record it" | write | `/write-feedback` |
+| "What feedback do I have?" | check | `/check-feedback` |
+| "Mark feedback #2 as done" | done | update status |
+| "Show only open feedback" | check open | `/check-feedback open` |
 
 ---
 
-## 자연어 → 피드백 변환 예시
+## Natural Language to Feedback Conversion Examples
 
-### Case 1: 대화 중 자연스럽게
-
-```
-사용자: wrap 기능 쓰다가 느낀건데, 결과가 좀 더 간결했으면 좋겠어.
-       이거 피드백으로 남겨둬.
-
-Claude: (feedback skill 자동 활성화)
-        피드백을 저장합니다.
-
-        타입: improvement
-        내용: wrap 결과가 좀 더 간결했으면 좋겠다
-        태그: wrap, ux
-
-        저장 완료: ~/.claude/feedback/2026-01-22.jsonl
-```
-
-### Case 2: 명시적 커맨드
+### Case 1: Natural Conversation
 
 ```
-사용자: /feedback write 다크모드 추가해주세요
+User: I used the wrap feature and thought the results could be more concise.
+      Save this as feedback.
 
-Claude: → /write-feedback 다크모드 추가해주세요
+Claude: (feedback skill auto-activates)
+        Saving feedback.
 
-        타입: idea
-        내용: 다크모드 추가해주세요
-        태그: new-feature, ui
+        Type: improvement
+        Content: wrap results could be more concise
+        Tags: wrap, ux
+
+        Save complete: ~/.claude/feedback/2026-01-22.jsonl
 ```
 
-### Case 3: 피드백 확인
+### Case 2: Explicit Command
 
 ```
-사용자: 피드백 목록 좀 볼래
+User: /feedback write Please add dark mode
 
-Claude: (feedback skill 자동 활성화)
+Claude: → /write-feedback Please add dark mode
+
+        Type: idea
+        Content: Please add dark mode
+        Tags: new-feature, ui
+```
+
+### Case 3: View Feedback
+
+```
+User: Can I see my feedback list?
+
+Claude: (feedback skill auto-activates)
         → /check-feedback
 
-        | # | 상태 | 프로젝트 | 타입 | 내용 |
-        |---|------|----------|------|------|
-        | 1 | 🔴 | my-app | 💡 | 다크모드 추가 |
-        | 2 | 🔴 | claude-automate | ✨ | wrap 간결하게 |
+        | # | Status | Project | Type | Content |
+        |---|--------|---------|------|---------|
+        | 1 | 🔴 | my-app | 💡 | Add dark mode |
+        | 2 | 🔴 | claude-automate | ✨ | Make wrap concise |
 
-        총 2개 (🔴 open: 2)
+        Total: 2 items (🔴 open: 2)
 ```
 
-### Case 4: 피드백 완료 처리
+### Case 4: Mark Feedback Done
 
 ```
-사용자: 1번 피드백 처리됐어
+User: Mark feedback #1 as done
 
-Claude: (feedback skill 자동 활성화)
+Claude: (feedback skill auto-activates)
 
         Feedback #1 marked as done
-        내용: 다크모드 추가
+        Content: Add dark mode
 ```
 
 ---
 
-## 저장되는 JSON 예시
+## Saved JSON Examples
 
-### idea 타입
+### idea type
 
 ```json
 {
   "timestamp": "2026-01-22T23:30:00+09:00",
   "session_id": "abc-123",
   "project": "my-app",
-  "user_feedback": "다크모드 추가해주세요",
+  "user_feedback": "Please add dark mode",
   "type": "idea",
   "status": "open",
   "context": {
-    "description": "앱에 다크모드 테마 추가",
-    "related": "현재 라이트모드만 지원"
+    "description": "Add dark theme to app",
+    "related": "Currently supports light mode only"
   },
   "tags": ["new-feature", "ui", "theme"]
 }
 ```
 
-### bug 타입
+### bug type
 
 ```json
 {
   "timestamp": "2026-01-22T23:35:00+09:00",
   "session_id": "abc-123",
   "project": "claude-automate",
-  "user_feedback": "훅이 작동 안 해",
+  "user_feedback": "Hook not working",
   "type": "bug",
   "status": "open",
   "context": {
     "target": "feedback-hint.sh",
-    "symptom": "피드백 키워드 감지 안 됨",
-    "steps": "1. 피드백 키워드 입력 2. 힌트 미표시"
+    "symptom": "Feedback keywords not detected",
+    "steps": "1. Enter feedback keyword 2. Hint not shown"
   },
   "tags": ["bug", "hook"]
 }
 ```
 
-### improvement 타입
+### improvement type
 
 ```json
 {
   "timestamp": "2026-01-22T23:40:00+09:00",
   "session_id": "abc-123",
   "project": "claude-automate",
-  "user_feedback": "wrap 결과가 너무 길어",
+  "user_feedback": "wrap output is too verbose",
   "type": "improvement",
   "status": "open",
   "context": {
     "target": "/wrap",
-    "current": "상세한 분석 결과 출력",
-    "desired": "간결한 요약 출력"
+    "current": "Detailed analysis output",
+    "desired": "Concise summary output"
   },
   "tags": ["wrap", "ux", "improvement"]
 }

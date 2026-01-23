@@ -1,36 +1,36 @@
 # Backlog Templates
 
-## 스토리 템플릿
+## Story Template
 
-새 백로그 추가 시 사용:
+Use when adding new backlog items:
 
 ```markdown
-# [제목]
+# [Title]
 
-> [한 줄 요약 - 테이블 설명 컬럼에 표시됨]
+> [One-line summary - appears in table description column]
 
 ## User Story
 
-[역할]로서 [기능]을 원한다. [이유] 때문에.
+As a [role] I want [feature]. Because [reason].
 
 ## Acceptance Criteria
 
-- [ ] 조건 1
-- [ ] 조건 2
-- [ ] 조건 3
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
 
 ## Why
 
-[왜 이 기능이 필요한가? 어떤 문제를 해결하는가?]
+[Why is this feature needed? What problem does it solve?]
 
 ## Dependencies
 
-- [선행 작업이 있다면 기재]
-- 없으면 "없음"
+- [List predecessor work if applicable]
+- "None" if no dependencies
 
 ## Notes
 
-[추가 참고 사항]
+[Additional reference information]
 
 ---
 Created: {DATE}
@@ -38,26 +38,26 @@ Created: {DATE}
 
 ---
 
-## 아이디어 템플릿
+## Idea Template
 
-스코프 밖 아이디어 기록 시 사용:
+Use when recording out-of-scope ideas:
 
 ```markdown
-# [제목]
+# [Title]
 
-> [한 줄 요약]
+> [One-line summary]
 
 ## Description
 
-[아이디어 상세 설명]
+[Detailed idea explanation]
 
 ## Motivation
 
-[왜 이 아이디어가 떠올랐는가? 어떤 상황에서?]
+[Why did this idea come up? In what context?]
 
 ## Related
 
-- [관련 기능/이슈]
+- [Related features/issues]
 
 ## Priority Estimate
 
@@ -70,36 +70,36 @@ Created: {DATE}
 
 ---
 
-## 파일명 생성 규칙
+## Filename Generation Rules
 
-### 스토리
+### Story
 
 ```
 phase{N}-{ID}-{slug}.md
 ```
 
-1. **Phase 결정**: 의존성 기반
-   - 다른 것에 의존 없음 → Phase 1 또는 Phase 4
-   - Phase 1에 의존 → Phase 2
-   - Phase 2에 의존 → Phase 3
+1. **Determine Phase**: Based on dependencies
+   - No dependencies → Phase 1 or Phase 4
+   - Depends on Phase 1 → Phase 2
+   - Depends on Phase 2 → Phase 3
 
-2. **ID 부여**: 해당 Phase 내 다음 번호
+2. **Assign ID**: Next number in that Phase
    ```bash
-   ls docs/backlog/todo/phase1-* | wc -l  # 기존 개수 확인
-   # 다음 번호 = 기존 개수 + 1 (3자리 패딩)
+   ls docs/backlog/todo/phase1-* | wc -l  # Check existing count
+   # Next number = existing count + 1 (3-digit padded)
    ```
 
-3. **Slug 생성**: 제목을 케밥케이스로
+3. **Generate Slug**: Convert title to kebab-case
    - "User Authentication" → `user-authentication`
-   - "몰입 모드" → `immersion-mode`
+   - "Immersion Mode" → `immersion-mode`
 
-### 아이디어
+### Idea
 
 ```
 idea-{ID}-{slug}.md
 ```
 
-또는 날짜 기반:
+Or date-based:
 
 ```
 idea-{YYYYMMDD}-{slug}.md
@@ -107,28 +107,28 @@ idea-{YYYYMMDD}-{slug}.md
 
 ---
 
-## 사용 예시
+## Usage Examples
 
-### 새 스토리 추가
+### Add New Story
 
 ```
-사용자: "로그인 기능 백로그 추가해줘"
+User: "Add login feature to backlog"
 
 Claude:
-1. Phase 결정 → Phase 1 (기반 기능)
-2. ID 확인 → phase1에 3개 있음 → 004
-3. 파일 생성 → phase1-004-login.md
-4. 템플릿으로 내용 작성
-5. docs/backlog/todo/에 저장
+1. Determine phase → Phase 1 (foundation feature)
+2. Check ID → 3 existing in phase1 → 004
+3. Create file → phase1-004-login.md
+4. Fill with template content
+5. Save to docs/backlog/todo/
 ```
 
-### 아이디어 추가
+### Add Idea
 
 ```
-사용자: "다크모드 나중에 하면 좋겠다"
+User: "I'd like to add dark mode later"
 
 Claude:
-1. 아이디어 템플릿 사용
-2. 파일 생성 → idea-001-dark-mode.md
-3. docs/backlog/ideas/에 저장
+1. Use idea template
+2. Create file → idea-001-dark-mode.md
+3. Save to docs/backlog/ideas/
 ```
