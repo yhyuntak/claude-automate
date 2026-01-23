@@ -10,6 +10,17 @@ $ARGUMENTS
 
 ---
 
+## 📚 Complete Documentation
+
+This skill provides quick reference for Claude Code Skills. For comprehensive documentation:
+
+- **[Agent Skills Open Standard](references/agentskills-spec.md)** - The complete agentskills.io specification with progressive disclosure, validation, and best practices
+- **[Claude Code Extensions](references/claude-code-extensions.md)** - Claude Code-specific features including invocation control, subagents, hooks, and advanced configurations
+
+**Quick overview below** | **Deep dive in references** ↑
+
+---
+
 ## 1. Skills vs Commands
 
 | 구분 | Commands (구식) | Skills (현재 표준) |
@@ -169,5 +180,12 @@ REST API 작성 시:
 
 ## 참고 자료
 
-- [Claude Code Docs - Slash commands](https://code.claude.com/docs/en/slash-commands)
-- [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+### 📖 This Skill's Documentation
+- [Agent Skills Open Standard](references/agentskills-spec.md) - Complete agentskills.io specification
+- [Claude Code Extensions](references/claude-code-extensions.md) - Claude Code-specific features
+
+### 🌐 External Resources
+- [agentskills.io](https://agentskills.io) - Official open standard
+- [Claude Code Skills Guide](https://code.claude.com/docs/ko/skills) - Official Claude Code docs
+- [Example Skills](https://github.com/anthropics/skills) - Anthropic's example repository
+- [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) - Community resources
