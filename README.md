@@ -82,11 +82,12 @@ claude-automate/
 │
 ├── rules/
 │   ├── interaction.md           # AskUserQuestion UX rules
-│   ├── versioning.md            # Semantic versioning rules
 │   ├── backlog-rules.md         # Backlog management (todo/doing/done)
 │   └── workflow.md              # Git branching and release strategies
 │
 ├── .claude/
+│   ├── rules/
+│   │   └── version-up.md        # Version bump rules (project-specific)
 │   ├── context/                 # Session context files (auto-generated)
 │   └── CLAUDE.md                # Main Claude configuration
 │

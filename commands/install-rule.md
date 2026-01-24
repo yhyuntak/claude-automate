@@ -64,11 +64,10 @@ cp -f rules/*.md ~/.claude/rules/
 Installed to `~/.claude/rules/`:
 
 - interaction.md
-- versioning.md
 - backlog-rules.md
 - workflow.md
 
-**Total:** 4 rules
+**Total:** 3 rules
 
 These rules will apply to all Claude Code sessions.
 
@@ -101,7 +100,6 @@ These rules will apply to all Claude Code sessions.
 ## Related Files
 
 - `rules/interaction.md` - AskUserQuestion UX rules
-- `rules/versioning.md` - Semantic versioning rules
 - `rules/backlog-rules.md` - Backlog management (todo/doing/done)
 - `rules/workflow.md` - Git branching and release strategies
 
