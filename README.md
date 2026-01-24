@@ -44,11 +44,12 @@ This command:
 - Saves your session context automatically
 
 Other useful commands:
+- `/project-init` - Initialize new project with templates and structure
 - `/start-work` - Begin a work session with context loading and worktree setup
 - `/session-start` - Load previous session summary
 - `/backlog` - View and manage your project backlog
-- `/check-feedback` - View feedback from previous sessions
-- `/write-feedback` - Save notes and feedback for future sessions
+- `/feedback` - View feedback from previous sessions
+- `/install-rule` - Install project rules to global Claude Code configuration
 
 ## Project Structure
 
@@ -62,6 +63,7 @@ claude-automate/
 │   ├── wrap.md                  # /wrap command - session wrap-up with goal-first architecture
 │   ├── start-work.md            # /start-work command - integrated workflow for session setup
 │   ├── session-start.md         # Session context loading
+│   ├── install-rule.md          # /install-rule command - install project rules globally
 │   └── feedback.md              # Feedback management commands
 │
 ├── agents/
@@ -75,11 +77,16 @@ claude-automate/
 │   ├── explain-skills/          # Skill system documentation and references
 │   ├── feedback/                # Feedback system with schema and examples
 │   ├── backlog/                 # Project backlog management
-│   ├── interaction-rules/       # System interaction guidelines
+│   ├── project-init/            # New project initialization with templates
 │   └── [other skills]/
 │
+├── rules/
+│   ├── interaction.md           # AskUserQuestion UX rules
+│   ├── versioning.md            # Semantic versioning rules
+│   ├── backlog-rules.md         # Backlog management (todo/doing/done)
+│   └── workflow.md              # Git branching and release strategies
+│
 ├── .claude/
-│   ├── rules/                   # Project-specific rules (versioning, interaction)
 │   ├── context/                 # Session context files (auto-generated)
 │   └── CLAUDE.md                # Main Claude configuration
 │

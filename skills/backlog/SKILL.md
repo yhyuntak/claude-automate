@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Query and manage project backlog. Supports task lists, progress tracking, and idea filtering. Auto-activates on keywords like "show backlog", "what needs to be done", "in progress", "idea list", etc.
+description: Query and manage project backlog. Supports task lists, progress tracking, and idea filtering. Auto-activates on keywords like "backlog"/"백로그", "todo"/"할 일", "in progress"/"진행 중", "done"/"완료", "ideas"/"아이디어", etc.
 argument-hint: "[todo|doing|done|ideas|phase N]"
 ---
 

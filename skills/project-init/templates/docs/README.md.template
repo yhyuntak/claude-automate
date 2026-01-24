@@ -1,0 +1,32 @@
+# {PROJECT_NAME} - 문서
+
+> 프로젝트 문서 모음
+
+---
+
+## 📁 구조
+
+```
+docs/
+├── README.md                # 이 파일
+├── architecture/            # 아키텍처 설계 문서
+├── backlogs/                # 개발 백로그 (Epic/Story)
+└── ideas/                   # 아이디어 노트
+```
+
+---
+
+## 📚 주요 문서
+
+### 아키텍처
+- 추후 추가 예정
+
+### 백로그
+- [백로그 현황](backlogs/README.md)
+
+### 아이디어
+- [아이디어 템플릿](ideas/_template.md)
+
+---
+
+**Last Updated**: {LAST_UPDATE_DATE}

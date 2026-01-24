@@ -157,16 +157,46 @@ git worktree list | grep {branch}
 git worktree add ../{project}-{branch} -b {branch}
 ```
 
+### Copy Environment Files
+
+Check for .env files in original project:
+```bash
+ls .env* 2>/dev/null
+```
+
+If .env files exist, copy to worktree:
+```bash
+cp .env* ../{project}-{branch}/ 2>/dev/null
+```
+
+Display result:
+```
+✓ Copied environment files: .env, .env.local
+```
+
+If no .env files found, skip silently.
+
 ### Switch to Worktree
+
+**IMPORTANT: Always execute cd to move to worktree:**
 ```bash
 cd ../{project}-{branch}
 ```
+
+This ensures Claude Code's working directory is the worktree for the rest of the session.
 
 ---
 
 ## STEP 6: Completion Message
 
 ### Worktree Mode
+
+**Read backlog file content:**
+```bash
+cat docs/backlog/todo/phase1-001-feature-x.md
+```
+
+**Display:**
 ```markdown
 ## ✅ Work Environment Ready
 
@@ -175,16 +205,40 @@ cd ../{project}-{branch}
 **Branch:** feature-x
 
 Now working in this folder.
+
+---
+
+## 📄 Task Details
+
+[Full content of the backlog file]
+
+---
+
 Run `/wrap` when done to complete your session.
 
 💡 Return to main project: `cd ../claude-automate`
 ```
 
 ### Standard Mode
+
+**Read backlog file content:**
+```bash
+cat docs/backlog/todo/phase1-001-feature-x.md
+```
+
+**Display:**
 ```markdown
 ## ✅ Work Started
 
 **Task:** phase1-001-feature-x (Implement feature X)
+
+---
+
+## 📄 Task Details
+
+[Full content of the backlog file]
+
+---
 
 Run `/wrap` when done to complete your session.
 ```

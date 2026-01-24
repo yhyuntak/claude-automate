@@ -1,6 +1,6 @@
 ---
 name: feedback
-description: User feedback system for recording improvements, bugs, and ideas. Auto-activates on keywords like "feedback", "save this", "improvement", "bug found", etc.
+description: User feedback system for recording improvements, bugs, and ideas. Auto-activates on keywords like "feedback"/"피드백", "check"/"확인", "save"/"저장", "improvement"/"개선", "bug"/"버그", etc.
 user-invocable: true
 argument-hint: "[check|options]"
 ---
