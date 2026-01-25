@@ -21,40 +21,41 @@ This skill copies rules from the plugin's references to `~/.claude/rules/` so th
 
 ---
 
-## Process
+## Instructions
 
-### 1. Create Target Directory
+The rules files are included in this skill's `references/` folder and are automatically loaded into your context when this skill runs.
 
-```bash
-mkdir -p ~/.claude/rules
-```
+### Step 1: Create target directory
+
+Use Bash tool to create the global rules directory:
+- Command: `mkdir -p ~/.claude/rules`
+
+### Step 2: Install each rule file
+
+Use the **Write tool** to create each rule file in `~/.claude/rules/` using the content from the references that are automatically loaded:
+
+1. **interaction.md** - Write to `~/.claude/rules/interaction.md`
+   - Use the content from `references/interaction.md` (in your context)
+
+2. **backlog-rules.md** - Write to `~/.claude/rules/backlog-rules.md`
+   - Use the content from `references/backlog-rules.md` (in your context)
+
+3. **workflow.md** - Write to `~/.claude/rules/workflow.md`
+   - Use the content from `references/workflow.md` (in your context)
+
+### Step 3: Confirm installation
+
+After successfully writing all three files, display this confirmation:
 
 ---
 
-### 2. Install Rules
-
-**IMPORTANT:** The rules are included in this skill's `references/` folder and are automatically loaded into your context. Use the **Write tool** to create each rule file in `~/.claude/rules/`:
-
-1. Write `~/.claude/rules/interaction.md` using content from `references/interaction.md`
-2. Write `~/.claude/rules/backlog-rules.md` using content from `references/backlog-rules.md`
-3. Write `~/.claude/rules/workflow.md` using content from `references/workflow.md`
-
-**Do NOT use bash cp or cat commands.** The references are in your context, use Write tool directly.
-
----
-
-### 3. Report Installation
-
-After writing all files, confirm with:
-
-```markdown
 ## ✅ Rules Installed
 
 Installed to `~/.claude/rules/`:
 
-- interaction.md (AskUserQuestion UX rules)
-- backlog-rules.md (Backlog management)
-- workflow.md (Git branching and release)
+- **interaction.md** - AskUserQuestion UX rules
+- **backlog-rules.md** - Backlog management (todo/doing/done)
+- **workflow.md** - Git branching and release strategies
 
 **Total:** 3 rules
 
@@ -63,7 +64,6 @@ These rules will apply to all Claude Code sessions.
 ---
 
 💡 To update rules, run `/install-rule` again after plugin updates.
-```
 
 ---
 
