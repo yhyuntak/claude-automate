@@ -1,0 +1,730 @@
+# Orchestrator Agent Configuration Example
+# Complete orchestrator setup with model selection, delegation strategy, and quality gates
+
+# ==============================================================================
+# ORCHESTRATOR AGENT: Master Coordinator
+# ==============================================================================
+#
+# This configuration demonstrates a complete orchestrator agent that:
+# - Manages complex multi-phase workflows
+# - Intelligently delegates tasks to specialized subagents
+# - Selects optimal models based on task complexity
+# - Implements quality gates and verification loops
+#
+# ==============================================================================
+
+metadata:
+  name: orchestrator
+  version: "1.0.0"
+  description: Master orchestrator for coordinating multi-agent workflows
+  created: "2026-01-25"
+  author: Claude Automate Team
+  role: conductor
+
+# ==============================================================================
+# CORE CONFIGURATION
+# ==============================================================================
+
+core:
+  # Base model for the orchestrator itself
+  # Orchestrators make strategic decisions, so Opus is appropriate
+  model: claude-opus-4-5
+
+  # Context window requirements
+  context_window:
+    required: 200000  # Need large window for coordinating multiple agents
+    reserved: 50000   # Reserve buffer for agent responses
+
+  # Timeout for orchestrator decisions
+  timeout_ms: 30000
+
+  # Temperature for decision-making (lower = more deterministic)
+  temperature: 0.7
+
+# ==============================================================================
+# DELEGATED SUBAGENTS
+# ==============================================================================
+#
+# Define all specialized agents this orchestrator can delegate to.
+# Each subagent has its optimal model tier based on task complexity.
+
+subagents:
+  # ============================================================================
+  # Research Phase Agent
+  # ============================================================================
+  research:
+    name: oh-my-claude-sisyphus:explore
+    model: haiku                    # Fast information gathering
+    tier: low
+    timeout_ms: 10000
+    capabilities:
+      - file_search
+      - pattern_matching
+      - codebase_exploration
+      - quick_lookup
+    max_parallel_tasks: 5
+    quality_threshold: 0.75         # Lower threshold for simple search
+    cost_limit: $0.05
+
+  # ============================================================================
+  # Analysis Phase Agent
+  # ============================================================================
+  analysis:
+    name: oh-my-claude-sisyphus:oracle
+    model: sonnet                   # Balanced analysis capability
+    tier: medium
+    timeout_ms: 15000
+    capabilities:
+      - architecture_analysis
+      - bug_root_cause_analysis
+      - pattern_identification
+      - code_review
+      - technical_evaluation
+    max_parallel_tasks: 3
+    quality_threshold: 0.85         # Medium-high threshold for analysis
+    cost_limit: $0.15
+    fallback_model: opus            # Escalate if complexity is high
+
+  # ============================================================================
+  # Planning Phase Agent
+  # ============================================================================
+  planning:
+    name: oh-my-claude-sisyphus:prometheus
+    model: opus                     # Strategic planning requires reasoning
+    tier: high
+    timeout_ms: 20000
+    capabilities:
+      - strategic_planning
+      - architecture_design
+      - requirement_analysis
+      - workflow_design
+      - risk_assessment
+    max_parallel_tasks: 1           # Plan one major workflow at a time
+    quality_threshold: 0.95         # High threshold for critical plans
+    cost_limit: $0.30
+    min_model: opus                 # Don't downgrade - planning is critical
+
+  # ============================================================================
+  # Implementation Phase Agent
+  # ============================================================================
+  implementation:
+    name: oh-my-claude-sisyphus:sisyphus-junior
+    model: sonnet                   # Standard implementation capability
+    tier: medium
+    timeout_ms: 25000
+    capabilities:
+      - code_generation
+      - file_editing
+      - feature_implementation
+      - refactoring
+      - test_writing
+    max_parallel_tasks: 3           # Can work on multiple files
+    quality_threshold: 0.88         # Good quality code standards
+    cost_limit: $0.20
+
+  # ============================================================================
+  # Documentation Phase Agent
+  # ============================================================================
+  documentation:
+    name: oh-my-claude-sisyphus:document-writer
+    model: haiku                    # Documentation is straightforward
+    tier: low
+    timeout_ms: 12000
+    capabilities:
+      - readme_creation
+      - api_documentation
+      - comment_generation
+      - guide_writing
+      - example_creation
+    max_parallel_tasks: 4
+    quality_threshold: 0.80         # Solid documentation standards
+    cost_limit: $0.08
+
+  # ============================================================================
+  # Review Phase Agent
+  # ============================================================================
+  review:
+    name: oh-my-claude-sisyphus:momus
+    model: opus                     # Critical review needs expertise
+    tier: high
+    timeout_ms: 18000
+    capabilities:
+      - plan_review
+      - code_quality_review
+      - architecture_validation
+      - risk_identification
+      - feedback_generation
+    max_parallel_tasks: 1           # One thorough review at a time
+    quality_threshold: 0.92         # Very high standards for review
+    cost_limit: $0.25
+
+  # ============================================================================
+  # Verification Phase Agent
+  # ============================================================================
+  verification:
+    name: oh-my-claude-sisyphus:qa-tester
+    model: sonnet                   # Testing requires understanding
+    tier: medium
+    timeout_ms: 20000
+    capabilities:
+      - test_execution
+      - integration_testing
+      - manual_verification
+      - edge_case_testing
+      - quality_assurance
+    max_parallel_tasks: 2
+    quality_threshold: 0.90         # High standards for verification
+    cost_limit: $0.18
+
+# ==============================================================================
+# WORKFLOW PHASES
+# ==============================================================================
+#
+# Define the 5-phase workflow pattern with clear responsibilities and gates
+
+phases:
+  # ============================================================================
+  # PHASE 1: RESEARCH
+  # ============================================================================
+  phase1_research:
+    name: "Research & Discovery"
+    description: "Gather information and understand the landscape"
+
+    agent: research
+
+    dependencies: []                # First phase - no dependencies
+
+    inputs:
+      - requirement_description
+      - project_scope
+      - existing_codebase_path
+
+    outputs:
+      - codebase_structure
+      - relevant_files_list
+      - pattern_discoveries
+      - architecture_overview
+
+    quality_gates:
+      - must_find_relevant_files: true
+      - minimum_patterns_identified: 3
+      - coverage_threshold: 0.80
+
+    timeout_minutes: 10
+
+    example_prompt: |
+      Task: Explore the codebase for authentication patterns
+
+      Goal: Discover all authentication-related files, patterns, and existing implementations
+
+      Deliverables:
+      1. List all files containing auth logic (src/ directory)
+      2. Identify auth patterns currently in use (JWT, session-based, OAuth, etc.)
+      3. Map the authentication architecture
+      4. Find any TODOs or FIXMEs related to auth
+
+      Search locations: src/auth/, src/middleware/, config/
+      Pattern keywords: authenticate, authorize, token, session, jwt, oauth
+
+  # ============================================================================
+  # PHASE 2: PLANNING
+  # ============================================================================
+  phase2_planning:
+    name: "Planning & Design"
+    description: "Create comprehensive strategy and architecture"
+
+    agent: planning
+
+    dependencies:
+      - phase1_research                # Needs research data
+
+    inputs:
+      - research_findings
+      - business_requirements
+      - constraints_and_risks
+      - success_criteria
+
+    outputs:
+      - detailed_plan
+      - architecture_design
+      - implementation_strategy
+      - risk_mitigation_approach
+      - verification_approach
+
+    quality_gates:
+      - plan_completeness: 0.95       # Plan must be very detailed
+      - architecture_clarity: 0.93
+      - risk_coverage: 0.90
+
+    timeout_minutes: 20
+
+    example_prompt: |
+      Task: Design authentication system upgrade
+
+      Research Findings:
+      - Current system uses session-based auth
+      - Supports ~1000 concurrent users
+      - No OAuth integration yet
+      - Some legacy code still using hardcoded credentials
+
+      Requirements:
+      - Support 100x more concurrent users
+      - Add OAuth2 for third-party integrations
+      - Migrate from session-based to token-based
+      - Zero downtime migration
+
+      Create a comprehensive plan including:
+      1. Architecture design (token system)
+      2. Migration strategy (phased approach)
+      3. Integration points for OAuth
+      4. Backward compatibility approach
+      5. Performance considerations
+      6. Security best practices
+      7. Testing strategy
+      8. Rollback procedure
+
+  # ============================================================================
+  # PHASE 3: IMPLEMENTATION
+  # ============================================================================
+  phase3_implementation:
+    name: "Implementation & Development"
+    description: "Write code and build features"
+
+    agent: implementation
+
+    dependencies:
+      - phase2_planning                # Must have a plan first
+
+    inputs:
+      - detailed_plan
+      - architecture_design
+      - code_quality_standards
+      - testing_requirements
+
+    outputs:
+      - implemented_features
+      - test_coverage_report
+      - documentation_stubs
+      - created_files_list
+
+    quality_gates:
+      - test_coverage: 0.80            # Minimum 80% coverage
+      - code_quality_score: 8.0        # Out of 10
+      - documentation_complete: 0.90
+
+    timeout_minutes: 45
+
+    example_prompt: |
+      Task: Implement JWT token-based authentication system
+
+      Plan Summary:
+      - Create JWT token generation service
+      - Add token validation middleware
+      - Implement refresh token mechanism
+      - Create token rotation logic
+
+      Implementation Requirements:
+      1. Create src/auth/jwt-service.ts
+         - Generate JWT tokens with 15min expiry
+         - Include user ID, permissions in payload
+         - Add signature verification
+
+      2. Create src/middleware/auth-middleware.ts
+         - Extract token from Authorization header
+         - Validate token signature
+         - Extract user from token
+
+      3. Create src/auth/refresh-handler.ts
+         - Validate refresh tokens
+         - Generate new access tokens
+         - Implement token rotation
+
+      Code Requirements:
+      - Follow existing code style
+      - Include comprehensive error handling
+      - Write unit tests (80% coverage)
+      - Add JSDoc comments
+      - Log security-relevant events
+
+  # ============================================================================
+  # PHASE 4: REVIEW & VALIDATION
+  # ============================================================================
+  phase4_review:
+    name: "Review & Validation"
+    description: "Validate implementation against plan and standards"
+
+    agent: review
+
+    dependencies:
+      - phase3_implementation          # Need completed implementation
+
+    inputs:
+      - implementation_code
+      - original_plan
+      - quality_standards
+      - test_results
+
+    outputs:
+      - review_report
+      - identified_issues
+      - improvement_recommendations
+      - approval_status
+
+    quality_gates:
+      - no_critical_issues: true
+      - implements_full_plan: 0.98
+      - follows_standards: 0.95
+
+    timeout_minutes: 30
+
+    example_prompt: |
+      Task: Review JWT authentication implementation
+
+      Review Checklist:
+      1. Implementation Completeness
+         - Does it implement all plan requirements?
+         - Are all endpoints using the new auth?
+         - Is token rotation implemented?
+
+      2. Code Quality
+         - Follows project code style?
+         - Proper error handling?
+         - Security best practices followed?
+
+      3. Test Coverage
+         - Unit tests for token generation?
+         - Middleware test coverage?
+         - Edge cases covered?
+
+      4. Security Review
+         - Tokens properly signed?
+         - Refresh tokens handled securely?
+         - No credentials in logs?
+
+      5. Performance
+         - Token generation latency acceptable?
+         - Validation overhead minimal?
+
+      Files to Review:
+      - src/auth/jwt-service.ts
+      - src/middleware/auth-middleware.ts
+      - src/auth/refresh-handler.ts
+      - tests/auth/*.test.ts
+
+  # ============================================================================
+  # PHASE 5: VERIFICATION & FINAL CHECK
+  # ============================================================================
+  phase5_verification:
+    name: "Verification & Final Validation"
+    description: "Run tests, verify functionality, confirm deployment readiness"
+
+    agent: verification
+
+    dependencies:
+      - phase4_review                  # Need review approval
+
+    inputs:
+      - implementation_code
+      - test_suite
+      - acceptance_criteria
+      - deployment_requirements
+
+    outputs:
+      - test_execution_report
+      - quality_metrics
+      - deployment_checklist
+      - final_approval
+
+    quality_gates:
+      - all_tests_pass: true           # 100% test pass rate
+      - no_blockers: true              # No blocking issues
+      - deployment_ready: true         # Can be deployed
+
+    timeout_minutes: 25
+
+    example_prompt: |
+      Task: Verify JWT authentication system deployment readiness
+
+      Verification Steps:
+      1. Test Execution
+         - Run all unit tests
+         - Run integration tests
+         - Report coverage
+
+      2. Security Verification
+         - Token expiry working?
+         - Refresh rotation working?
+         - Invalid tokens rejected?
+
+      3. Load Testing
+         - Generate 10k tokens/second?
+         - Validate 50k tokens/second?
+         - No memory leaks?
+
+      4. Backward Compatibility
+         - Old session tokens still work?
+         - Migration path clear?
+
+      5. Deployment Readiness
+         - Environment variables defined?
+         - Database migrations ready?
+         - Rollback plan documented?
+
+      Success Criteria:
+      - All tests pass: MUST
+      - Load test at 100k QPS: SHOULD
+      - Zero security warnings: MUST
+      - Documentation complete: MUST
+
+# ==============================================================================
+# DELEGATION STRATEGY
+# ==============================================================================
+#
+# Define how the orchestrator makes delegation decisions
+
+delegation:
+  # ============================================================================
+  # COMPLEXITY ASSESSMENT
+  # ============================================================================
+  complexity_assessment:
+    enabled: true
+
+    # Calculate complexity score for incoming tasks
+    factors:
+      - input_length:
+          weight: 0.15
+          formula: "log(input_tokens / 100)"
+
+      - required_reasoning:
+          weight: 0.35
+          description: "How much critical thinking is needed?"
+          options:
+            high: 0.9        # Needs strategic decision-making
+            medium: 0.5      # Standard technical work
+            low: 0.2         # Simple mechanical tasks
+
+      - number_of_subagents:
+          weight: 0.25
+          description: "How many specialized agents are needed?"
+          formula: "min(count / 5, 1.0)"
+
+      - decision_impact:
+          weight: 0.25
+          description: "How critical is the decision?"
+          options:
+            critical: 0.95   # Shapes entire project
+            important: 0.6   # Significant impact
+            minor: 0.1       # Limited scope
+
+  # ============================================================================
+  # MODEL SELECTION HEURISTIC
+  # ============================================================================
+  model_selection:
+    enabled: true
+
+    rules:
+      # Rule 1: Low complexity tasks - use cheaper models
+      - name: "Low Complexity (< 0.3)"
+        condition: "complexity_score < 0.3"
+        model_preferences:
+          - name: haiku
+            confidence: 0.95
+          - name: sonnet
+            confidence: 0.05
+        cost_savings: "70-80%"
+        suitable_for:
+          - file_searching
+          - pattern_matching
+          - simple_lookups
+
+      # Rule 2: Medium complexity - balanced approach
+      - name: "Medium Complexity (0.3-0.7)"
+        condition: "complexity_score >= 0.3 AND complexity_score < 0.7"
+        model_preferences:
+          - name: sonnet
+            confidence: 0.85
+          - name: haiku
+            confidence: 0.10
+          - name: opus
+            confidence: 0.05
+        cost_savings: "30-50%"
+        suitable_for:
+          - code_analysis
+          - documentation
+          - standard_implementation
+
+      # Rule 3: High complexity - use powerful models
+      - name: "High Complexity (>= 0.7)"
+        condition: "complexity_score >= 0.7"
+        model_preferences:
+          - name: opus
+            confidence: 0.90
+          - name: sonnet
+            confidence: 0.10
+        cost_savings: "10-20%"
+        suitable_for:
+          - architecture_design
+          - strategic_planning
+          - critical_review
+
+  # ============================================================================
+  # ESCALATION RULES
+  # ============================================================================
+  escalation:
+    enabled: true
+
+    rules:
+      # If simple task fails, don't escalate - retry
+      - source_agent: research
+        failure_condition: "quality_score < threshold"
+        action: retry_same_agent
+        max_retries: 2
+
+      # If medium task fails, escalate to higher model
+      - source_agent: analysis
+        failure_condition: "quality_score < 0.80"
+        action: escalate_to_opus
+        max_retries: 1
+
+      # If high task fails, escalate to human review
+      - source_agent: planning
+        failure_condition: "quality_score < 0.90"
+        action: halt_and_report
+        notify: true
+
+# ==============================================================================
+# MONITORING & QUALITY ASSURANCE
+# ==============================================================================
+
+monitoring:
+  # Track all delegations and their outcomes
+  track_delegations: true
+
+  # Quality metrics to track
+  metrics:
+    - task_completion_rate
+    - average_quality_score
+    - average_cost_per_task
+    - model_performance_comparison
+    - phase_duration_tracking
+
+  # Cost tracking
+  cost_tracking:
+    enabled: true
+    budget_alerts: true
+    budget_limits:
+      per_task: $1.00
+      per_phase: $5.00
+      per_workflow: $20.00
+
+  # Logging
+  logging:
+    level: info
+    include_prompts: true
+    include_responses: true
+    log_file: orchestrator.log
+
+# ==============================================================================
+# FAILURE HANDLING & RECOVERY
+# ==============================================================================
+
+error_handling:
+  # What to do when a phase fails
+  phase_failure_strategy:
+    research_failure:
+      action: retry_with_different_patterns
+      max_attempts: 3
+
+    planning_failure:
+      action: escalate_to_manual_review
+      notify: true
+
+    implementation_failure:
+      action: retry_with_clearer_prompt
+      fallback: escalate_to_opus
+
+    review_failure:
+      action: halt_workflow
+      notify: true
+
+    verification_failure:
+      action: return_to_implementation_phase
+      max_iterations: 2
+
+  # Timeout handling
+  timeout_handling:
+    on_timeout: retry_with_longer_timeout
+    max_timeout_extensions: 2
+    timeout_multiplier: 1.5
+
+# ==============================================================================
+# OPTIMIZATION
+# ==============================================================================
+
+optimization:
+  # Parallel execution where possible
+  parallel_execution:
+    enabled: true
+
+    # These phases can run in parallel when appropriate
+    parallelizable_tasks:
+      - multiple_file_searches
+      - independent_code_reviews
+      - separate_test_suites
+
+  # Caching for repeated tasks
+  caching:
+    enabled: true
+    cache_results_for:
+      - file_searches (1 day)
+      - pattern_analysis (1 day)
+      - architecture_understanding (1 week)
+
+  # Batch processing
+  batch_processing:
+    enabled: true
+    batch_similar_tasks: true
+    min_batch_size: 3
+
+# ==============================================================================
+# DOCUMENTATION & EXAMPLES
+# ==============================================================================
+
+examples:
+  - name: "Feature Implementation Workflow"
+    description: "Complete workflow: plan new feature from research to verification"
+    file: "examples/feature-implementation-workflow.md"
+
+  - name: "Bug Fix Workflow"
+    description: "Streamlined workflow for investigating and fixing bugs"
+    file: "examples/bug-fix-workflow.md"
+
+  - name: "Code Review Workflow"
+    description: "Comprehensive code review using the 5-phase pattern"
+    file: "examples/code-review-workflow.md"
+
+# ==============================================================================
+# QUICK START
+# ==============================================================================
+
+quick_start: |
+  To use this orchestrator configuration:
+
+  1. Define your task:
+     - Provide clear requirement description
+     - Specify business context
+     - Define success criteria
+
+  2. The orchestrator will:
+     - Assess task complexity
+     - Select appropriate subagents and models
+     - Execute the 5-phase workflow
+     - Track quality at each phase
+     - Report results and costs
+
+  3. The workflow phases are:
+     - Phase 1 (Research): Explore and understand
+     - Phase 2 (Planning): Design solution
+     - Phase 3 (Implementation): Build features
+     - Phase 4 (Review): Validate quality
+     - Phase 5 (Verification): Confirm readiness
