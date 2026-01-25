@@ -33,34 +33,28 @@ mkdir -p ~/.claude/rules
 
 ### 2. Install Rules
 
-Copy all reference files to global rules directory:
+**IMPORTANT:** The rules are included in this skill's `references/` folder and are automatically loaded into your context. Use the **Write tool** to create each rule file in `~/.claude/rules/`:
 
-```bash
-cp -f skills/install-rule/references/*.md ~/.claude/rules/
-```
+1. Write `~/.claude/rules/interaction.md` using content from `references/interaction.md`
+2. Write `~/.claude/rules/backlog-rules.md` using content from `references/backlog-rules.md`
+3. Write `~/.claude/rules/workflow.md` using content from `references/workflow.md`
 
-**Important:** Use `-f` flag to force overwrite existing files.
+**Do NOT use bash cp or cat commands.** The references are in your context, use Write tool directly.
 
 ---
 
 ### 3. Report Installation
 
-List the installed files:
-
-```bash
-ls -1 ~/.claude/rules/
-```
-
-Output format:
+After writing all files, confirm with:
 
 ```markdown
 ## ✅ Rules Installed
 
 Installed to `~/.claude/rules/`:
 
-- interaction.md
-- backlog-rules.md
-- workflow.md
+- interaction.md (AskUserQuestion UX rules)
+- backlog-rules.md (Backlog management)
+- workflow.md (Git branching and release)
 
 **Total:** 3 rules
 
