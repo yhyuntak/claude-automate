@@ -1,7 +1,6 @@
 ---
 name: project-init
 description: Initialize new project with Claude Code setup and templates. Auto-activates on keywords like "new project", "start project", "create project", "init project".
-user-invocable: true
 argument-hint: "[project-name]"
 ---
 

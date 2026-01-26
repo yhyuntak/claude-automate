@@ -1,7 +1,6 @@
 ---
 name: install-rule
 description: Install project rules to global Claude Code rules directory
-user-invocable: true
 argument-hint: ""
 ---
 
