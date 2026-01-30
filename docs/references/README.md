@@ -25,6 +25,13 @@ AI 기반 개발 워크플로우에 대한 참고 자료 모음.
 - 안티패턴도 그대로 적용됨
 - HITL: Exception이 Question으로
 
+### 4. [oh-my-claudecode 플러그인 분석](./04-oh-my-claudecode-analysis.md)
+> "Multi-agent orchestration for Claude Code"
+
+- 32개 전문 에이전트 + 40+ 스킬
+- 5가지 실행 모드 (Autopilot, Ultrapilot, Swarm, Pipeline, Ecomode)
+- 3-tier 에이전트 시스템 (Haiku/Sonnet/Opus)
+
 ## Common Themes
 
 ```
