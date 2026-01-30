@@ -115,29 +115,30 @@ CLAUDE.md   =  package.json (project identity, principles)
 
 ## Roadmap
 
-### Phase 1: Parallel Review Agents (Upcoming)
+### Phase 1: Plan-Execute Workflow (Upcoming)
 
-Build Kieran Klaassen-style parallel review system:
+Peter Steinberger-style planning-first development:
 
-- [ ] **phase1-001**: Design parallel review agent structure
-- [ ] **phase1-002**: Implement triage workflow
-- [ ] **phase1-003**: Accumulate review learnings
+- [ ] **phase1-001**: Architecture-first planning phase
+- [ ] **phase1-002**: Multi-agent parallel execution
+- [ ] **phase1-003**: Result integration and feedback
 
 ### Phase 2: PARA Knowledge Management
 
 System for accumulating learnings:
 
-- [ ] Projects, Areas, Resources, Archive structure
-- [ ] Auto-extract insights from sessions
-- [ ] Knowledge search and utilization
+- [ ] **phase2-001**: Design PARA knowledge structure
+- [ ] **phase2-002**: Auto-extract insights from sessions
+- [ ] **phase2-003**: Knowledge search and utilization
 
-### Phase 3: Plan-Execute Workflow
+### Phase 3: Parallel Review Agents
 
-Peter Steinberger-style planning-first development:
+Kieran Klaassen-style parallel review system (post-code verification):
 
-- [ ] Enhanced planning phase (architecture first)
-- [ ] Multi-agent parallel execution
-- [ ] Result integration and feedback
+- [ ] **phase3-001**: Design parallel review agent structure
+- [ ] **phase3-002**: Implement triage workflow
+- [ ] **phase3-003**: Accumulate review learnings
+- [ ] **phase3-004**: Define tool delegation rules
 
 ---
 
