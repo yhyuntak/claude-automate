@@ -187,6 +187,43 @@ This ensures Claude Code's working directory is the worktree for the rest of the
 
 ---
 
+## STEP 5.5: Create Anchor
+
+After selecting a backlog task (or starting free work), create the anchor file.
+
+### Create Anchor Directory
+
+```bash
+mkdir -p .claude
+```
+
+### Anchor Content
+
+**If backlog selected:**
+```markdown
+# Anchor
+
+{Task title from backlog}
+> {First line description from backlog file}
+
+**Started**: {current date}
+```
+
+**If free work (no backlog):**
+```markdown
+# Anchor
+
+{User's stated goal or "Free work session"}
+
+**Started**: {current date}
+```
+
+### Write to File
+
+Write the anchor content to `.claude/anchor.md` in the working directory (either main project or worktree).
+
+---
+
 ## STEP 6: Completion Message
 
 ### Worktree Mode
@@ -310,5 +347,6 @@ Before completion, verify:
 - [ ] Session context displayed
 - [ ] Backlog status displayed (explicitly state "none" if missing)
 - [ ] User selection received (worktree, task)
+- [ ] Anchor file created (.claude/anchor.md)
 - [ ] Environment configured per selection
 - [ ] Completion message displayed
