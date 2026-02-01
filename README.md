@@ -1,238 +1,187 @@
 # claude-automate
 
-> Self-Evolving Development System - Automation Plugin for Claude Code Meta Layer
+> **"코드를 보지 않고 개발하기"** - AI 시대, 개발자의 새로운 역할
 
-## Overview
+🌏 [English](README.en.md) | **한국어**
 
-**claude-automate** is a comprehensive automation plugin for Claude Code that streamlines your development workflow. It automatically enforces project patterns, maintains session continuity, synchronizes documentation with code changes, and extracts learning insights from your development sessions.
+---
 
-## Features
+## Vision
 
-### 1. Project Pattern Checker
-Automatically validates that code changes follow your project's rules and conventions.
+개발자는 더 이상 모든 코드를 직접 읽고 쓸 필요가 없습니다.
 
-### 2. Usage Pattern Analysis
-Detects repeated prompt patterns in your workflow and suggests automatic skill generation to streamline repetitive tasks.
+**claude-automate**는 개발자가 **아키텍처, 패턴, 아이디어** 레벨에 집중할 수 있게 해주는 Claude Code 플러그인입니다. 코드 구현은 AI에게 위임하고, 당신은 **방향 제시와 의사결정**에 집중하세요.
 
-### 3. Session Continuity
-Automatically manages `context.md` files to maintain context across development sessions, so you can pick up exactly where you left off.
+### 핵심 목표
 
-### 4. Automatic Documentation Sync
-Monitors code changes and suggests documentation updates to keep your docs in sync with your implementation.
+| # | 목표 | 설명 |
+|---|------|------|
+| 1 | **코드를 보지 않고 개발** | 아키텍처/패턴/아이디어 레벨에 집중 |
+| 2 | **성장하는 시스템** | 만들면서 배우고, 배운 것을 축적 |
+| 3 | **나만의 Harness** | 직접 수정 가능한 확장 시스템 |
+| 4 | **단순함 유지** | 필요한 것부터 하나씩 |
 
-### 5. Learning Extraction (TIL)
-Automatically extracts and records insights and lessons learned from each development session.
+### Harness 컨셉
 
-## Installation
+```
+┌─────────────────────────────────────────────────────────────┐
+│                       당신 (Driver)                          │
+│              아키텍처 · 패턴 · 아이디어 · 의사결정             │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                    ┌─────────┴─────────┐
+                    │    claude-automate │
+                    │     (Harness)      │
+                    └─────────┬─────────┘
+                              │
+          ┌───────────┬───────┴───────┬───────────┐
+          ▼           ▼               ▼           ▼
+    ┌─────────┐ ┌─────────┐   ┌─────────┐ ┌─────────┐
+    │ Pattern │ │ Doc Sync│   │ Context │ │ Review  │
+    │ Checker │ │ Checker │   │ Builder │ │ Agents  │
+    └─────────┘ └─────────┘   └─────────┘ └─────────┘
+        AI Agents (실행자)
+```
+
+---
+
+## Philosophy
+
+### 1. "나보다 더 잘 보는 녀석이 나타났다"
+> Peter Steinberger (Moltbot 창시자)
+
+5-10개 에이전트를 병렬로 운영하며, 코드 리뷰 대신 아키텍처 논의에 집중합니다. 계획에 시간을 투자하고, 실행은 위임합니다.
+
+### 2. "코드 읽기를 그만뒀더니, 리뷰가 더 좋아졌다"
+> Kieran Klaassen
+
+13개 전문 AI 리뷰어가 병렬로 실행됩니다. 50/50 규칙: 리뷰 50%, 시스템 개선 50%. Triage 기반으로 의사결정합니다.
+
+### 3. "코드를 보면 안 된다. 상위 레벨 개념을 확고히"
+> 토스테크 Software 3.0
+
+도구는 바뀌었지만 좋은 설계의 원칙은 그대로입니다. Claude Code도 레이어드 아키텍처를 따르고, 안티패턴도 그대로 적용됩니다.
+
+### 4. "참고하되 내 것으로 만들어야 성장"
+> oh-my-claudecode 분석에서
+
+다른 사람의 설정을 복사하는 것만으론 부족합니다. 직접 만들고, 이해하고, 수정할 수 있어야 진짜 내 것이 됩니다.
+
+---
+
+## Current Features
+
+### 아키텍처 레이어 매핑
+
+claude-automate는 토스테크의 레이어드 아키텍처 모델을 따릅니다:
+
+```
+Commands    =  Controller (진입점, 사용자 인터페이스)
+Agents      =  Service Layer (비즈니스 로직, 분석/검증)
+Skills      =  Domain Component (단일 책임, 재사용 가능)
+MCP         =  Infrastructure/Adapter (외부 연동)
+CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
+```
+
+### Commands (Controller)
+
+| Command | 설명 |
+|---------|------|
+| `/start-work` | 세션 시작: 이전 컨텍스트 + 백로그 + 워크트리 |
+| `/wrap` | 세션 종료: 패턴 검증 + 문서 동기화 + 컨텍스트 저장 |
+| `/backlog` | 백로그 조회 및 관리 |
+| `/project-init` | 새 프로젝트 초기화 |
+
+### Agents (Service Layer)
+
+| Agent | Tier | 역할 |
+|-------|------|------|
+| `pattern-checker` | Sonnet | 프로젝트 규칙 검증 |
+| `pattern-checker-high` | Opus | 복잡한 규칙 충돌 해결 |
+| `doc-sync-checker` | Sonnet | 문서-코드 동기화 검증 |
+| `doc-sync-checker-high` | Opus | 대규모 문서 구조 변경 |
+| `context-builder` | Sonnet | 세션 컨텍스트 생성 |
+
+### Skills (Domain Component)
+
+| Skill | 역할 |
+|-------|------|
+| `backlog` | 백로그 CRUD 및 상태 관리 |
+| `feedback` | 피드백 수집 및 조회 |
+| `project-init` | 프로젝트 템플릿 생성 |
+| `explain-plugins` | 플러그인 시스템 설명 |
+
+---
+
+## Roadmap
+
+### Phase 1: 계획-실행 워크플로우 (진행 예정)
+
+Peter Steinberger 스타일의 계획 중심 개발:
+
+- [ ] **phase1-001**: 아키텍처 우선 계획 단계
+- [ ] **phase1-002**: 다중 에이전트 병렬 실행
+- [ ] **phase1-003**: 결과 통합 및 피드백
+
+### Phase 2: PARA 지식 관리
+
+배운 것을 축적하는 시스템:
+
+- [ ] **phase2-001**: PARA 지식 구조 설계
+- [ ] **phase2-002**: 세션 인사이트 자동 추출
+- [ ] **phase2-003**: 지식 검색 및 활용
+
+### Phase 3: 병렬 리뷰 에이전트
+
+Kieran Klaassen 스타일의 병렬 리뷰 시스템 (코드 완성 후 검증):
+
+- [ ] **phase3-001**: 병렬 리뷰 에이전트 구조 설계
+- [ ] **phase3-002**: Triage 워크플로우 구현
+- [ ] **phase3-003**: 리뷰 결과 학습 축적
+- [ ] **phase3-004**: 도구 위임 규칙 정의
+
+---
+
+## Quick Start
+
+### 1. 설치
 
 ```bash
+# Claude Code 플러그인 마켓플레이스에서 설치
 /plugin marketplace add yhyuntak/claude-automate
 /plugin install claude-automate@claude-automate
 ```
 
-## Usage
-
-The main command is `/wrap`, which concludes your development session:
+### 2. 세션 시작
 
 ```bash
-/wrap
-```
-
-This command:
-- Verifies code follows project patterns
-- Checks if documentation needs updates
-- Saves your session context automatically
-
-Other useful commands:
-- `/project-init` - Initialize new project with templates and structure
-- `/start-work` - Begin a work session with context loading and worktree setup
-- `/session-start` - Load previous session summary
-- `/backlog` - View and manage your project backlog
-- `/feedback` - View feedback from previous sessions
-- `/install-rule` - Install project rules to global Claude Code configuration
-
-## Project Structure
-
-```
-claude-automate/
-├── .claude-plugin/
-│   ├── plugin.json              # Plugin metadata and version
-│   └── marketplace.json         # Marketplace configuration
-│
-├── commands/
-│   ├── wrap.md                  # /wrap command - session wrap-up with goal-first architecture
-│   ├── start-work.md            # /start-work command - integrated workflow for session setup
-│   ├── session-start.md         # Session context loading
-│   ├── install-rule.md          # /install-rule command - install project rules globally
-│   └── feedback.md              # Feedback management commands
-│
-├── agents/
-│   ├── pattern-checker.md       # Validates code against project rules
-│   ├── pattern-checker-high.md  # Complex rule conflict resolution (Opus)
-│   ├── doc-sync-checker.md      # Monitors documentation consistency
-│   ├── doc-sync-checker-high.md # Complex doc structure changes (Opus)
-│   └── context-builder.md       # Creates session context files
-│
-├── skills/
-│   ├── explain-skills/          # Skill system documentation and references
-│   ├── feedback/                # Feedback system with schema and examples
-│   ├── backlog/                 # Project backlog management
-│   ├── project-init/            # New project initialization with templates
-│   └── [other skills]/
-│
-├── rules/
-│   ├── interaction.md           # AskUserQuestion UX rules
-│   ├── backlog-rules.md         # Backlog management (todo/doing/done)
-│   └── workflow.md              # Git branching and release strategies
-│
-├── .claude/
-│   ├── rules/
-│   │   └── version-up.md        # Version bump rules (project-specific)
-│   ├── context/                 # Session context files (auto-generated)
-│   └── CLAUDE.md                # Main Claude configuration
-│
-└── .gitignore
-```
-
-## How It Works: WRAP Architecture
-
-The `/wrap` command uses a **Goal-first** (WRAP V3) architecture optimized for efficiency:
-
-### Step 1: Analyze Changes
-Review only file changes with `git diff --stat` to understand what was modified.
-
-### Step 2: Route to Agents
-Based on change types, dispatch to specialized agents:
-
-| File Type | Pattern Checker | Doc Sync Checker |
-|-----------|-----------------|------------------|
-| Code files (.ts, .py, etc.) | ✅ Check | △ If API |
-| Documentation (.md) | △ If rules-related | ❌ Skip |
-| Configuration files | △ Check | ❌ Skip |
-| New features | ✅ Check | ✅ Check |
-
-### Step 3: Parallel Execution
-Agents collect and analyze in parallel - you wait for the slowest, not the sum.
-
-### Step 4: Integrated Results
-Results are combined into a single summary with recommended actions.
-
-### Step 5: Session Saved
-Context is automatically saved to `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md` for future reference.
-
-## Model Tiering Strategy
-
-The plugin optimizes cost and latency by using the right model for each task:
-
-| Model | Primary Use |
-|-------|------------|
-| **Haiku** | Data collection, simple pattern matching |
-| **Sonnet** | Analysis, decision-making, standard agent work |
-| **Opus** | Complex conflict resolution, strategic decisions |
-
-## Key Commands
-
-### `/start-work`
-Unified workflow for starting your development session:
-1. Shows previous session summary
-2. Displays project backlog
-3. Sets up optional git worktree for branch isolation
-4. Prepares your working environment
-
-Options:
-- `/start-work --skip-session` - Skip previous session summary
-- `/start-work --no-worktree` - Skip worktree setup
-
-### `/wrap`
-Concludes your development session with comprehensive checks:
-1. Validates code against project rules
-2. Checks documentation consistency
-3. Saves session context
-4. Provides recommended next actions
-
-### `/check-feedback` & `/write-feedback`
-Session feedback system for recording learnings and notes between sessions.
-
-### `/backlog`
-View and manage project tasks organized by phase.
-
-## Session Context System
-
-Each development session is automatically tracked in `.claude/context/`:
-
-```
-.claude/context/
-├── 2026-01/
-│   ├── 2026-01-20-a8013.md      # Session from Jan 20
-│   ├── 2026-01-22-f7bf0.md      # Session from Jan 22
-│   └── 2026-01-23-session.md    # Current session
-```
-
-Session files contain:
-- **Date and session ID** for unique identification
-- **Summary of work done** during the session
-- **Files changed** in the session
-- **Analysis results** from pattern and doc sync checks
-- **Recommended actions** for next session
-
-This context is automatically loaded at the start of your next session with `/start-work`.
-
-## Configuration
-
-### Project Rules
-
-Create `.claude/rules/` files to define your project's conventions:
-
-- `versioning.md` - Semantic versioning strategy
-- `interaction.md` - Communication and interaction patterns
-- Add custom rules as needed
-
-### Custom Skills
-
-Skills are defined in the `skills/` directory and extend the plugin's functionality. Each skill includes:
-- `SKILL.md` - Skill description and usage
-- `schema.md` - Input/output specifications
-- `templates.md` - Usage examples
-
-### Hooks Configuration
-
-Configure automation hooks in `.claude/hooks/hooks.json` to trigger actions at specific points in your workflow.
-
-## Development Workflow Example
-
-Here's a typical development session:
-
-```bash
-# 1. Start your session
 /start-work
-
-# 2. Choose your task from backlog or start freely
-# 3. Make your code changes
-# 4. When finished, wrap up the session
-/wrap
-
-# /wrap will:
-# ✅ Check code follows project patterns
-# ✅ Verify documentation is up-to-date
-# ✅ Save your session context
-# ✅ Suggest next steps
 ```
 
-## Extensibility
+이전 세션 컨텍스트를 불러오고, 백로그를 확인하고, 워크트리를 설정합니다.
 
-The plugin is designed to be extended with new:
-- **Agents**: Custom specialized agents in `agents/`
-- **Skills**: New capabilities in `skills/`
-- **Commands**: New commands in `commands/`
-- **Hooks**: Automated triggers in `.claude/hooks/`
+### 3. 작업 후 마무리
 
-Each component is modular and can be developed independently.
+```bash
+/wrap
+```
 
-## Requirements
+패턴 검증, 문서 동기화 확인, 세션 컨텍스트를 자동 저장합니다.
 
-- Claude Code (Claude API client)
-- Git (for version control and worktree support)
-- Bash/Shell environment
+---
+
+## References
+
+더 자세한 배경과 영감의 원천:
+
+| 문서 | 핵심 인사이트 |
+|------|--------------|
+| [Peter Steinberger](docs/references/01-peter-steinberger-moltbot.md) | "I ship code I don't read" |
+| [Kieran Klaassen](docs/references/02-kieran-klaassen-code-review.md) | 13개 병렬 AI 리뷰어 |
+| [토스테크](docs/references/03-toss-software-3.0.md) | 레이어드 아키텍처 매핑 |
+| [oh-my-claudecode](docs/references/04-oh-my-claudecode-analysis.md) | 멀티 에이전트 오케스트레이션 |
+
+---
 
 ## License
 
@@ -241,7 +190,3 @@ MIT
 ## Author
 
 [yhyuntak](https://github.com/yhyuntak)
-
----
-
-For more detailed documentation on specific features, see the command files in the `commands/` directory and skill documentation in `skills/`.
