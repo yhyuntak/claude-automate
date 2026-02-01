@@ -5,7 +5,7 @@
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
 | content | string | O | 저장할 내용 (사용자 입력) |
-| category | string | O | 카테고리 (concepts, python 등) |
+| category | string | O | 카테고리 (README.md에서 동적 조회) |
 | title | string | O | 문서 제목 |
 | tags | string[] | X | 태그 목록 |
 
@@ -40,25 +40,20 @@ source: claude-session
 ## 관련 문서
 
 -
-
----
-
-**Last Updated**: {YYYY-MM-DD}
 ```
 
 ---
 
-## 카테고리 목록
+## 카테고리 조회 (동적)
 
-| 카테고리 | 설명 | 예시 |
-|----------|------|------|
-| concepts | 언어 무관 개념 | CORS, JWT, Race Condition |
-| architecture | 아키텍처 패턴 | Clean Architecture, Event-Driven |
-| python | Python 특화 | FastAPI, SQLAlchemy |
-| javascript | JS 특화 | Promise, EventEmitter |
-| react | React 특화 | Hooks, 상태관리 |
-| infra | 인프라/DevOps | Docker, CI/CD |
-| _inbox | 임시 저장 | 분류 전 |
+**하드코딩 금지** - 실행 시 README.md에서 조회
+
+```
+조회 경로: ~/workspace/mynotes/Resources/README.md
+조회 위치: "카테고리" 테이블 또는 "분류 기준" 테이블
+```
+
+카테고리 목록은 mynotes에서 관리되며, 이 스킬은 단지 참조만 합니다.
 
 ---
 

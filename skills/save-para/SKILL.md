@@ -10,27 +10,29 @@ argument-hint: "[제목]"
 
 ---
 
-## 저장 위치
+## Progressive Disclosure 워크플로우
+
+이 스킬은 **하드코딩된 구조 없이** README.md를 순차적으로 읽어서 동적으로 작동합니다.
+
+### Step 1: PARA 루트 확인
 
 ```
-~/workspace/mynotes/Resources/
-├── concepts/       # 언어 무관 개념
-├── architecture/   # 아키텍처 패턴
-├── python/         # Python 특화
-├── javascript/     # JavaScript 특화
-├── react/          # React 특화
-├── infra/          # 인프라, DevOps
-└── _inbox/         # 임시 (분류 전)
+Read: ~/workspace/mynotes/README.md
+→ PARA 구조 이해 (Projects, Areas, Resources, Archive)
+→ Resources/ 폴더로 진입
 ```
 
----
+### Step 2: Resources 구조 파악
 
-## 워크플로우
+```
+Read: ~/workspace/mynotes/Resources/README.md
+→ "분류 기준" 테이블에서 카테고리 목록 추출
+→ "카테고리" 테이블에서 현재 폴더 구조 확인
+```
 
-### 1. 내용 확인 (필수)
+### Step 3: 사용자 질문 (동적 옵션)
 
-**항상 사용자에게 물어보기:**
-
+**내용 확인:**
 ```
 AskUserQuestion:
   question: "어떤 내용을 저장할까요?"
@@ -39,23 +41,24 @@ AskUserQuestion:
     - "직접 입력"
 ```
 
-### 2. 카테고리 선택
-
+**카테고리 선택 (README.md에서 읽은 목록 사용):**
 ```
 AskUserQuestion:
   question: "어느 카테고리에 저장할까요?"
   options:
-    - concepts (언어 무관 개념)
-    - architecture (아키텍처 패턴)
-    - python
-    - javascript
-    - react
-    - infra
-    - _inbox (나중에 분류)
+    - (Resources/README.md의 "카테고리" 테이블에서 동적으로 생성)
     - "새 카테고리 생성"
 ```
 
-### 3. 제목/파일명 확인
+### Step 4: 카테고리 README 확인
+
+```
+Read: ~/workspace/mynotes/Resources/{선택한 카테고리}/README.md
+→ 해당 카테고리의 규칙/형식 파악
+→ 기존 문서 목록 확인 (중복 방지)
+```
+
+### Step 5: 제목/파일명 확인
 
 ```
 AskUserQuestion:
@@ -65,60 +68,62 @@ AskUserQuestion:
     - "직접 입력"
 ```
 
-### 4. 저장 실행
+### Step 6: 저장 실행
 
-1. **파일 생성**
-   ```
-   ~/workspace/mynotes/Resources/{category}/{slug}.md
-   ```
-
-2. **템플릿 적용**
-   ```markdown
-   ---
-   title: {title}
-   created: {YYYY-MM-DD}
-   tags: [{tags}]
-   source: claude-session
-   ---
-
-   # {title}
-
-   {content}
-
-   ---
-
-   ## 관련 문서
-
-   -
-   ```
-
-3. **README.md 업데이트**
-   - 해당 카테고리 README.md 테이블에 추가
-   - Resources/README.md "최근 추가" 테이블에 추가
+1. **파일 생성**: `~/workspace/mynotes/Resources/{category}/{slug}.md`
+2. **템플릿 적용** (아래 참조)
+3. **인덱스 업데이트** (아래 참조)
 
 ---
 
-## 인덱스 업데이트 로직
+## 템플릿
+
+```markdown
+---
+title: {title}
+created: {YYYY-MM-DD}
+tags: [{tags}]
+source: claude-session
+---
+
+# {title}
+
+{content}
+
+---
+
+## 관련 문서
+
+-
+```
+
+---
+
+## 인덱스 업데이트
 
 ### 카테고리 README.md
 
+문서 목록 테이블에 새 항목 추가:
 ```markdown
-## 문서 목록
-
-| 제목 | 설명 | 태그 |
-|------|------|------|
-| [[새문서]] | 첫 문장 | #tag1 #tag2 |  ← 추가
+| [[새문서]] | 첫 문장 | #tag1 #tag2 |
 ```
 
 ### Resources/README.md
 
+"최근 추가" 테이블 맨 위에 추가:
 ```markdown
-## 최근 추가
-
-| 제목 | 카테고리 | 태그 | 생성일 |
-|------|----------|------|--------|
-| [[새문서]] | concepts | #tag | 2026-02-01 |  ← 맨 위에 추가
+| [[새문서]] | {category} | #tag | {date} |
 ```
+
+"카테고리" 테이블의 문서 수 갱신
+
+---
+
+## 새 카테고리 생성 시
+
+1. `Resources/{new-category}/` 폴더 생성
+2. `Resources/{new-category}/README.md` 생성 (기존 카테고리 README 형식 참조)
+3. `Resources/README.md`의 "분류 기준" 및 "카테고리" 테이블 업데이트
 
 ---
 
@@ -127,9 +132,9 @@ AskUserQuestion:
 ```markdown
 ## 저장 완료!
 
-- **파일**: Resources/concepts/race-condition.md
-- **카테고리**: concepts
-- **태그**: #concurrency #backend
+- **파일**: Resources/{category}/{slug}.md
+- **카테고리**: {category}
+- **태그**: {tags}
 
 인덱스가 업데이트되었습니다.
 ```
