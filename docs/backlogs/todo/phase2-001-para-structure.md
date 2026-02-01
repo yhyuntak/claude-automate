@@ -48,6 +48,45 @@ docs/knowledge/
 └── archive/        # 완료된 Phase, 더 이상 유효하지 않은 것
 ```
 
+### 2026-01-31 논의 내용
+
+**핵심 방향: 옵시디언 vault로 통합**
+
+```
+위치: ~/workspace/mynotes
+현재 상태: 구조 없이 사용 중
+목표: PARA 구조로 재편
+```
+
+**Resources = 지식 축적소**
+
+```
+Resources/
+├── architecture/     # 아키텍처 패턴
+├── patterns/         # 디자인 패턴, 코딩 패턴
+├── learnings/        # 세션에서 배운 것들
+└── tech-references/  # 기술 레퍼런스
+```
+
+**목적: 초보 개발자 성장**
+
+> AI 시대에 코드 작성 능력보다 "무엇을, 왜, 어떻게" 결정하는 능력이 중요.
+> 아키텍처, 패턴, 트레이드오프에 대한 이해가 핵심.
+> PARA의 Resource가 이런 지식 축적에 적합.
+
+**Claude Code 연동 비전**
+
+```
+작업하면서 배움 → 자동 추출 → Resource에 저장
+새 작업 시 → 지식 참조 → 더 나은 결정
+```
+
+**통합 계획**
+
+- 프로젝트별 docs/ → 옵시디언 Projects/로 통합
+- 범용 지식 → Resources/로 분류
+- 완료된 프로젝트 → Archive/로 이동
+
 ### 기술 결정
 
 (작업 시 기록)
@@ -58,4 +97,4 @@ docs/knowledge/
 
 ---
 
-**Last Updated**: 2026-01-30
+**Last Updated**: 2026-01-31
