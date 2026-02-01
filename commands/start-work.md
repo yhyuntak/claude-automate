@@ -341,12 +341,44 @@ Run `/wrap` when done to complete your session.
 
 ---
 
+## CRITICAL RULES
+
+### 1. Use explore Agent for File Reading
+
+When reading files (session context, backlog files, etc.), use explore agent:
+
+```
+Task(
+  subagent_type="claude-automate:explore-low",
+  prompt="Read and summarize: {file_path}"
+)
+```
+
+**Why:** Prevents context pollution. Main receives summary only.
+
+### 2. Enter Plan Mode After Start-Work
+
+**DO NOT start implementation immediately.**
+
+After /start-work completes:
+1. User reviews task details
+2. User decides next action
+3. If implementation needed → Enter plan mode first (use /oh-my-claudecode:plan or EnterPlanMode)
+
+**Why:**
+- Prevents unplanned work
+- Ensures user agreement before changes
+- Follows "architecture first" principle
+
+---
+
 ## THE START-WORK PROMISE
 
 Before completion, verify:
-- [ ] Session context displayed
+- [ ] Session context displayed (via explore agent)
 - [ ] Backlog status displayed (explicitly state "none" if missing)
 - [ ] User selection received (worktree, task)
 - [ ] Anchor file created (.claude/anchor.md)
 - [ ] Environment configured per selection
 - [ ] Completion message displayed
+- [ ] **Did NOT start implementation** (wait for user direction)

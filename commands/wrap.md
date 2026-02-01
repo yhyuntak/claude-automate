@@ -116,7 +116,72 @@ Receive agent results and consolidate:
 
 ---
 
-## STEP 5: Save Session Context (Always last)
+## STEP 5: Update Backlog Status
+
+### Check Anchor for Current Task
+
+```bash
+cat .claude/anchor.md 2>/dev/null
+```
+
+If anchor contains a backlog task (e.g., `phase1-001-xxx`):
+
+### Move Backlog File
+
+```bash
+# If task was in todo/, move to done/
+mv docs/backlogs/todo/{task}.md docs/backlogs/done/
+# Or if in doing/, move to done/
+mv docs/backlogs/doing/{task}.md docs/backlogs/done/
+```
+
+### Update README.md
+
+Update the backlog README to reflect the status change:
+- Change status from "Todo" or "Doing" to "Done"
+- Update file path link
+
+---
+
+## STEP 6: Commit Changes (If No Issues)
+
+### Commit Criteria
+
+Only commit if:
+- [ ] No pattern-checker violations (or all resolved)
+- [ ] No doc-sync issues (or all resolved)
+- [ ] Changes are staged or ready to stage
+
+### Commit Flow
+
+```bash
+# Check status
+git status
+
+# Stage changes (specific files, not -A)
+git add {changed files}
+
+# Commit with descriptive message
+git commit -m "{type}: {description}
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+```
+
+### Commit Message Format
+
+| Type | Usage |
+|------|-------|
+| feat | New feature |
+| fix | Bug fix |
+| refactor | Code refactoring |
+| docs | Documentation |
+| chore | Maintenance |
+
+**If issues remain:** Skip commit, list in Recommended Actions.
+
+---
+
+## STEP 7: Save Session Context
 
 ```
 Task(
@@ -140,7 +205,7 @@ Context file path: `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md`
 
 ---
 
-## STEP 6: Final Output
+## STEP 8: Final Output
 
 ```markdown
 ## /wrap Complete
@@ -185,5 +250,7 @@ Before completion, verify:
 - [ ] Reviewed changed files with diff --stat
 - [ ] Called only necessary agents (no unnecessary agent calls)
 - [ ] Clearly defined scope for each agent
+- [ ] Updated backlog status (if applicable)
+- [ ] Committed changes (if no issues)
 - [ ] Saved session with context-builder
 - [ ] Displayed results to user
