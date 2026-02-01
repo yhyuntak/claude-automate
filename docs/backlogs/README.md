@@ -8,11 +8,11 @@
 
 | 상태 | 개수 |
 |------|------|
-| Todo | 9 |
+| Todo | 10 |
 | Doing | 0 |
 | Done | 1 |
 
-**전체 진행률**: 1/10 (10%)
+**전체 진행률**: 1/11 (9%)
 
 ---
 
@@ -27,6 +27,7 @@
 | 1 | 001 | [아키텍처 우선 계획 단계](done/phase1-001-architecture-first-planning.md) | ✅ Done |
 | 1 | 002 | [다중 에이전트 병렬 실행](todo/phase1-002-multi-agent-execution.md) | Todo |
 | 1 | 003 | [결과 통합 및 피드백](todo/phase1-003-result-integration.md) | Todo |
+| 1 | 004 | [Plan Skill 테스트](todo/phase1-004-plan-skill-test.md) | Todo |
 
 ---
 
