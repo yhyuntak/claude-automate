@@ -9,7 +9,7 @@
       "name": "claude-automate",
       "source": "./",
       "description": "Self-Evolving Development System - 메타 레이어 자동화",
-      "version": "0.5.4"
+      "version": "0.5.5"
     }
   ]
 }
