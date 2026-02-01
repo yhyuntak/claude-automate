@@ -10,10 +10,10 @@
 
 ## Acceptance Criteria
 
-- [ ] PARA 폴더 구조 정의 (docs/knowledge/)
-- [ ] 각 카테고리별 저장 규칙 명확화
-- [ ] 지식 분류 기준 문서화
-- [ ] 마이그레이션 경로 (기존 docs/ → PARA)
+- [x] PARA 폴더 구조 정의 (~/workspace/mynotes/)
+- [x] 각 카테고리별 저장 규칙 명확화 (PARA.md, 각 폴더 README.md)
+- [x] 지식 분류 기준 문서화 (PARA.md)
+- [x] 마이그레이션 경로 (기존 폴더 → PARA 완료)
 
 ## 비기능 요구사항
 
@@ -90,12 +90,17 @@ Resources/
 
 ### 기술 결정
 
-(작업 시 기록)
+- 옵시디언 vault (~/workspace/mynotes)를 PARA 구조로 재편
+- Projects/, Areas/, Resources/, Archive/ 4개 폴더 체계
+- Resources/에 기술 지식 집중 (concepts/, architecture/, 언어별 폴더)
 
-### 이슈/해결
+### 완료 내역 (2026-02-02)
 
-(작업 시 기록)
+- 폴더 12개 정리 (중복 삭제, PARA 이동)
+- 파일 10개 정리 (분류 또는 삭제)
+- DB 관련 문서 3개 보완 (idle-in-transaction, mvcc, connection-pool)
+- PARA.md 및 각 폴더 README.md 작성
 
 ---
 
-**Last Updated**: 2026-01-31
+**Completed**: 2026-02-02

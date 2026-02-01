@@ -9,6 +9,10 @@ ANCHOR_FILE=".claude/anchor.md"
 if [ -f "$ANCHOR_FILE" ]; then
     CONTENT=$(cat "$ANCHOR_FILE")
 
+    # tmux 상태바에 앵커 표시 (tmux 서버 실행 중이면 동작)
+    GOAL=$(sed -n '3p' "$ANCHOR_FILE" | head -c 40)
+    tmux set -g status-right " 🎯 $GOAL " 2>/dev/null
+
     MESSAGE="<system-reminder>
 ┌─ 🎯 ANCHOR ─────────────────────────────────────────┐
 ${CONTENT}
