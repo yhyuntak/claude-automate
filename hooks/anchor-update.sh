@@ -2,7 +2,7 @@
 
 # Anchor Update Hook (Stop)
 # Reminds Claude to update anchor if needed after each turn
-# Output format: JSON { "continue": true, "message": "..." }
+# Output format: JSON with hookSpecificOutput.additionalContext
 
 ANCHOR_FILE=".claude/anchor.md"
 
@@ -14,7 +14,7 @@ Keep it concise - just the current objective and any refinements.
 </system-reminder>"
 
     ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
-    echo "{\"continue\": true, \"message\": $ESCAPED}"
+    echo "{\"continue\": true, \"hookSpecificOutput\": {\"hookEventName\": \"Stop\", \"additionalContext\": $ESCAPED}}"
 else
     echo "{\"continue\": true}"
 fi

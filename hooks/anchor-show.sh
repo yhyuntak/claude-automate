@@ -2,7 +2,7 @@
 
 # Anchor Show Hook (UserPromptSubmit)
 # Displays current anchor to remind Claude of the session goal
-# Output format: JSON { "continue": true, "message": "..." }
+# Output format: JSON with hookSpecificOutput.additionalContext
 
 ANCHOR_FILE=".claude/anchor.md"
 
@@ -18,7 +18,7 @@ Update .claude/anchor.md if the goal changes or becomes more specific.
 </system-reminder>"
 
     ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
-    echo "{\"continue\": true, \"message\": $ESCAPED}"
+    echo "{\"continue\": true, \"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": $ESCAPED}}"
 else
     MESSAGE="<system-reminder>
 [NO ANCHOR]
@@ -34,5 +34,5 @@ else
 </system-reminder>"
 
     ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
-    echo "{\"continue\": true, \"message\": $ESCAPED}"
+    echo "{\"continue\": true, \"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": $ESCAPED}}"
 fi
