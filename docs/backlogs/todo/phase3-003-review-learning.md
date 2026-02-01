@@ -22,8 +22,7 @@
 
 ## Dependencies
 
-- phase1-001 완료 후 시작 가능
-- phase1-002 결과 활용 가능
+- phase2-003 완료 후 시작 (Triage 워크플로우 결과 필요)
 
 ---
 

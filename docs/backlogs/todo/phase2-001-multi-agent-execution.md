@@ -23,7 +23,7 @@
 
 ## Dependencies
 
-- phase3-001 완료 (계획 단계 필요)
+- phase1-001 완료 후 시작 (Plan skill 검증 후 실행 단계)
 
 ---
 

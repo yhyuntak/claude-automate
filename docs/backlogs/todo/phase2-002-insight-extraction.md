@@ -23,7 +23,7 @@
 
 ## Dependencies
 
-- phase2-001 완료 후 시작 (PARA 구조 필요)
+- phase1-002 완료 후 시작 (PARA 구조 필요)
 
 ---
 
