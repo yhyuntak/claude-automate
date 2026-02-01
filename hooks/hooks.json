@@ -21,11 +21,6 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-stop.sh",
             "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/anchor-update.sh",
-            "timeout": 3
           }
         ]
       }

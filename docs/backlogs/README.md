@@ -8,8 +8,8 @@
 
 | 상태 | 개수 |
 |------|------|
-| Todo | 6 |
-| Doing | 0 |
+| Todo | 5 |
+| Doing | 1 |
 | Done | 0 |
 
 ---
@@ -18,7 +18,7 @@
 
 | Phase | ID | Title | Status |
 |-------|-----|-------|--------|
-| 1 | 001 | [brain.md 구조 정의](todo/phase1-001-brain-structure.md) | Todo |
+| 1 | 001 | [brain.md 구조 정의](doing/phase1-001-brain-structure.md) | 🔄 Doing |
 | 1 | 002 | [/start-work에 brain 로드](todo/phase1-002-start-work-brain-load.md) | Todo |
 | 1 | 003 | [/wrap에 brain 업데이트](todo/phase1-003-wrap-brain-update.md) | Todo |
 
