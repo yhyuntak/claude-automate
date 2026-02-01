@@ -20,5 +20,19 @@ Update .claude/anchor.md if the goal changes or becomes more specific.
     ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
     echo "{\"continue\": true, \"message\": $ESCAPED}"
 else
-    echo "{\"continue\": true}"
+    MESSAGE="<system-reminder>
+[NO ANCHOR]
+.claude/anchor.md가 없습니다.
+사용자의 현재 목표를 파악해서 .claude/anchor.md를 생성해주세요.
+
+형식:
+# Anchor
+
+{목표}
+
+**Started**: {날짜}
+</system-reminder>"
+
+    ESCAPED=$(echo "$MESSAGE" | jq -Rs '.')
+    echo "{\"continue\": true, \"message\": $ESCAPED}"
 fi
