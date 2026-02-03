@@ -296,8 +296,12 @@ Starting free work without backlog.
   "multiSelect": false,
   "options": [
     {
+      "label": "브레인스토밍",
+      "description": "뭘 만들지 구체화 (/brainstorm)"
+    },
+    {
       "label": "계획 세우기",
-      "description": "Plan mode 진입 (EnterPlanMode)"
+      "description": "어떻게 만들지 계획 (/planning)"
     },
     {
       "label": "바로 구현",
@@ -306,10 +310,6 @@ Starting free work without backlog.
     {
       "label": "질문/논의",
       "description": "태스크에 대해 더 논의"
-    },
-    {
-      "label": "다른 작업",
-      "description": "자유롭게 진행"
     }
   ]
 }
@@ -359,10 +359,10 @@ Starting free work without backlog.
 │     ├─ 6. Completion message                        │
 │     │                                               │
 │     └─ 6.5 [Ask] "다음에 무엇을 할까요?"            │
-│            ├─ 계획 세우기 → EnterPlanMode           │
+│            ├─ 브레인스토밍 → /brainstorm            │
+│            ├─ 계획 세우기 → /planning               │
 │            ├─ 바로 구현                             │
-│            ├─ 질문/논의                             │
-│            └─ 다른 작업                             │
+│            └─ 질문/논의                             │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 ```
