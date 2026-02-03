@@ -126,7 +126,7 @@ Options:
   - "New task (no backlog)": Free work
 ```
 
-Skip this step if no backlog exists.
+**If no backlog exists:** Skip this step and proceed as Free work automatically (no question needed).
 
 ---
 
