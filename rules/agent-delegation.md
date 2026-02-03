@@ -47,6 +47,25 @@ explore-high (Opus):
 | 짧은 수정 (10줄 이하) | 메인이 직접 |
 | 중간 작업 (10-50줄) | `writer` 권장 |
 | 큰 구현 (50줄+) | `writer` 필수 |
+| 복잡한 구현 | `writer-high` 필수 |
+
+### Writer 2-Tier 구조
+
+| 복잡도 | 에이전트 | 기준 |
+|--------|----------|------|
+| Standard | `writer` (Sonnet) | 일반 코드, CRUD, 단순 로직 |
+| High | `writer-high` (Opus) | 알고리즘, 보안, 아키텍처 |
+
+### writer-high 사용 기준
+
+```
+writer-high (Opus):
+- 복잡한 알고리즘 구현 (정렬, 탐색, DP, 그래프)
+- 보안 관련 코드 (인증, 암호화, 권한)
+- 아키텍처 패턴 적용 (Design Pattern 구현)
+- 성능 최적화 코드
+- 여러 파일에 걸친 대규모 리팩토링
+```
 
 ### writer 사용 시
 
@@ -65,6 +84,30 @@ Task(
 
 ## Verification
 {검증 방법 - build, test, lint}
+"""
+)
+```
+
+### writer-high 사용 시
+
+```
+Task(
+  subagent_type="claude-automate:writer-high",
+  prompt="""
+## Task
+{뭘 할지}
+
+## Target
+{파일 경로}
+
+## Requirements
+{요구사항}
+
+## Complexity Reason
+{왜 writer-high가 필요한지 - algorithm/security/architecture/performance/scale}
+
+## Verification
+{검증 방법 - build, test, lint, security check}
 """
 )
 ```
@@ -141,4 +184,4 @@ npm run build && npm test
 
 ---
 
-**Last Updated**: 2026-02-02
+**Last Updated**: 2026-02-03
