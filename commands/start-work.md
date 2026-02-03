@@ -251,8 +251,6 @@ Now working in this folder.
 
 ---
 
-Run `/wrap` when done to complete your session.
-
 💡 Return to main project: `cd ../claude-automate`
 ```
 
@@ -274,10 +272,6 @@ cat docs/backlog/todo/phase1-001-feature-x.md
 ## 📄 Task Details
 
 [Full content of the backlog file]
-
----
-
-Run `/wrap` when done to complete your session.
 ```
 
 ### New Task (No Backlog)
@@ -285,9 +279,45 @@ Run `/wrap` when done to complete your session.
 ## ✅ Work Started
 
 Starting free work without backlog.
-
-Run `/wrap` when done to complete your session.
 ```
+
+---
+
+## STEP 6.5: Ask Next Action
+
+완료 메시지 출력 후, **반드시** AskUserQuestion 호출:
+
+**Use AskUserQuestion:**
+
+```json
+{
+  "question": "다음에 무엇을 할까요?",
+  "header": "Next Action",
+  "multiSelect": false,
+  "options": [
+    {
+      "label": "계획 세우기",
+      "description": "Plan mode 진입 (EnterPlanMode)"
+    },
+    {
+      "label": "바로 구현",
+      "description": "확인 없이 구현 시작"
+    },
+    {
+      "label": "질문/논의",
+      "description": "태스크에 대해 더 논의"
+    },
+    {
+      "label": "다른 작업",
+      "description": "자유롭게 진행"
+    }
+  ]
+}
+```
+
+> **Note:** `multiSelect: false` - 상호 배타적 선택 (한 가지 행동만 선택)
+
+**CRITICAL:** 이 질문을 건너뛰지 마세요. 도구 호출은 무시할 수 없습니다.
 
 ---
 
@@ -326,7 +356,13 @@ Run `/wrap` when done to complete your session.
 │     │      ├─ cd switch                             │
 │     │      └─ Warning (if already exists)           │
 │     │                                               │
-│     └─ 6. Completion message                        │
+│     ├─ 6. Completion message                        │
+│     │                                               │
+│     └─ 6.5 [Ask] "다음에 무엇을 할까요?"            │
+│            ├─ 계획 세우기 → EnterPlanMode           │
+│            ├─ 바로 구현                             │
+│            ├─ 질문/논의                             │
+│            └─ 다른 작업                             │
 │                                                     │
 └─────────────────────────────────────────────────────┘
 ```
@@ -356,19 +392,17 @@ Task(
 
 **Why:** Prevents context pollution. Main receives summary only.
 
-### 2. Enter Plan Mode After Start-Work
+### 2. AskUserQuestion으로 다음 행동 강제
 
-**DO NOT start implementation immediately.**
+**STEP 6.5의 AskUserQuestion 호출은 필수입니다.**
 
-After /start-work completes:
-1. User reviews task details
-2. User decides next action
-3. If implementation needed → Enter plan mode first (use /oh-my-claudecode:plan or EnterPlanMode)
+텍스트 규칙("구현하지 마세요")은 Claude가 무시할 수 있지만,
+도구 호출은 무시할 수 없습니다.
 
 **Why:**
-- Prevents unplanned work
-- Ensures user agreement before changes
-- Follows "architecture first" principle
+- 사용자 확인 없이 구현 시작 방지
+- 사용자가 다음 행동 결정
+- "architecture first" 원칙 준수
 
 ---
 
@@ -381,4 +415,4 @@ Before completion, verify:
 - [ ] Anchor file created (.claude/anchor.md)
 - [ ] Environment configured per selection
 - [ ] Completion message displayed
-- [ ] **Did NOT start implementation** (wait for user direction)
+- [ ] **AskUserQuestion으로 다음 행동 질문** (필수 - 건너뛰기 불가)
