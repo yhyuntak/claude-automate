@@ -42,6 +42,9 @@ Use the **Write tool** to create each rule file in `~/.claude/rules/` using the 
 3. **workflow.md** - Write to `~/.claude/rules/workflow.md`
    - Use the content from `references/workflow.md` (in your context)
 
+4. **agent-delegation.md** - Write to `~/.claude/rules/agent-delegation.md`
+   - Use the content from `references/agent-delegation.md` (in your context)
+
 ### Step 3: Confirm installation
 
 After successfully writing all three files, display this confirmation:
@@ -55,8 +58,9 @@ Installed to `~/.claude/rules/`:
 - **interaction.md** - AskUserQuestion UX rules
 - **backlog-rules.md** - Backlog management (todo/doing/done)
 - **workflow.md** - Git branching and release strategies
+- **agent-delegation.md** - 에이전트 위임 규칙 (explore, writer)
 
-**Total:** 3 rules
+**Total:** 4 rules
 
 These rules will apply to all Claude Code sessions.
 
@@ -89,6 +93,7 @@ These rules will apply to all Claude Code sessions.
 - **interaction.md** - AskUserQuestion UX rules
 - **backlog-rules.md** - Backlog management (todo/doing/done)
 - **workflow.md** - Git branching and release strategies
+- **agent-delegation.md** - 에이전트 위임 규칙 (explore, writer)
 
 ---
 
