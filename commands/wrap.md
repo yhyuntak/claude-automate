@@ -116,34 +116,7 @@ Receive agent results and consolidate:
 
 ---
 
-## STEP 5: Update Backlog Status
-
-### Check Anchor for Current Task
-
-```bash
-cat .claude/anchor.md 2>/dev/null
-```
-
-If anchor contains a backlog task (e.g., `phase1-001-xxx`):
-
-### Move Backlog File
-
-```bash
-# If task was in todo/, move to done/
-mv docs/backlogs/todo/{task}.md docs/backlogs/done/
-# Or if in doing/, move to done/
-mv docs/backlogs/doing/{task}.md docs/backlogs/done/
-```
-
-### Update README.md
-
-Update the backlog README to reflect the status change:
-- Change status from "Todo" or "Doing" to "Done"
-- Update file path link
-
----
-
-## STEP 6: Commit Changes (If No Issues)
+## STEP 5: Commit Changes (If No Issues)
 
 ### Commit Criteria
 
@@ -181,7 +154,7 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 
 ---
 
-## STEP 7: Save Session Context
+## STEP 6: Save Session Context
 
 ```
 Task(
@@ -205,7 +178,7 @@ Context file path: `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md`
 
 ---
 
-## STEP 8: Final Output
+## STEP 7: Final Output
 
 ```markdown
 ## /wrap Complete
@@ -250,7 +223,6 @@ Before completion, verify:
 - [ ] Reviewed changed files with diff --stat
 - [ ] Called only necessary agents (no unnecessary agent calls)
 - [ ] Clearly defined scope for each agent
-- [ ] Updated backlog status (if applicable)
 - [ ] Committed changes (if no issues)
 - [ ] Saved session with context-builder
 - [ ] Displayed results to user
