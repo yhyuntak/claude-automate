@@ -24,10 +24,15 @@ This skill copies rules from the plugin's references to `~/.claude/rules/` so th
 
 The rules files are included in this skill's `references/` folder and are automatically loaded into your context when this skill runs.
 
-### Step 1: Create target directory
+### Step 1: Prepare target directory (force overwrite)
 
-Use Bash tool to create the global rules directory:
-- Command: `mkdir -p ~/.claude/rules`
+Use Bash tool to create directory and **delete existing files**:
+
+```bash
+mkdir -p ~/.claude/rules && rm -f ~/.claude/rules/interaction.md ~/.claude/rules/backlog-rules.md ~/.claude/rules/workflow.md ~/.claude/rules/agent-delegation.md
+```
+
+**⚠️ 기존 파일이 있어도 무조건 삭제 후 새로 작성합니다.**
 
 ### Step 2: Install each rule file
 
