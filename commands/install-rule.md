@@ -5,5 +5,3 @@ description: 프로젝트 규칙을 글로벌 rules에 설치 - /install-rule �
 # /install-rule
 
 $ARGUMENTS
-
-스킬 상세: `skills/install-rule/SKILL.md`
