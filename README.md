@@ -91,6 +91,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `/wrap` | 세션 종료: 패턴 검증 + 문서 동기화 + 컨텍스트 저장 |
 | `/backlog` | 백로그 조회 및 관리 |
 | `/project-init` | 새 프로젝트 초기화 |
+| `/verify-web-ui` | Web UI 검증: 시나리오 설계 → 브라우저 테스트 → 분석 |
 
 ### Agents (Service Layer)
 
@@ -101,6 +102,8 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `doc-sync-checker` | Sonnet | 문서-코드 동기화 검증 |
 | `doc-sync-checker-high` | Opus | 대규모 문서 구조 변경 |
 | `context-builder` | Sonnet | 세션 컨텍스트 생성 |
+| `test-planner` | Sonnet | 테스트 시나리오 설계 |
+| `verify-web-ui` | Sonnet | Web UI 테스트 실행 + 데이터 수집 |
 
 ### Skills (Domain Component)
 
@@ -110,6 +113,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `feedback` | 피드백 수집 및 조회 |
 | `project-init` | 프로젝트 템플릿 생성 |
 | `explain-plugins` | 플러그인 시스템 설명 |
+| `verify-web-ui` | Web UI 검증 오케스트레이터 |
 
 ---
 
