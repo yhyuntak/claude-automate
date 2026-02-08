@@ -154,6 +154,27 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 
 ---
 
+## STEP 5.5: Backlog Cleanup
+
+Check if any backlog items in `doing/` should be moved to `done/`.
+
+```bash
+ls docs/backlogs/doing/
+```
+
+| Situation | Action |
+|-----------|--------|
+| `doing/` is empty | Skip this step |
+| Files exist, AC fulfilled this session | `mv doing/{file} done/{file}` + update `docs/backlogs/README.md` |
+| Files exist, AC not fulfilled | Keep in `doing/` (no action) |
+
+**AC Fulfillment Check:**
+- Read the backlog file's Acceptance Criteria
+- Compare against what was actually done this session
+- Only move if ALL criteria are met
+
+---
+
 ## STEP 6: Save Session Context
 
 ```
@@ -189,6 +210,11 @@ Context file path: `.claude/context/YYYY-MM/YYYY-MM-DD-{session-id}.md`
 ### Actions (Optional)
 1. [ ] [Action]
 
+### Backlog (if applicable)
+- ✅ Moved `{file}` → `done/`
+- OR: 🔄 `{file}` remains in `doing/`
+- OR: (no backlog items)
+
 ### Session Saved
 ✅ .claude/context/2026-01/2026-01-22-abc123.md
 ```
@@ -215,6 +241,13 @@ Rule conflicts → Escalate to pattern-checker-high
 Document structure change needed → Escalate to doc-sync-checker-high
 ```
 
+### Backlog Cases
+```
+doing/ is empty → Skip STEP 5.5
+doing/ has files, AC fulfilled → Move to done/ + update README
+doing/ has files, AC not fulfilled → Keep in doing/
+```
+
 ---
 
 ## THE WRAP PROMISE
@@ -224,5 +257,6 @@ Before completion, verify:
 - [ ] Called only necessary agents (no unnecessary agent calls)
 - [ ] Clearly defined scope for each agent
 - [ ] Committed changes (if no issues)
+- [ ] Cleaned up backlog (doing → done if applicable)
 - [ ] Saved session with context-builder
 - [ ] Displayed results to user
