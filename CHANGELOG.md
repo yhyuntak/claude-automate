@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.23.1] - 2026-02-14
+
+### Fixed
+- /verify-web-ui 커맨드가 스킬을 거치지 않고 직접 orchestrator 에이전트 호출하도록 수정
+
 ## [0.23.0] - 2026-02-14
 
 ### Changed
