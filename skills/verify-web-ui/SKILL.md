@@ -31,6 +31,17 @@ allowed-tools: Bash, Read, Write, Glob, Grep, Task
 
 ---
 
+## 절대 규칙
+
+**이 스킬은 오케스트레이터입니다. 브라우저를 직접 조작하지 않습니다.**
+
+- ❌ `mcp__playwright__*` 도구 직접 호출 금지
+- ❌ `mcp__chrome-devtools__*` 도구 직접 호출 금지
+- ✅ 브라우저 조작은 반드시 `Task(subagent_type="claude-automate:verify-web-ui")`로 위임
+- ✅ 이 스킬이 사용하는 도구: `Task`, `Bash`, `Read`, `Write`, `Glob`, `Grep`만 허용
+
+---
+
 ## 4단계 파이프라인
 
 ### 1단계: 시나리오 설계 (순차)
@@ -50,15 +61,19 @@ test-planner가 반환한 시나리오를 다음 단계로 전달.
 
 ### 2단계: 테스트 실행 (순차)
 
-```
-Task(verify-web-ui):
-  prompt: |
-    ## 시나리오
-    {1단계에서 받은 시나리오}
+**⚠️ 반드시 Task 도구로 verify-web-ui 에이전트를 호출하세요. Playwright/Chrome DevTools를 직접 사용하지 마세요.**
 
-    ## Target URL
-    {URL}
-  subagent_type: verify-web-ui
+```
+Task(
+  subagent_type="claude-automate:verify-web-ui",
+  prompt="""
+## 시나리오
+{1단계에서 받은 시나리오 전체 마크다운}
+
+## Target URL
+{URL}
+"""
+)
 ```
 
 데이터 수집 완료까지 대기. 결과 경로(`.claude/verify-data/{timestamp}/`) 확보.
@@ -166,6 +181,7 @@ Task(verify-idea-suggester):
 
 ## 주의사항
 
+- **브라우저 직접 조작 금지**: Playwright/Chrome DevTools MCP는 verify-web-ui 에이전트만 사용. 이 스킬에서 절대 직접 호출하지 않음
 - 1단계와 2단계는 반드시 순차 실행
 - 3단계 에이전트들은 반드시 병렬 실행
 - 특화 에이전트 탐색은 Glob으로 동적 수행 (하드코딩 금지)

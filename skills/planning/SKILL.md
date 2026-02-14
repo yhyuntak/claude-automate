@@ -15,14 +15,16 @@ $ARGUMENTS
 ## ⚠️ 실행 순서 (반드시 준수)
 
 ```
-Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4 → Phase 5
+EnterPlanMode → Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4 → Phase 5 → ExitPlanMode
 ```
 
-**절대 건너뛰지 마세요. Phase 0부터 시작하세요.**
+**절대 건너뛰지 마세요. 스킬 시작 즉시 EnterPlanMode를 호출한 후 Phase 0부터 시작하세요.**
 
 ---
 
 ## 필수/조건부 단계 구분
+
+**스킬 시작 즉시 `EnterPlanMode` 호출**
 
 ### 🔴 필수 단계 (스킵 불가)
 
@@ -30,7 +32,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4 → Phase 
 |-------|------|------|
 | 0 | 요구사항 게이트 체크 | brainstorm 수행 여부 확인 |
 | 1 | 계획 유형 분류 | 코드베이스 탐색 필요 여부 결정 |
-| 4 | Plan Mode 진입 | EnterPlanMode 호출 |
+| 4 | 계획 문서 작성 | Plan Mode 내에서 계획 작성 |
 | 5 | devil 😈 계획 검증 | 계획의 논리적 정합성 검증 |
 
 ### 🟡 조건부 단계 (유형에 따라)
@@ -58,6 +60,11 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4 → Phase 
 
 ```
 [사용자 요청]
+      │
+      ▼
+┌─────────────────────────────────────┐
+│ 🔴 스킬 시작: EnterPlanMode 호출    │
+└─────────────────────────────────────┘
       │
       ▼
 ┌─────────────────────────────────────┐
@@ -98,12 +105,17 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4 → Phase 
       │
       ▼
 ┌─────────────────────────────────────┐
-│ 🔴 Phase 4: Plan Mode 진입          │
+│ 🔴 Phase 4: 계획 문서 작성          │
 └─────────────────────────────────────┘
       │
       ▼
 ┌─────────────────────────────────────┐
 │ 🔴 Phase 5: devil 😈 계획 검증      │
+└─────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────┐
+│ 🔴 스킬 종료: ExitPlanMode 호출     │
 └─────────────────────────────────────┘
 ```
 
@@ -237,15 +249,9 @@ AskUserQuestion으로 시각화 포함 여부 확인.
 
 ---
 
-### 🔴 Phase 4: Plan Mode 진입
+### 🔴 Phase 4: 계획 문서 작성
 
-패턴 예시를 참고하여 계획 수립:
-
-```
-EnterPlanMode 호출
-```
-
-Plan Mode 내에서 계획 문서 작성:
+Plan Mode 내에서 패턴 예시를 참고하여 계획 문서 작성:
 
 ```markdown
 # 구현 계획: {Feature Name}
@@ -330,10 +336,10 @@ Task(
 5. **Brain 먼저**: 패턴 확인 없이 바로 계획 X (있는 경우)
 6. **예시 기반**: 규칙이 아닌 예시 코드 참고
 7. **Progressive Disclosure**: 필요한 패턴만 로드
-8. **Plan Mode 필수**: EnterPlanMode로 사용자 승인
+8. **Plan Mode 필수**: 스킬 시작 즉시 EnterPlanMode 호출
 9. **시각화 권유**: 복잡한 구조는 ASCII 다이어그램 제안
 10. **에이전트 배너**: devil 호출 시 시작/완료 배너 출력
 
 ---
 
-**Last Updated**: 2026-02-06
+**Last Updated**: 2026-02-14
