@@ -66,28 +66,15 @@ With tag:
 
 ---
 
-## Current Version: 0.3.0
+## Current Version: 0.22.0
 
-**Release Date:** 2026-01-24
-
-**Features:**
-- project-init skill with templates
-- Global rules system (4 rules)
-- Korean keyword support
-- /install-rule command
+**Release Date:** 2026-02-14
 
 ---
 
 ## Version History
 
-```
-0.3.0 (2026-01-24): project-init skill, global rules
-0.2.0 (2026-01-23): interaction-rules skill
-0.1.9 (2026-01-23): explain-skills spec reference
-0.1.8 (2026-01-22): start-work integrated workflow
-0.1.7 (2026-01-22): backlog skill
-0.1.6 (2026-01-22): Skills system, feedback improvements
-```
+→ [CHANGELOG.md](/CHANGELOG.md) 참조
 
 ---
 
