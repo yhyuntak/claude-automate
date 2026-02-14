@@ -8,7 +8,7 @@
 
 | 상태 | 개수 |
 |------|------|
-| Todo | 0 |
+| Todo | 6 |
 | Doing | 0 |
 | Done | 0 |
 
@@ -24,9 +24,22 @@
 
 ---
 
+## Phase 4: Claude Code 리서치 & 인사이트 반영
+
+| Phase | ID | Task | Status |
+|-------|-----|------|--------|
+| 4 | 001 | [리서치 소스 수집](todo/phase4-001-fetch-sources.md) | Todo |
+| 4 | 002 | [아티클 리뷰 및 인사이트 추출](todo/phase4-002-review-articles.md) | Todo |
+| 4 | 003 | [Affaan 레포 리뷰](todo/phase4-003-review-affaan-repo.md) | Todo |
+| 4 | 004 | [플러그인 리뷰 및 설치](todo/phase4-004-review-plugins.md) | Todo |
+| 4 | 005 | [하네스 인사이트 반영](todo/phase4-005-apply-insights.md) | Todo |
+| 4 | 006 | [AI 시대 TDD 실전 리서치](todo/phase4-006-tdd-research.md) | Todo |
+
+---
+
 ## Todo
 
-(없음 - 필요할 때 추가)
+(Phase 4 참조)
 
 ---
 
@@ -53,4 +66,4 @@
 
 ---
 
-**Last Updated**: 2026-02-03
+**Last Updated**: 2026-02-15
