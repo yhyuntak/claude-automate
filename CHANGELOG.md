@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.23.0] - 2026-02-14
+
+### Changed
+- verify-web-ui 오케스트레이터를 별도 에이전트로 분리하여 MCP 물리적 차단
+- SKILL.md를 즉시 위임 구조로 단순화
+- mcp-test 임시 에이전트 삭제
+
 ## [0.22.0] - 2026-02-14
 
 ### Changed

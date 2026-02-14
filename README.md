@@ -104,6 +104,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `context-builder` | Sonnet | 세션 컨텍스트 생성 |
 | `test-planner` | Sonnet | 테스트 시나리오 설계 |
 | `verify-web-ui` | Sonnet | Web UI 테스트 실행 + 데이터 수집 |
+| `verify-web-ui-orchestrator` | Sonnet | Web UI 검증 오케스트레이션 |
 
 ### Skills (Domain Component)
 
