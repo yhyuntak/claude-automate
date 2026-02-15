@@ -179,3 +179,67 @@ env:
   TITLE: ${{ github.event.issue.title }}
 run: echo "$TITLE"
 ```
+
+---
+
+## Source Code Mechanism Analysis (2026-02-15)
+
+### Hook 동작 상세
+
+**입력 (stdin JSON)**:
+```json
+{
+  "session_id": "abc123",
+  "tool_name": "Edit",
+  "tool_input": { "file_path": "...", "new_string": "..." }
+}
+```
+
+**처리 로직**:
+1. 파일 경로/내용 추출
+2. `SECURITY_PATTERNS` 배열 순회 → path_check 또는 substring 매칭
+3. 세션 상태 확인 (`~/.claude/security_warnings_state_{session_id}.json`)
+4. warning_key = `{file_path}-{rule_name}` → 중복 체크
+5. 신규 → stderr 경고 + exit(2) 차단 / 중복 → exit(0) 통과
+
+### Exit Code Protocol
+
+| Exit Code | 의미 | 결과 |
+|-----------|------|------|
+| 0 | 정상 통과 | 툴 실행 진행 |
+| 1 | 에러 | 비정상 종료 |
+| 2 | 보안 경고 | 툴 실행 차단 |
+
+### 선언적 패턴 설정 구조
+
+```python
+SECURITY_PATTERNS = [
+    {
+        "ruleName": "eval_injection",
+        "substrings": ["eval("],
+        "reminder": "⚠️ eval() 사용 감지..."
+    },
+    {
+        "ruleName": "github_actions_workflow",
+        "path_check": lambda path: ".github/workflows/" in path,
+        "reminder": "⚠️ GitHub Actions 워크플로우..."
+    }
+]
+```
+
+**확장**: 배열에 새 dict 추가만으로 커스텀 룰 생성 가능
+
+### 세션 상태 관리
+
+- 파일: `~/.claude/security_warnings_state_{session_id}.json`
+- 키: `{file_path}-{rule_name}` → 같은 조합은 세션 내 1회만 경고
+- 정리: 30일 이상 파일을 10% 확률로 자동 삭제 (Probabilistic Cleanup)
+- Fail-Safe: 상태 저장 실패해도 Hook 자체는 정상 동작
+
+### claude-automate 차용 패턴
+
+1. **선언적 패턴 설정**: 룰 데이터와 로직 분리 (pattern-checker에 적용)
+2. **Session-Scoped State**: 중복 경고 방지 메커니즘
+3. **Exit Code Protocol**: Hook 표준 프로토콜 (0=통과, 2=차단)
+4. **Probabilistic Cleanup**: 상태 파일 자동 정리
+5. **Fail-Safe Error Handling**: Hook 실패가 워크플로우를 막지 않음
