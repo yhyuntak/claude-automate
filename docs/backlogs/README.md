@@ -8,9 +8,9 @@
 
 | 상태 | 개수 |
 |------|------|
-| Todo | 3 |
+| Todo | 2 |
 | Doing | 0 |
-| Done | 3 |
+| Done | 4 |
 
 ---
 
@@ -30,7 +30,7 @@
 |-------|-----|------|--------|
 | 4 | 001 | [리서치 소스 수집](done/phase4-001-fetch-sources.md) | ✅ Done |
 | 4 | 002 | [아티클 리뷰 및 인사이트 추출](done/phase4-002-review-articles.md) | ✅ Done |
-| 4 | 003 | [Affaan 레포 리뷰](todo/phase4-003-review-affaan-repo.md) | Todo |
+| 4 | 003 | [Affaan 레포 리뷰](done/phase4-003-review-affaan-repo.md) | ✅ Done |
 | 4 | 004 | [플러그인 리뷰 및 설치](done/phase4-004-review-plugins.md) | ✅ Done |
 | 4 | 005 | [하네스 인사이트 반영](todo/phase4-005-apply-insights.md) | Todo |
 | 4 | 006 | [AI 시대 TDD 실전 리서치](todo/phase4-006-tdd-research.md) | Todo |
