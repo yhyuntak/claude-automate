@@ -8,9 +8,9 @@
 
 | 상태 | 개수 |
 |------|------|
-| Todo | 2 |
-| Doing | 0 |
-| Done | 4 |
+| Todo | 14 |
+| Doing | 1 |
+| Done | 11 |
 
 ---
 
@@ -32,8 +32,28 @@
 | 4 | 002 | [아티클 리뷰 및 인사이트 추출](done/phase4-002-review-articles.md) | ✅ Done |
 | 4 | 003 | [Affaan 레포 리뷰](done/phase4-003-review-affaan-repo.md) | ✅ Done |
 | 4 | 004 | [플러그인 리뷰 및 설치](done/phase4-004-review-plugins.md) | ✅ Done |
-| 4 | 005 | [하네스 인사이트 반영](todo/phase4-005-apply-insights.md) | Todo |
-| 4 | 006 | [AI 시대 TDD 실전 리서치](todo/phase4-006-tdd-research.md) | Todo |
+| 4 | 005 | [Hook 체계 설계](done/phase4-005-hook-system.md) | ✅ Done |
+| 4 | 006 | [AI+TDD 전략](doing/phase4-006-ai-tdd.md) | 🔄 Doing |
+| 4 | 007 | [Verification Loop 확장](todo/phase4-007-verification-loop.md) | Todo |
+| 4 | 008 | [CA형 Orchestrator 설계](todo/phase4-008-orchestrator.md) | Todo |
+| 4 | 009 | [Brain 활성화](todo/phase4-009-brain.md) | Todo |
+| 4 | 010 | [Dual Learning 시스템](todo/phase4-010-dual-learning.md) | Todo |
+| 4 | 011 | [Confidence Scoring](todo/phase4-011-confidence-scoring.md) | Todo |
+| 4 | 012 | [Session-Scoped State](todo/phase4-012-session-state.md) | Todo |
+| 4 | 013 | [연속 루프 아키텍처](todo/phase4-013-continuous-loop.md) | Todo |
+| 4 | 014 | [Iterative Retrieval](todo/phase4-014-iterative-retrieval.md) | Todo |
+| 4 | 015 | [Eval Harness](todo/phase4-015-eval-harness.md) | Todo |
+| 4 | 016 | [MCP 레이지 로드](todo/phase4-016-mcp-lazy-load.md) | Todo |
+| 4 | 017 | [PreCompact 스킬](todo/phase4-017-precompact-skill.md) | Todo |
+| 4 | 018 | [/start-work 스킬 재설계](done/phase4-018-start-work-redesign.md) | ✅ Done |
+| 4 | 019 | [AI 하네스 2.0](todo/phase4-019-ai-harness-2.md) | Todo |
+| 4 | 020 | [/brainstorm 스킬 재설계](done/phase4-020-brainstorm-redesign.md) | ✅ Done |
+| 4 | 021 | [/planning 스킬 재설계](done/phase4-021-planning-redesign.md) | ✅ Done |
+| 4 | 022 | [/implement 스킬](done/phase4-022-implement-skill.md) | ✅ Done |
+| 4 | 023 | [Stop Hook 운영 설계](done/phase4-023-stop-hook.md) | ✅ Done |
+| 4 | 024 | [/save-context 스킬](done/phase4-024-save-context.md) | ✅ Done |
+| 4 | 025 | [패턴 체크 타이밍 재설계](todo/phase4-025-pattern-check-timing.md) | Todo |
+| 4 | 026 | [문서 싱크 체크 타이밍 재설계](todo/phase4-026-doc-sync-timing.md) | Todo |
 
 ---
 
@@ -66,4 +86,4 @@
 
 ---
 
-**Last Updated**: 2026-02-16
+**Last Updated**: 2026-02-22

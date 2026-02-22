@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.24.0] - 2026-02-23
+
+### Changed
+- Harness 2.0: 7개 스킬 기반 통합 워크플로우 재설계
+  - start-work, brainstorm, planning, implement, save-context, wrap 스킬 재설계
+  - Stop Hook 추가 (컨텍스트 70% 도달 시 자동 트리거)
+- Commands → Skills 전환 (wrap, start-work 등)
+- Plan 파일 시스템 도입 (.claude/plans/)
+- 종료 컨텍스트 템플릿 분리 (wrap vs save-context)
+
+### Added
+- skills/wrap/ — 태스크 완료 시 상태 정리 + 커밋
+- skills/implement/ — plan 기반 AC별 구현 실행기
+- skills/save-context/ — 세션 중단 시 컨텍스트 저장
+- phase4-025 백로그: 패턴 체크 타이밍 재설계
+- phase4-026 백로그: 문서 싱크 체크 타이밍 재설계
+
+### Removed
+- commands/wrap.md (V3) — skills/wrap/SKILL.md로 대체
+- /wrap에서 패턴 체크 / 문서 싱크 분리 (별도 백로그로 이동)
+
 ## [0.23.1] - 2026-02-14
 
 ### Fixed
