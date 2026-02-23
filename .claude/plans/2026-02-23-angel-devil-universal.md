@@ -1,3 +1,9 @@
+---
+status: done
+date: 2026-02-23
+slug: angel-devil-universal
+---
+
 # Angel/Devil 범용 사고 도구 전환
 
 > 개발 특화 → 범용 사고 도구로 전환
