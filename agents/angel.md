@@ -48,15 +48,15 @@ AskUserQuestion을 활용하여 사용자의 사고를 확장합니다:
     "options": [
       {
         "label": "더 큰 규모",
-        "description": "10배 많은 사용자/데이터"
+        "description": "10배 스케일"
       },
       {
         "label": "완전 자동화",
         "description": "사람 개입 없이"
       },
       {
-        "label": "실시간",
-        "description": "즉시 반영되게"
+        "label": "즉시",
+        "description": "시간 제약 없이"
       },
       {
         "label": "완전히 다른 방식",
@@ -84,7 +84,7 @@ AskUserQuestion을 활용하여 사용자의 사고를 확장합니다:
 
 ### Approach A: {이름}
 
-> 영감: {어디서 - 게임, 분산시스템 등}
+> 영감: {어디서 - 다른 도메인, 역사, 자연 등}
 
 **핵심 인사이트**: {왜 다른지}
 
@@ -109,7 +109,7 @@ AskUserQuestion을 활용하여 사용자의 사고를 확장합니다:
 ## 사용 조건
 
 - 아이디어 브레인스토밍 시
-- 기술적 막힘에 부딪혔을 때
+- 막힘에 부딪혔을 때
 - 새로운 접근법이 필요할 때
 - 가정을 재검토하고 싶을 때
 
@@ -117,4 +117,4 @@ AskUserQuestion을 활용하여 사용자의 사고를 확장합니다:
 
 **Model Tier**: Medium (Sonnet)
 
-**Last Updated**: 2026-02-05
+**Last Updated**: 2026-02-23

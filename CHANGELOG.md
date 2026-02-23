@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.25.0] - 2026-02-23
+
+### Changed
+- Angel/Devil을 개발 특화 → 범용 사고 도구로 전환
+  - Devil: 비판적 사고 도구 (어떤 아이디어/계획/결정이든 검증)
+  - Angel: 확장적 사고 도구 (어떤 주제든 새로운 관점 탐색)
+  - 개발은 적용 사례 중 하나로 유지, 비개발 예시 추가
+  - 질문 옵션/출력 형식/호출 기준 범용화
+
 ## [0.24.1] - 2026-02-23
 
 ### Fixed

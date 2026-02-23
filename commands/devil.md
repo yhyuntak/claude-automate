@@ -1,12 +1,12 @@
 ---
 name: devil
-description: 냉철한 비판자. 계획/설계/코드를 검증. "devil", "악마", "비판", "검증", "리스크" 키워드로 자동 활성화
+description: 냉철한 비판자. 어떤 아이디어든 비판적으로 검증. "devil", "악마", "비판", "검증", "리스크", "비판적 사고" 키워드로 자동 활성화
 argument-hint: "[topic or plan to review]"
 ---
 
 # /devil
 
-> 😈 냉철한 비판자 - 계획/설계/코드 검증
+> 😈 냉철한 비판자 - 어떤 아이디어든 비판적으로 검증
 
 $ARGUMENTS
 
