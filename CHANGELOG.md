@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.24.1] - 2026-02-23
+
+### Fixed
+- Stop Hook BSD sed 호환성 수정 (macOS에서 에러 발생 문제)
+- Stop Hook `test-command: null` 처리 추가
+- Stop Hook을 플러그인 hooks 시스템으로 이관 (프로젝트 레벨 → 플러그인 배포)
+- hooks/session-stop.sh를 Harness 2.0 버전으로 교체
+
 ## [0.24.0] - 2026-02-23
 
 ### Changed

@@ -1,4 +1,16 @@
 {
   "description": "claude-automate session hooks",
-  "hooks": {}
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-stop.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
