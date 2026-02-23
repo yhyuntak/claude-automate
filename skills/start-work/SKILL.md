@@ -20,6 +20,31 @@ MUST: `refs/context-loading.md`를 읽고 컨텍스트 로드 규칙을 확인�
 가장 최근 컨텍스트 파일 1개를 읽어 요약을 표시한다.
 파일이 없으면 "이전 세션 없음"을 명시하고 Step 2로 진행한다.
 
+### 중단된 세션 감지 시
+
+컨텍스트에서 "다음 행동"이 발견되면 중단된 세션이다.
+AskUserQuestion으로 이어가기 여부를 확인한다:
+
+```json
+{
+  "question": "이전 세션이 중단된 상태입니다. 이어갈까요?\n\n다음 행동: {다음 행동 내용}",
+  "header": "세션 이어가기",
+  "multiSelect": false,
+  "options": [
+    { "label": "이어가기 (Recommended)", "description": "이전 세션의 다음 행동부터 재개" },
+    { "label": "새로 시작", "description": "이전 세션 무시하고 새 작업 선택" }
+  ]
+}
+```
+
+- "이어가기" 선택 시:
+  - 상태가 `implement`이고 Plan 경로 있으면 → `/implement` 안내
+  - 상태가 `planning`이면 → `/planning` 안내
+  - 상태가 `brainstorm`이면 → `/brainstorm` 안내
+  - 상태가 `자유 대화`이면 → "다음 행동" 기반으로 자유 논의 진행
+  - **Step 2~4를 건너뛴다.**
+- "새로 시작" 선택 시 → Step 2로 계속 진행
+
 ## Step 2: Plan 파일 스캔
 
 MUST: `refs/plan-scanning.md`를 읽고 Plan 스캔 규칙을 확인하라.
@@ -98,6 +123,7 @@ AskUserQuestion으로 다음 행동을 결정한다.
 MUST: 아래 체크리스트를 모두 확인하라.
 
 - [ ] 세션 컨텍스트를 표시했는가? (없으면 "없음" 명시)
+- [ ] 중단된 세션이면 이어가기 옵션을 제시했는가?
 - [ ] Plan 스캔 결과를 표시했는가? (없으면 "없음" 명시)
 - [ ] 사용자 선택을 받았는가? (백로그 또는 새로운 작업)
 - [ ] 다음 액션을 AskUserQuestion으로 안내했는가?

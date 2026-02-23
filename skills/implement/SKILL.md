@@ -13,6 +13,7 @@ allowed-tools:
   - LSP
   - Task
   - Bash
+  - AskUserQuestion
 ---
 
 # /implement
@@ -59,6 +60,27 @@ MUST: 아래 체크리스트를 모두 확인하라.
 - [ ] plan 파일의 AC 체크가 갱신되었는가?
 
 실패 시: Stop Hook이 exit 2로 차단 → 수정 후 재시도.
+
+---
+
+## 완료 처리
+
+모든 AC를 완료하면:
+
+1. plan 파일 status를 `done`으로 변경
+2. AskUserQuestion으로 다음 행동 안내:
+
+```json
+{
+  "question": "구현이 완료되었습니다. 다음에 무엇을 할까요?",
+  "header": "완료",
+  "multiSelect": false,
+  "options": [
+    { "label": "/wrap으로 마무리 (Recommended)", "description": "백로그 정리 + 컨텍스트 저장 + 커밋" },
+    { "label": "계속 작업", "description": "다른 작업 이어서 진행" }
+  ]
+}
+```
 
 ---
 

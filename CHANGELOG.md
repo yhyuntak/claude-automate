@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.25.1] - 2026-02-24
+
+### Improved
+- start-work: 중단된 세션 감지 → "이어가기" 옵션 우선 제시
+  - 컨텍스트 파일 헤더 파싱 (상태, Plan, 다음 행동)
+  - "다음 행동" 존재 시 중단된 세션으로 판단, 이어가기 라우팅
+- implement: 완료 후 /wrap 유도 AskUserQuestion 추가
+  - 모든 AC 완료 시 plan status → done + 다음 행동 안내
+
 ## [0.25.0] - 2026-02-23
 
 ### Changed

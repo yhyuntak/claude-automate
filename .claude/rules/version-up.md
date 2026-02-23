@@ -66,9 +66,9 @@ With tag:
 
 ---
 
-## Current Version: 0.25.0
+## Current Version: 0.25.1
 
-**Release Date:** 2026-02-23
+**Release Date:** 2026-02-24
 
 ---
 
