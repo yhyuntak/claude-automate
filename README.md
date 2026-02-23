@@ -31,16 +31,20 @@
                               │
                     ┌─────────┴─────────┐
                     │    claude-automate │
-                    │     (Harness)      │
+                    │  (Harness 2.0)     │
+                    │  12 Commands       │
+                    │  15 Agents         │
+                    │  13 Skills         │
                     └─────────┬─────────┘
                               │
-          ┌───────────┬───────┴───────┬───────────┐
-          ▼           ▼               ▼           ▼
-    ┌─────────┐ ┌─────────┐   ┌─────────┐ ┌─────────┐
-    │ Pattern │ │ Doc Sync│   │ Context │ │ Review  │
-    │ Checker │ │ Checker │   │ Builder │ │ Agents  │
-    └─────────┘ └─────────┘   └─────────┘ └─────────┘
-        AI Agents (실행자)
+     ┌──────────┬─────────────┼─────────────┬──────────┐
+     ▼          ▼             ▼             ▼          ▼
+┌─────────┐ ┌───────┐  ┌──────────┐  ┌──────────┐ ┌──────┐
+│ explore │ │writer │  │ pattern  │  │ doc-sync │ │angel/│
+│ low/mid │ │  /high│  │ checker  │  │ checker  │ │devil │
+│  /high  │ │       │  │  /high   │  │  /high   │ │      │
+└─────────┘ └───────┘  └──────────┘  └──────────┘ └──────┘
+                    AI Agents (실행자, 3-Tier)
 ```
 
 ---
@@ -69,7 +73,7 @@
 
 ---
 
-## Current Features
+## Current Features (v0.24.1)
 
 ### 아키텍처 레이어 매핑
 
@@ -83,67 +87,84 @@ MCP         =  Infrastructure/Adapter (외부 연동)
 CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 ```
 
-### Commands (Controller)
+### Commands (Controller) — 12개
 
 | Command | 설명 |
 |---------|------|
-| `/start-work` | 세션 시작: 이전 컨텍스트 + 백로그 + 워크트리 |
-| `/wrap` | 세션 종료: 패턴 검증 + 문서 동기화 + 컨텍스트 저장 |
-| `/backlog` | 백로그 조회 및 관리 |
-| `/project-init` | 새 프로젝트 초기화 |
-| `/verify-web-ui` | Web UI 검증: 시나리오 설계 → 브라우저 테스트 → 분석 |
+| `/start-work` | 세션 시작: 컨텍스트 복원, plan 이어가기, 백로그 관리 |
+| `/brainstorm` | 아이디어 구체화 자유 대화 |
+| `/planning` | brainstorm 결과를 plan 파일로 구체화 |
+| `/implement` | plan 기반 AC별 구현 실행 |
+| `/save-context` | 세션 컨텍스트 저장 |
+| `/wrap` | 세션 종료 마무리: plan 완료 + 백로그 정리 + 컨텍스트 저장 + 커밋 |
+| `/angel` | 생각 확장자: 새로운 관점과 가능성 탐색 |
+| `/devil` | 냉철한 비판자: 계획/설계/코드 검증 |
+| `/verify-web-ui` | Web UI 검증 (Playwright/Chrome DevTools MCP) |
+| `/save-para` | 대화 인사이트를 PARA Resources에 저장 |
+| `/install-rule` | 프로젝트 규칙을 글로벌 rules에 설치 |
+| `/extract-brain` | 대화에서 사고 포인트 추출 |
 
-### Agents (Service Layer)
+### Agents (Service Layer) — 15개, 3-Tier
 
 | Agent | Tier | 역할 |
 |-------|------|------|
-| `pattern-checker` | Sonnet | 프로젝트 규칙 검증 |
-| `pattern-checker-high` | Opus | 복잡한 규칙 충돌 해결 |
+| `explore-low` | Haiku | 빠른 코드베이스 단순 검색/파일 찾기 |
+| `explore` | Sonnet | 코드베이스 구조 파악, 관계 매핑 |
+| `explore-high` | Opus | 깊은 아키텍처 분석, 복잡한 구조 매핑 |
+| `writer` | Sonnet | 코드 작성/수정 (메인 컨텍스트 보호) |
+| `writer-high` | Opus | 복잡한 코드 작성 (알고리즘/보안/아키텍처) |
+| `pattern-checker` | Sonnet | 프로젝트 규칙 준수 검증 |
+| `pattern-checker-high` | Opus | 복잡한 규칙 충돌 해결, 아키텍처 패턴 |
 | `doc-sync-checker` | Sonnet | 문서-코드 동기화 검증 |
-| `doc-sync-checker-high` | Opus | 대규모 문서 구조 변경 |
-| `context-builder` | Sonnet | 세션 컨텍스트 생성 |
+| `doc-sync-checker-high` | Opus | 대규모 문서 구조 재설계 |
+| `context-builder` | Haiku | 세션 컨텍스트 파일 생성 |
+| `angel` | Sonnet | 생각 확장자 (brainstorm 촉진) |
+| `devil` | Sonnet | 냉철한 비판자 (devil's advocate) |
 | `test-planner` | Sonnet | 테스트 시나리오 설계 |
-| `verify-web-ui` | Sonnet | Web UI 테스트 실행 + 데이터 수집 |
+| `verify-web-ui` | Sonnet | Web UI 테스트 실행 |
 | `verify-web-ui-orchestrator` | Sonnet | Web UI 검증 오케스트레이션 |
 
-### Skills (Domain Component)
+### Skills (Domain Component) — 13개
+
+**Core 7개** (Harness 2.0 워크플로우):
 
 | Skill | 역할 |
 |-------|------|
+| `start-work` | 세션 시작 오케스트레이션 |
+| `brainstorm` | 아이디어 탐색 및 구체화 |
+| `planning` | plan 파일 생성 및 관리 |
+| `implement` | AC 기반 구현 실행 |
+| `save-context` | 세션 컨텍스트 스냅샷 저장 |
+| `wrap` | 세션 종료 워크플로우 |
 | `backlog` | 백로그 CRUD 및 상태 관리 |
+
+**Utility 6개**:
+
+| Skill | 역할 |
+|-------|------|
+| `save-para` | PARA Resources 저장 |
 | `feedback` | 피드백 수집 및 조회 |
-| `project-init` | 프로젝트 템플릿 생성 |
 | `explain-plugins` | 플러그인 시스템 설명 |
+| `project-init` | 프로젝트 템플릿 생성 |
+| `install-rule` | 글로벌 규칙 설치 |
 | `verify-web-ui` | Web UI 검증 오케스트레이터 |
+
+### Hooks
+
+- **Stop Hook**: 세션 종료 시 테스트 검증 + 컨텍스트 70% 감시
+- 플러그인 hooks 시스템으로 배포 (`hooks/hooks.json`)
 
 ---
 
 ## Roadmap
 
-### Phase 1: 계획-실행 워크플로우 (진행 예정)
+### ✅ Phase 1-3 완료
 
-Peter Steinberger 스타일의 계획 중심 개발:
+계획-실행 워크플로우, PARA 지식 관리, 병렬 리뷰 에이전트 등 핵심 기능이 구축되었습니다.
 
-- [ ] **phase1-001**: 아키텍처 우선 계획 단계
-- [ ] **phase1-002**: 다중 에이전트 병렬 실행
-- [ ] **phase1-003**: 결과 통합 및 피드백
+### 🔄 Phase 4: 현재 진행 중
 
-### Phase 2: PARA 지식 관리
-
-배운 것을 축적하는 시스템:
-
-- [ ] **phase2-001**: PARA 지식 구조 설계
-- [ ] **phase2-002**: 세션 인사이트 자동 추출
-- [ ] **phase2-003**: 지식 검색 및 활용
-
-### Phase 3: 병렬 리뷰 에이전트
-
-Kieran Klaassen 스타일의 병렬 리뷰 시스템 (코드 완성 후 검증):
-
-- [ ] **phase3-001**: 병렬 리뷰 에이전트 구조 설계
-- [ ] **phase3-002**: Triage 워크플로우 구현
-- [ ] **phase3-003**: 리뷰 결과 학습 축적
-- [ ] **phase3-004**: 도구 위임 규칙 정의
+상세 백로그는 [`docs/backlogs/README.md`](docs/backlogs/README.md) 참조.
 
 ---
 
@@ -157,21 +178,24 @@ Kieran Klaassen 스타일의 병렬 리뷰 시스템 (코드 완성 후 검증):
 /plugin install claude-automate@claude-automate
 ```
 
-### 2. 세션 시작
+### 2. Harness 2.0 워크플로우
 
 ```bash
-/start-work
+/start-work    # 세션 시작: 컨텍스트 복원 + 백로그 확인
+/brainstorm    # 아이디어 자유 탐색
+/planning      # brainstorm 결과를 구체적인 plan으로
+/implement     # plan의 AC 하나씩 실행
+/wrap          # 세션 종료: 검증 + 정리 + 커밋
 ```
 
-이전 세션 컨텍스트를 불러오고, 백로그를 확인하고, 워크트리를 설정합니다.
-
-### 3. 작업 후 마무리
+보조 도구:
 
 ```bash
-/wrap
+/angel         # 새로운 관점 탐색
+/devil         # 비판적 검증
+/verify-web-ui # Web UI 테스트
+/save-para     # 인사이트 저장
 ```
-
-패턴 검증, 문서 동기화 확인, 세션 컨텍스트를 자동 저장합니다.
 
 ---
 

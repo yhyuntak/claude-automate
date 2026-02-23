@@ -46,6 +46,7 @@ Driver (당신)    →    Harness (claude-automate)    →    Engine (Claude)
 Commands    =  Controller       (진입점, 사용자 인터페이스)
 Agents      =  Service Layer    (비즈니스 로직, 분석/검증)
 Skills      =  Domain Component (단일 책임, 재사용 가능)
+Hooks       =  Middleware       (자동 검증, 세션 가드)
 MCP         =  Infrastructure   (외부 연동, 어댑터)
 CLAUDE.md   =  package.json     (프로젝트 정체성)
 rules/*.md  =  eslint.config    (세부 규칙)
@@ -81,14 +82,20 @@ claude-automate/
 │   └── {skill-name}/
 │       ├── SKILL.md    # 스킬 정의
 │       ├── schema.md   # 입출력 스키마
-│       └── references/ # 참고 자료
+│       └── refs/       # 참고 자료 (지연 로딩)
+├── hooks/              # Hook 스크립트 + 설정
+│   ├── hooks.json      # 플러그인 hooks 등록
+│   └── session-stop.sh # Stop Hook 스크립트
 ├── rules/              # 세부 규칙 (eslint.config 역할)
+├── templates/          # 프로젝트 템플릿
 ├── docs/
 │   ├── references/     # 외부 참고 자료
 │   └── backlogs/       # 백로그 (todo/doing/done)
 ├── .claude/
 │   ├── rules/          # 프로젝트별 규칙
-│   └── context/        # 세션 컨텍스트 (자동 생성)
+│   ├── context/        # 세션 컨텍스트 (자동 생성)
+│   ├── plans/          # 구현 계획 파일
+│   └── brain/          # 프로젝트 brain 시스템
 └── CLAUDE.md           # 이 문서
 ```
 
@@ -284,4 +291,4 @@ skills/*/references/*.md (스킬 상세)
 
 ---
 
-**Last Updated**: 2026-01-30
+**Last Updated**: 2026-02-23
