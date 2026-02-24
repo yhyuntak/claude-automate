@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.26.1] - 2026-02-25
+
+### Removed
+- Stop Hook 컨텍스트 감시 제거 (70% 임계값 → save-context 유도 로직 삭제)
+  - PreCompact hook 도입 예정으로 불필요해짐
+  - compact가 세션을 유지하므로 세션 강제 중단 불필요
+
 ## [0.26.0] - 2026-02-24
 
 ### Changed

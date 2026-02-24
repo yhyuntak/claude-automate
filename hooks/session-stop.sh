@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stop Hook — 테스트 검증 + 컨텍스트 감시
+# Stop Hook — 테스트 검증
 # 하네스 2.0 운영 스크립트
 
 set -euo pipefail
@@ -35,19 +35,5 @@ if [[ -d "$PLANS_DIR" ]]; then
     fi
   done
 fi
-
-# --- 2. 컨텍스트 감시 ---
-SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
-CONTEXT_FILE="/tmp/claude-context-pct-${SESSION_ID}"
-if [[ -f "$CONTEXT_FILE" ]]; then
-  CONTEXT_PCT=$(cat "$CONTEXT_FILE" 2>/dev/null || echo "0")
-  # 정수 비교를 위해 소수점 제거
-  CONTEXT_INT=${CONTEXT_PCT%.*}
-  if [[ "$CONTEXT_INT" -ge 70 ]]; then
-    echo "컨텍스트 ${CONTEXT_PCT}% 사용 (임계값 70%). /save-context를 실행하고 새 세션을 시작하세요." >&2
-    exit 2
-  fi
-fi
-
-# --- 3. 통과 ---
+# --- 2. 통과 ---
 exit 0
