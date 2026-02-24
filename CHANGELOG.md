@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.25.2] - 2026-02-24
+
+### Improved
+- brainstorm → planning 전환 시 MUST: AskUserQuestion 확인 강제
+- planning → implement 전환 시 MUST: AskUserQuestion 확인 강제
+
 ## [0.25.1] - 2026-02-24
 
 ### Improved

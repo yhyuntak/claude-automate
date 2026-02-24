@@ -49,7 +49,9 @@ MUST: refs/angel-devil.md를 읽고 호출 기준을 확인하라.
 MUST: refs/output-format.md를 읽고 출력 형식을 확인하라.
 MUST: refs/ac-extraction.md를 읽고 AC 추출 기준을 확인하라.
 
-→ 요구사항 정리 + AC 추출 후 /planning 핸드오프
+→ 요구사항 정리 + AC 추출 후:
+1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.
+2. 확인 시 → /planning 스킬 호출
 
 ## 검증
 

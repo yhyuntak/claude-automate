@@ -60,8 +60,8 @@ MUST: refs/plan-file.md를 읽고 파일 구조와 규칙을 확인하라.
 ## 출력
 
 plan 파일 생성 후:
-1. AskUserQuestion으로 사용자 최종 확인
-2. 확인 시 → /implement로 핸드오프
+1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.
+2. 확인 시 → /implement 스킬 호출
 
 ---
 
