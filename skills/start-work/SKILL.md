@@ -98,7 +98,7 @@ git worktree add ../{project}-{branch} -b {branch}
 
 ## Step 5: 다음 액션
 
-AskUserQuestion으로 다음 행동을 결정한다.
+MUST: AskUserQuestion으로 다음 행동을 결정하라.
 
 ```json
 {

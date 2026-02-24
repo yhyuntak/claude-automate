@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.25.3] - 2026-02-24
+
+### Fixed
+- start-work Step 5: AskUserQuestion에 MUST 키워드 추가
+
 ## [0.25.2] - 2026-02-24
 
 ### Improved
