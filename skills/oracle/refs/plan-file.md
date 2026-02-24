@@ -11,8 +11,8 @@
 ## 상태 관리
 
 ```
-draft       → planning에서 생성 (구현 시작 전)
-in_progress → /implement 시작 시
+draft       → oracle에서 생성 (구현 시작 전)
+in_progress → /smith 시작 시
 done        → /wrap에서 완료 시
 ```
 
@@ -35,7 +35,7 @@ test-command: {프로젝트 테스트 커맨드 예: npm test, pytest, go test}
 ## 요구사항
 
 ### Context (배경)
-- {brainstorm에서 가져옴}
+- {muse에서 가져옴}
 
 ### What (무엇을)
 - {핵심 기능}
@@ -68,8 +68,8 @@ test-command: {프로젝트 테스트 커맨드 예: npm test, pytest, go test}
 
 ## test-command
 
-Stop Hook이 implement 중 자동으로 실행하는 테스트 커맨드.
-- planning 단계에서 설정
+Stop Hook이 smith 중 자동으로 실행하는 테스트 커맨드.
+- oracle 단계에서 설정
 - 프로젝트에 맞는 커맨드 사용 (npm test, pytest, go test 등)
 - 비어있으면 테스트 스킵
 

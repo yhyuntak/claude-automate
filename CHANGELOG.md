@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.26.0] - 2026-02-24
+
+### Changed
+- 스킬 리네이밍: brainstorm → muse, planning → oracle, implement → smith
+  - Plan Mode 충돌 해소 (planning → oracle)
+  - 캐릭터 호출 방식 지원 ("뮤즈 생각해봐", "오라클 정리해줘", "스미스 만들어")
+  - 기존 한국어 키워드("브레인스토밍", "계획", "구현하자" 등) 그대로 유지
+
 ## [0.25.3] - 2026-02-24
 
 ### Fixed

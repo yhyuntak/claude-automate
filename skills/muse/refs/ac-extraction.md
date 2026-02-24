@@ -30,4 +30,4 @@
 ## 사용자 확인
 
 AC 목록을 AskUserQuestion (multiSelect: true)으로 제시.
-수정/삭제/추가 가능. 확인 후 /planning으로 핸드오프.
+수정/삭제/추가 가능. 확인 후 /oracle으로 핸드오프.

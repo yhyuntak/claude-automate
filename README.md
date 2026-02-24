@@ -92,9 +92,9 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | Command | 설명 |
 |---------|------|
 | `/start-work` | 세션 시작: 컨텍스트 복원, plan 이어가기, 백로그 관리 |
-| `/brainstorm` | 아이디어 구체화 자유 대화 |
-| `/planning` | brainstorm 결과를 plan 파일로 구체화 |
-| `/implement` | plan 기반 AC별 구현 실행 |
+| `/muse` | 아이디어 구체화 자유 대화 |
+| `/oracle` | muse 결과를 plan 파일로 구체화 |
+| `/smith` | plan 기반 AC별 구현 실행 |
 | `/save-context` | 세션 컨텍스트 저장 |
 | `/wrap` | 세션 종료 마무리: plan 완료 + 백로그 정리 + 컨텍스트 저장 + 커밋 |
 | `/angel` | 생각 확장자: 새로운 관점과 가능성 탐색 |
@@ -131,9 +131,9 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | Skill | 역할 |
 |-------|------|
 | `start-work` | 세션 시작 오케스트레이션 |
-| `brainstorm` | 아이디어 탐색 및 구체화 |
-| `planning` | plan 파일 생성 및 관리 |
-| `implement` | AC 기반 구현 실행 |
+| `muse` | 아이디어 탐색 및 구체화 |
+| `oracle` | plan 파일 생성 및 관리 |
+| `smith` | AC 기반 구현 실행 |
 | `save-context` | 세션 컨텍스트 스냅샷 저장 |
 | `wrap` | 세션 종료 워크플로우 |
 | `backlog` | 백로그 CRUD 및 상태 관리 |
@@ -182,9 +182,9 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 
 ```bash
 /start-work    # 세션 시작: 컨텍스트 복원 + 백로그 확인
-/brainstorm    # 아이디어 자유 탐색
-/planning      # brainstorm 결과를 구체적인 plan으로
-/implement     # plan의 AC 하나씩 실행
+/muse          # 아이디어 자유 탐색
+/oracle        # muse 결과를 구체적인 plan으로
+/smith         # plan의 AC 하나씩 실행
 /wrap          # 세션 종료: 검증 + 정리 + 커밋
 ```
 

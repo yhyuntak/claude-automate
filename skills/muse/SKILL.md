@@ -1,8 +1,8 @@
 ---
-name: brainstorm
+name: muse
 description: |
   아이디어를 구체화하는 자유 대화.
-  "brainstorm", "브레인스토밍", "아이디어", "뭘 만들지" 키워드로 활성화.
+  "muse", "뮤즈", "brainstorm", "브레인스토밍", "아이디어", "뭘 만들지" 키워드로 활성화.
 argument-hint: "[idea or topic]"
 allowed-tools:
   - Read
@@ -51,7 +51,7 @@ MUST: refs/ac-extraction.md를 읽고 AC 추출 기준을 확인하라.
 
 → 요구사항 정리 + AC 추출 후:
 1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.
-2. 확인 시 → /planning 스킬 호출
+2. 확인 시 → /oracle 스킬 호출
 
 ## 검증
 

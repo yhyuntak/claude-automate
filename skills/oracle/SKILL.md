@@ -1,8 +1,8 @@
 ---
-name: planning
+name: oracle
 description: |
-  brainstorm 결과를 plan 파일로 구체화.
-  "planning", "계획", "플래닝", "어떻게 만들지" 키워드로 활성화.
+  muse 결과를 plan 파일로 구체화.
+  "oracle", "오라클", "planning", "계획", "플래닝", "어떻게 만들지" 키워드로 활성화.
 argument-hint: "[feature or topic]"
 allowed-tools:
   - Read
@@ -14,7 +14,7 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# /planning
+# /oracle
 
 $ARGUMENTS
 
@@ -22,7 +22,7 @@ $ARGUMENTS
 
 ## 역할
 
-brainstorm에서 나온 요구사항 + AC를 받아
+muse에서 나온 요구사항 + AC를 받아
 어떻게 구현할지 자유롭게 탐색하고, plan 파일을 생성한다.
 단계 없이 대화 흐름에 맞게 도구를 자유롭게 사용한다.
 
@@ -51,8 +51,8 @@ MUST: refs/plan-file.md를 읽고 파일 구조와 규칙을 확인하라.
 ## 제약
 
 - plan 파일 외 파일 수정 금지
-- 코드 작성 금지 (구현은 /implement에서)
-- brainstorm 결과(AC)를 임의로 바꾸지 않는다
+- 코드 작성 금지 (구현은 /smith에서)
+- muse 결과(AC)를 임의로 바꾸지 않는다
 - 정리를 재촉하지 않는다
 
 ---
@@ -61,7 +61,7 @@ MUST: refs/plan-file.md를 읽고 파일 구조와 규칙을 확인하라.
 
 plan 파일 생성 후:
 1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.
-2. 확인 시 → /implement 스킬 호출
+2. 확인 시 → /smith 스킬 호출
 
 ---
 
@@ -70,7 +70,7 @@ plan 파일 생성 후:
 MUST: 아래 체크리스트를 모두 확인하라.
 
 - [ ] plan 파일에 필수 섹션이 모두 있는가? (요구사항/AC/구현 순서/테스트 계획)
-- [ ] AC가 brainstorm 결과와 일치하는가?
+- [ ] AC가 muse 결과와 일치하는가?
 - [ ] 사용자 확인을 받았는가?
 
 실패 시: 해당 부분으로 돌아가 수정 → 재검증.
@@ -80,7 +80,7 @@ MUST: 아래 체크리스트를 모두 확인하라.
 ## 주의사항
 
 1. 단계를 강제하지 마라
-2. brainstorm 결과를 존중하라
+2. muse 결과를 존중하라
 3. 구현은 하지 않는다 — 계획만
 4. 사용자가 확인할 때만 파일 생성
 

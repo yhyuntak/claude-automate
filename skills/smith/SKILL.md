@@ -1,8 +1,8 @@
 ---
-name: implement
+name: smith
 description: |
   plan 파일 기반으로 구현 실행.
-  "implement", "구현", "구현하자" 키워드로 활성화.
+  "smith", "스미스", "implement", "구현", "구현하자" 키워드로 활성화.
 argument-hint: "[plan slug]"
 allowed-tools:
   - Read
@@ -16,7 +16,7 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# /implement
+# /smith
 
 > plan 파일을 로드하고 AC를 순서대로 구현하는 실행기
 
@@ -87,5 +87,5 @@ MUST: 아래 체크리스트를 모두 확인하라.
 ## 주의사항
 
 1. **plan대로만 실행** — 범위를 넓히지 않는다
-2. **묻지 않는다** — 앞단(brainstorm/planning)에서 이미 결정됨
+2. **묻지 않는다** — 앞단(muse/oracle)에서 이미 결정됨
 3. **Stop Hook 신뢰** — 테스트 실패와 컨텍스트 초과를 감시
