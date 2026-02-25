@@ -10,8 +10,6 @@ allowed-tools:
   - Grep
   - LSP
   - Task
-  - Write
-  - Edit
   - AskUserQuestion
 ---
 
@@ -148,14 +146,32 @@ AskUserQuestion으로 최종 AC 목록을 제시한다.
 
 MUST: refs/plan-file.md를 읽고 파일 구조를 확인하라.
 
-plan 파일을 `.claude/plans/{YYYY-MM-DD}-{slug}.md`에 Write한다.
+writer 에이전트에게 plan 파일 작성을 위임한다.
 
-포함 내용:
+```
+Task(
+  subagent_type="claude-automate:writer",
+  prompt="""
+## Task
+plan 파일 생성
+
+## Target
+.claude/plans/{YYYY-MM-DD}-{slug}.md
+
+## Content
+{아래 내용을 모두 포함하여 plan 파일을 Write하라}
+
 - 요구사항 (Context/What/Why/Scope)
 - Brain 업데이트 (Step 4에서 발견한 기록할 것들)
 - AC 목록 (Step 8에서 확정된 것)
 - 구현 순서 (Brain 업데이트 → AC 순서)
 - 테스트 계획
+
+## Format
+refs/plan-file.md 구조를 따를 것
+"""
+)
+```
 
 생성 후:
 1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.

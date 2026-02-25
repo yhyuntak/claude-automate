@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.27.1] - 2026-02-25
+
+### Changed
+- /planning Step 9: plan 파일 직접 Write → writer 에이전트 위임
+- planning allowed-tools에서 Write/Edit 제거
+- agent-delegation 규칙: "10줄 이상" → "모든 파일 수정 → writer 필수"
+
 ## [0.27.0] - 2026-02-25
 
 ### Changed
