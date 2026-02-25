@@ -117,7 +117,7 @@ const agents = {
     model: "sonnet",
     role: "Code and architecture analysis"
   },
-  oracle: {         // 전략가
+  strategist: {     // 전략가
     model: "opus",
     role: "Complex reasoning and design"
   }
@@ -130,7 +130,7 @@ async function delegateTask(task) {
   } else if (task.type === 'analysis') {
     return await invokeAgent(agents.analyzer, task);
   } else if (task.type === 'strategy') {
-    return await invokeAgent(agents.oracle, task);
+    return await invokeAgent(agents.strategist, task);
   }
 }
 ```

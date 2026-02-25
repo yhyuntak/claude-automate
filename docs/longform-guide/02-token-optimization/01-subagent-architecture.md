@@ -112,7 +112,7 @@ Claude 3 모델 계열은 세 가지 티어로 나뉩니다:
 |---------|---------|---------|-----------|----------|------|
 | **explore** | Haiku | Haiku | Haiku-medium | - | 빠른 검색 |
 | **librarian** | Sonnet | Haiku | Sonnet | - | 문서 조사 |
-| **oracle** | Opus | oracle-low | oracle-medium | Opus | 복잡한 분석 |
+| **planner** | Opus | planner-low | planner-medium | Opus | 복잡한 분석 |
 | **sisyphus-junior** | Sonnet | junior-low | Sonnet | junior-high | 작업 실행 |
 | **frontend-engineer** | Sonnet | engineer-low | Sonnet | engineer-high | UI/UX 작업 |
 | **document-writer** | Haiku | Haiku | - | - | 문서 작성 |
@@ -730,7 +730,7 @@ function evaluateComplexity(task) {
 // 나쁜 예
 async function searchFiles(pattern) {
   return await invokeSubagent({
-    agent: "oracle",
+    agent: "planner",
     model: "opus",  // 과도한 선택
     task: `Find files matching ${pattern}`
   });

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.27.0] - 2026-02-25
+
+### Changed
+- Harness 2.1: /planning 9-step 재설계
+  - 모드 자동 감지 (Direct/Interview)
+  - Brain 읽기 → explore 탐색 → AC 추출 → Angel 확장 → Devil 검증
+  - "자유롭게" 지시 제거, 구체적 스텝으로 전환
+- 스킬 이름 원복: muse→삭제, oracle→planning, smith→implement
+- Brain 구조 활성화: code-map.md, decisions.md 추가
+- plan 파일 포맷에 "Brain 업데이트" 섹션 추가
+
+### Removed
+- muse 스킬/커맨드 삭제 (브레인스토밍 = 일반 대화로 대체)
+
 ## [0.26.1] - 2026-02-25
 
 ### Removed

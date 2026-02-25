@@ -11,10 +11,18 @@
 ```
 /planning 실행 시:
 1. 이 파일 읽기 (패턴 목록 확인)
-2. 구현에 필요한 패턴 식별
-3. 해당 상세 파일 읽기
+2. 관련 code-map, patterns, decisions 확인
+3. 구현에 필요한 상세 파일 읽기
 4. 예시 기반으로 설계
 ```
+
+---
+
+## Code Map
+
+| 항목 | 설명 | 상세 |
+|------|------|------|
+| Code Map | 프로젝트 구조, 주요 파일, 모듈 관계 | [→ code-map.md](brain/code-map.md) |
 
 ---
 
@@ -28,11 +36,11 @@
 
 ---
 
-## Architecture
+## Decisions
 
-| 영역 | 설명 | 상세 |
+| 항목 | 설명 | 상세 |
 |------|------|------|
-| Layer Mapping | 레이어별 역할과 매핑 | CLAUDE.md 참조 |
+| Architecture Decisions | 아키텍처 결정과 근거 기록 | [→ decisions.md](brain/decisions.md) |
 
 ---
 
@@ -40,8 +48,9 @@
 
 | 날짜 | 결정 | 상세 |
 |------|------|------|
+| 2026-02-25 | Harness 2.1 재설계 | planning 9-step + brain 활성화 |
 | 2026-02-03 | Brain 도입 | 규칙 → 예시 중심 전환 |
 
 ---
 
-**Last Updated**: 2026-02-03
+**Last Updated**: 2026-02-25

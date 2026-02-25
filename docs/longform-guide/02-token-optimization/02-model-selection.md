@@ -119,7 +119,7 @@ Complexity: 0.1 (매우 낮음)
 ```javascript
 // 나쁜 예: Opus 사용
 await invokeAgent({
-  name: "oracle",
+  name: "planner",
   model: "opus",
   task: "모든 test 파일 찾기"  // 과도함
 });
@@ -801,7 +801,7 @@ ROI: $0.53 절감으로 동일한 품질 달성
 // 나쁜 예
 async function findTestFiles() {
   return await invokeAgent({
-    name: "oracle",
+    name: "planner",
     model: "opus",  // 과도함!
     task: "모든 test 파일 찾기"
   });

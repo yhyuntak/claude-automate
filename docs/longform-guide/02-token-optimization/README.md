@@ -160,7 +160,7 @@ Task(subagent_type="claude-opus")  # 비용 비싸고 느림
 # 좋은 예: 작업별로 적절한 모델 선택
 Task(subagent_type="oh-my-claude-sisyphus:explore")  # Haiku - 빠르고 저렴
 Task(subagent_type="oh-my-claude-sisyphus:sisyphus-junior")  # Sonnet - 균형
-Task(subagent_type="oh-my-claude-sisyphus:oracle")  # Opus - 복잡한 추론
+Task(subagent_type="claude-automate:writer-high")  # Opus - 복잡한 추론
 ```
 **절약**: 70% 비용 감소
 

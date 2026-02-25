@@ -38,9 +38,9 @@ AskUserQuestion으로 이어가기 여부를 확인한다:
 ```
 
 - "이어가기" 선택 시:
-  - 상태가 `implement`이고 Plan 경로 있으면 → `/smith` 안내
-  - 상태가 `planning`이면 → `/oracle` 안내
-  - 상태가 `brainstorm`이면 → `/muse` 안내
+  - 상태가 `implement`이고 Plan 경로 있으면 → `/implement` 안내
+  - 상태가 `planning`이면 → `/planning` 안내
+  - 상태가 `brainstorm`이면 → `/planning` 안내 (브레인스토밍은 일반 대화)
   - 상태가 `자유 대화`이면 → "다음 행동" 기반으로 자유 논의 진행
   - **Step 2~4를 건너뛴다.**
 - "새로 시작" 선택 시 → Step 2로 계속 진행
@@ -106,16 +106,16 @@ MUST: AskUserQuestion으로 다음 행동을 결정하라.
   "header": "Next Action",
   "multiSelect": false,
   "options": [
-    { "label": "Plan 이어가기", "description": "/smith 로 진행" },
-    { "label": "브레인스토밍", "description": "뭘 만들지 구체화 (/muse)" },
+    { "label": "Plan 이어가기", "description": "/implement 로 진행" },
+    { "label": "Planning", "description": "뭘 만들지 구체화 (/planning)" },
     { "label": "질문/논의", "description": "작업에 대해 더 논의" }
   ]
 }
 ```
 
 선택에 따라 안내:
-- "Plan 이어가기" → `/smith` 스킬 안내
-- "브레인스토밍" → `/muse` 스킬 안내
+- "Plan 이어가기" → `/implement` 스킬 안내
+- "Planning" → `/planning` 스킬 안내
 - "질문/논의" → 자유 논의 진행
 
 ## 검증

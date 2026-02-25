@@ -32,9 +32,9 @@
                     ┌─────────┴─────────┐
                     │    claude-automate │
                     │  (Harness 2.0)     │
-                    │  12 Commands       │
+                    │  11 Commands       │
                     │  15 Agents         │
-                    │  13 Skills         │
+                    │  12 Skills         │
                     └─────────┬─────────┘
                               │
      ┌──────────┬─────────────┼─────────────┬──────────┐
@@ -87,14 +87,13 @@ MCP         =  Infrastructure/Adapter (외부 연동)
 CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 ```
 
-### Commands (Controller) — 12개
+### Commands (Controller) — 11개
 
 | Command | 설명 |
 |---------|------|
 | `/start-work` | 세션 시작: 컨텍스트 복원, plan 이어가기, 백로그 관리 |
-| `/muse` | 아이디어 구체화 자유 대화 |
-| `/oracle` | muse 결과를 plan 파일로 구체화 |
-| `/smith` | plan 기반 AC별 구현 실행 |
+| `/planning` | 아이디어를 구체적인 plan 파일로 구체화 |
+| `/implement` | plan 기반 AC별 구현 실행 |
 | `/save-context` | 세션 컨텍스트 저장 |
 | `/wrap` | 세션 종료 마무리: plan 완료 + 백로그 정리 + 컨텍스트 저장 + 커밋 |
 | `/angel` | 생각 확장자: 새로운 관점과 가능성 탐색 |
@@ -124,16 +123,15 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `verify-web-ui` | Sonnet | Web UI 테스트 실행 |
 | `verify-web-ui-orchestrator` | Sonnet | Web UI 검증 오케스트레이션 |
 
-### Skills (Domain Component) — 13개
+### Skills (Domain Component) — 12개
 
-**Core 7개** (Harness 2.0 워크플로우):
+**Core 6개** (Harness 2.0 워크플로우):
 
 | Skill | 역할 |
 |-------|------|
 | `start-work` | 세션 시작 오케스트레이션 |
-| `muse` | 아이디어 탐색 및 구체화 |
-| `oracle` | plan 파일 생성 및 관리 |
-| `smith` | AC 기반 구현 실행 |
+| `planning` | plan 파일 생성 및 관리 |
+| `implement` | AC 기반 구현 실행 |
 | `save-context` | 세션 컨텍스트 스냅샷 저장 |
 | `wrap` | 세션 종료 워크플로우 |
 | `backlog` | 백로그 CRUD 및 상태 관리 |
@@ -182,9 +180,8 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 
 ```bash
 /start-work    # 세션 시작: 컨텍스트 복원 + 백로그 확인
-/muse          # 아이디어 자유 탐색
-/oracle        # muse 결과를 구체적인 plan으로
-/smith         # plan의 AC 하나씩 실행
+/planning      # 아이디어를 구체적인 plan으로
+/implement     # plan의 AC 하나씩 실행
 /wrap          # 세션 종료: 검증 + 정리 + 커밋
 ```
 
