@@ -19,6 +19,14 @@ $ARGUMENTS
 
 ---
 
+## 진행 안내 규칙
+
+각 단계 진입 시 사용자에게 현재 상황을 안내한다.
+
+- 진입: "{Direct/Interview} 모드로 진입합니다."
+- 각 단계: "[N/9] {단계명} 실행합니다."
+- 결과: 각 단계 완료 후 요약 한 줄
+
 ## Step 1: 모드 감지
 
 MUST: refs/mode-detection.md를 읽고 판별 기준을 확인하라.
@@ -30,6 +38,10 @@ MUST: refs/mode-detection.md를 읽고 판별 기준을 확인하라.
 | 구체적 요구사항 있음 (파일명, 기능명, 명확한 동작) | **Direct** → Step 3 |
 | 모호한 요청 (개선, 리팩터링, 뭔가 하고 싶다) | **Interview** → Step 2 |
 | 판단 불가 | AskUserQuestion으로 확인 |
+
+모드 결정 후 사용자에게 안내한다:
+- Direct: "**Direct 모드**로 진입합니다. 구체적 요구사항을 기반으로 계획을 수립합니다."
+- Interview: "**Interview 모드**로 진입합니다. 아이디어를 구체화하기 위해 질문합니다."
 
 ## Step 2: Interview (모호할 때만)
 
@@ -85,9 +97,12 @@ Task(
 | 대화/Interview | 사용자 관점 | "로그아웃하면 세션 끊김" |
 | Step 4 탐색 결과 | 기술 관점 | "refresh token도 무효화 필요" |
 
-AC 작성 기준:
-- "통과/실패" 판정 가능한 문장
-- 하나의 AC = 하나의 검증 포인트
+AC/TC 작성 기준:
+- AC = 작업 항목 (뭘 할지)
+- TC = 검증 기준 (어떻게 확인할지, AC 하위 항목)
+- TC는 "통과/실패" 판정 가능한 문장
+- 하나의 TC = 하나의 검증 포인트
+- 테스트 불가한 AC는 "(TC 없음)" 표기
 - 모호한 표현 금지 ("잘 동작한다" → "200 응답 반환")
 
 ## Step 6: Angel 확장
@@ -97,7 +112,7 @@ Angel 에이전트로 AC를 확장한다.
 ```
 Task(
   subagent_type="claude-automate:angel",
-  prompt="현재 AC 목록: [AC 목록]. 빠진 엣지케이스, 추가 고려사항이 있는지 확인해줘."
+  prompt="현재 AC/TC 목록: [AC/TC 목록]. AC 레벨에서 빠진 작업 항목, TC 레벨에서 빠진 엣지케이스/검증 조건이 있는지 확인해줘."
 )
 ```
 
@@ -112,7 +127,7 @@ Devil 에이전트로 AC 전체를 검증한다.
 ```
 Task(
   subagent_type="claude-automate:devil",
-  prompt="AC 목록 검증: [AC 목록]. 모호한 AC, 테스트 불가능한 AC, 빠진 리스크를 지적해줘."
+  prompt="AC/TC 목록 검증: [AC/TC 목록]. 모호한 AC, 테스트 불가능한 TC, 빠진 리스크, AC-TC 불일치를 지적해줘."
 )
 ```
 
@@ -173,9 +188,20 @@ refs/plan-file.md 구조를 따를 것
 )
 ```
 
-생성 후:
-1. MUST: AskUserQuestion으로 사용자 최종 확인을 받아라.
-2. 확인 시 → `/implement` 안내
+생성 후 MUST: AskUserQuestion으로 다음 행동을 확인하라.
+
+```json
+{
+  "question": "plan 파일이 생성되었습니다. 다음에 무엇을 할까요?",
+  "header": "다음 행동",
+  "multiSelect": true,
+  "options": [
+    { "label": "/implement 실행 (Recommended)", "description": "plan 기반으로 바로 구현 시작" },
+    { "label": "plan 수정", "description": "plan 파일을 다시 검토/수정" },
+    { "label": "나중에", "description": "지금은 구현하지 않음" }
+  ]
+}
+```
 
 ---
 

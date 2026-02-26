@@ -31,12 +31,12 @@ plan 종료 → 백로그 이동 → 컨텍스트 저장 → 커밋 순서로 �
 
 ## 실행
 
-### Step 1 — Plan 종료
+### Step 1 — Plan 확인
 
-`.claude/plans/*.md` Glob으로 `status: in_progress` 파일 찾기.
-해당 파일의 frontmatter `status`를 `done`으로 변경 (Edit).
+`.claude/plans/*.md` Glob으로 최근 plan 파일 확인.
+implement에서 이미 `status: done`으로 변경되므로, 여기서는 확인만 한다.
 
-스킵 조건: plan 파일이 없거나 `in_progress` 파일이 없을 때.
+스킵 조건: plan 파일이 없을 때.
 
 ### Step 2 — Backlog 이동
 
@@ -75,7 +75,7 @@ AskUserQuestion으로 커밋 메시지 확인 후 커밋 실행.
 
 MUST: 아래 체크리스트를 모두 확인하라.
 
-- [ ] plan 파일 status가 `done`으로 변경되었는가? (또는 스킵 사유 명시)
+- [ ] plan 파일 status가 `done`인가? (또는 스킵 사유 명시)
 - [ ] doing/ 파일이 done/으로 이동되었는가? (또는 스킵 사유 명시)
 - [ ] 종료 컨텍스트 파일이 생성되었는가?
 - [ ] 사용자가 커밋 메시지를 확인했는가?

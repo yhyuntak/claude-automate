@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.28.0] - 2026-02-26
+
+### Changed
+- Harness 2.2: /implement TDD 루프 재설계
+  - 5단계 파이프라인: Plan 로드 → Brain 업데이트 → AC 순회(TDD) → status done → 완료
+  - TDD 루프: TC 있는 AC → test→red→구현→green, TC 없는 AC → 구현만
+  - 재시도 에스컬레이션: 1~2회 writer → 3회 writer-high → 4회 사용자
+  - [병렬]/[순차] 표기 기반 실행 (planning이 결정)
+- /planning AC/TC 분리 반영
+  - Step 5: AC/TC 작성 기준 분리
+  - Step 6: Angel → AC/TC 양쪽 확장
+  - Step 7: Devil → AC/TC 양쪽 검증
+  - 진행 안내 규칙 [N/9] 추가
+- plan 파일 템플릿: 구현 순서에 [병렬]/[순차] 표기법 추가
+- /wrap: plan status 변경 제거 (implement에서 done 처리)
+
 ## [0.27.2] - 2026-02-26
 
 ### Changed
