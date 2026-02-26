@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.29.0] - 2026-02-26
+
+### Removed
+- commands/ 폴더 전체 삭제 (deprecated → skills로 대체)
+  - 11개 command 파일 제거 (angel, devil, extract-brain, implement 등)
+- skills/explain-plugins/ 삭제
+- skills/project-init/ 삭제
+- skills/session-start/ 삭제 (start-work에 통합)
+- skills/extract-brain/ 삭제
+
 ## [0.28.0] - 2026-02-26
 
 ### Changed
