@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.27.2] - 2026-02-26
+
+### Changed
+- plan 파일 템플릿에 TC(검증 기준) 구조 반영
+  - AC = 작업 항목 (진행 추적), TC = 검증 기준 (TDD 대상)
+  - AC 하위에 TC 항목 추가, TC 없는 AC는 "(TC 없음)" 명시
+- 별도 "테스트 계획" 섹션 삭제 (TC가 AC에 직접 포함)
+
 ## [0.27.1] - 2026-02-25
 
 ### Changed
