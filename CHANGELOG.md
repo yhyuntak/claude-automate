@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.30.0] - 2026-02-27
+
+### Added
+- SessionStart hook: 세션 시작 시 .claude/state/mode를 idle로 초기화
+- PreCompact hook: compact 직전 mode별 systemMessage 주입 (implement/planning 상태 복원)
+- 스킬 mode 지시: planning, implement, wrap이 시작 시 mode 파일 업데이트
+
+### Removed
+- .claude/hooks/ 실험 스크립트 삭제 (session-stop.sh, session-stop-poc.sh)
+
 ## [0.29.0] - 2026-02-26
 
 ### Removed

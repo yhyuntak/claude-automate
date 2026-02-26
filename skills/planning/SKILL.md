@@ -29,6 +29,8 @@ $ARGUMENTS
 
 ## Step 1: 모드 감지
 
+MUST: `.claude/state/mode`에 `planning`을 기록하라. (`echo planning > .claude/state/mode`)
+
 MUST: refs/mode-detection.md를 읽고 판별 기준을 확인하라.
 
 인자와 대화 히스토리를 분석하여 모드를 결정한다.

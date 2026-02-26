@@ -45,6 +45,8 @@ plan 파일을 `.claude/plans/`에서 로드한다.
 - status → `in_progress`로 변경
 - 이미 `in_progress` → 미완료 AC(`- [ ]`)부터 이어가기
 
+MUST: `.claude/state/mode`에 `implement`를 기록하라. (`echo implement > .claude/state/mode`)
+
 ## [2/5] Brain 업데이트
 
 plan의 "Brain 업데이트" 섹션을 실행한다.

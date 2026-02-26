@@ -38,6 +38,8 @@ implement에서 이미 `status: done`으로 변경되므로, 여기서는 확인
 
 스킵 조건: plan 파일이 없을 때.
 
+MUST: `.claude/state/mode`에 `idle`을 기록하라. (`echo idle > .claude/state/mode`)
+
 ### Step 2 — Backlog 이동
 
 `docs/backlogs/doing/` 파일을 `docs/backlogs/done/`으로 이동 (Bash: mv).
