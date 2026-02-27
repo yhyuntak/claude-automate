@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.32.1 (2026-02-27)
+
+### Changed
+- Convert all Korean content to English (agents, skills, hooks, rules, CLAUDE.md)
+- Restore functional emojis and Korean keyword triggers for bilingual activation
+- Add PARA concept extraction step (Step 10) to planning skill
+
 ## v0.32.0 (2026-02-27)
 
 ### Added
