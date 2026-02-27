@@ -77,16 +77,16 @@ mv docs/backlog/todo/phase1-xxx.md docs/backlog/doing/
 # Update README.md (🔄 emoji)
 ```
 
-### 다음 액션 제안
+### Next Action Suggestion
 
-백로그를 `doing/`으로 이동한 후, 다음 행동을 제안한다.
+After moving backlog to `doing/`, suggest the next steps.
 
 ```
 AskUserQuestion:
-  "다음에 어떻게 진행할까요?"
-  - /planning으로 계획 수립 (Recommended) | plan 파일 생성 후 /implement
-  - 자유 대화로 논의 | 요구사항 정리나 기술 검토 먼저
-  - 나중에 | 지금은 다른 작업
+  "How would you like to proceed?"
+  - Plan with /planning (Recommended) | create plan file then /implement
+  - Discuss freely | review requirements or technical approach first
+  - Later | handle other tasks for now
 ```
 
 ### Complete Story

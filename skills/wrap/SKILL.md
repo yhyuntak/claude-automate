@@ -1,10 +1,10 @@
 ---
 name: wrap
 description: |
-  세션 종료 시 태스크 마무리.
-  plan 확인 + 백로그 정리 + 문서 싱크 체크 + 커밋.
-  "wrap", "마무리", "끝" 키워드로 활성화.
-argument-hint: "[커밋 메시지]"
+  Task wrap-up at session end.
+  Checks plan + cleans up backlog + verifies doc sync + commits.
+  Activated by keywords: "wrap", "finish", "done", "end session".
+argument-hint: "[commit message]"
 allowed-tools:
   - Read
   - Glob
@@ -21,112 +21,112 @@ $ARGUMENTS
 
 ---
 
-## 진행 안내 규칙
+## Progress Guidance Rules
 
-각 단계 진입 시 사용자에게 현재 상황을 안내한다.
+Announce the current status to the user when entering each step.
 
-- 진입: "마무리를 시작합니다."
-- 각 단계: "[N/4] {단계명} 실행합니다."
-- 결과: 각 단계 완료 후 요약 한 줄
-- 완료: "마무리 완료"
+- Entry: "Starting wrap-up."
+- Each step: "[N/4] Running {step name}."
+- Result: One-line summary after each step completes
+- Completion: "Wrap-up complete"
 
-## Step 1: Plan 확인
+## Step 1: Plan Check
 
-`.claude/plans/` 에서 `status: in_progress`인 plan 파일을 Glob으로 탐색한다.
+Search for plan files with `status: in_progress` in `.claude/plans/` using Glob.
 
-있으면:
-- 모든 AC가 체크(`- [x]`)되었는지 확인
-- 미완료 AC가 있으면 경고 출력 + AskUserQuestion ("미완료 AC가 있습니다. 그래도 진행할까요?")
-- 진행 확인 후 writer에 위임하여 plan 파일의 status를 `done`으로 변경
+If found:
+- Check whether all ACs are checked (`- [x]`)
+- If incomplete ACs exist, print a warning + AskUserQuestion ("There are incomplete ACs. Do you want to proceed anyway?")
+- After confirmation, delegate to writer to change plan file status to `done`
 
-없으면: 스킵
+If not found: skip
 
-MUST: `.claude/state/mode`에 `idle`을 기록하라. (`echo idle > .claude/state/mode`)
+MUST: Write `idle` to `.claude/state/mode`. (`echo idle > .claude/state/mode`)
 
-## Step 2: 백로그 정리
+## Step 2: Backlog Cleanup
 
-`docs/backlogs/doing/` 에서 현재 작업과 관련된 백로그 파일을 확인한다.
+Check for backlog files related to the current task in `docs/backlogs/doing/`.
 
-- doing/에 여러 개 있을 수 있으므로, 현재 plan slug나 대화 히스토리와 매칭되는 것을 찾음
-- 관련 백로그의 AC가 모두 완료되었으면 → Bash로 `done/`으로 이동
-- `docs/backlogs/README.md` 업데이트 (writer 위임):
-  - 현황: Doing -1, Done +1
-  - 링크 경로: `doing/` → `done/`
-  - 상태: `🔄 Doing` → `✅ Done`
+- There may be multiple files in doing/, so find the one matching the current plan slug or conversation history
+- If all ACs of a related backlog are complete → move to `done/` with Bash
+- Update `docs/backlogs/README.md` (delegate to writer):
+  - Status: Doing -1, Done +1
+  - Link path: `doing/` → `done/`
+  - Status label: `🔄 Doing` → `✅ Done`
 
-관련 백로그 없으면: 스킵
+If no related backlog: skip
 
-## Step 3: 문서 싱크 체크
+## Step 3: Doc Sync Check
 
-doc-sync-checker 에이전트로 변경 파일과 인덱스의 일치 여부를 확인한다.
+Use the doc-sync-checker agent to verify that changed files match the index.
 
 ```
 Task(
   subagent_type="claude-automate:doc-sync-checker",
-  prompt="git diff로 변경된 파일 목록 확인. docs/README.md 인덱스와 비교하여 누락/불일치 항목 보고."
+  prompt="Check the list of changed files via git diff. Report any missing or mismatched items compared to the docs/README.md index."
 )
 ```
 
-결과에 싱크 문제 있으면:
-- AskUserQuestion ("인덱스 업데이트할까요?")
-- 확인 시 writer에 위임하여 업데이트
+If sync issues are found in the result:
+- AskUserQuestion ("Shall we update the index?")
+- On confirmation, delegate to writer to update
 
-싱크 문제 없으면: 스킵
+If no sync issues: skip
 
-doc-sync-checker 실패 시: "문서 싱크 체크 실패 (경고)" 출력하고 Step 4로 진행 (실패 내성)
+If doc-sync-checker fails: print "Doc sync check failed (warning)" and proceed to Step 4 (fault tolerant)
 
-## Step 4: 커밋
+## Step 4: Commit
 
-변경 내용 기반으로 커밋 메시지 초안을 작성한다.
+Draft a commit message based on the changes.
 
-- $ARGUMENTS가 있으면 기본 메시지로 제안
-- 없으면 `git diff --stat` 기반으로 메시지 생성
+- If $ARGUMENTS is provided, suggest it as the default message
+- Otherwise, generate a message based on `git diff --stat`
 
-AskUserQuestion으로 커밋 메시지 확인:
+Confirm commit message with AskUserQuestion:
 
 ```json
 {
-  "question": "커밋 메시지를 확인해주세요.",
-  "header": "커밋",
+  "question": "Please review the commit message.",
+  "header": "Commit",
   "multiSelect": false,
   "options": [
-    { "label": "이대로 커밋", "description": "제안된 메시지로 커밋 실행" },
-    { "label": "메시지 수정", "description": "메시지를 직접 입력" },
-    { "label": "커밋 안 함", "description": "커밋 없이 종료" }
+    { "label": "Commit as is", "description": "Execute commit with the suggested message" },
+    { "label": "Edit message", "description": "Enter a custom message" },
+    { "label": "Skip commit", "description": "Exit without committing" }
   ]
 }
 ```
 
-- "이대로 커밋" → `git add -A && git commit -m "{메시지}"` 실행
-- "메시지 수정" → AskUserQuestion으로 메시지 입력 받아 커밋
-- "커밋 안 함" → 스킵하고 graceful하게 종료
+- "Commit as is" → run `git add -A && git commit -m "{message}"`
+- "Edit message" → receive message via AskUserQuestion and commit
+- "Skip commit" → skip and exit gracefully
 
 ---
 
-## 제약
+## Constraints
 
-- plan에 없는 작업은 하지 않는다
-- 모든 파일 수정은 writer에 위임 (git 명령 제외)
-- 커밋은 반드시 사용자 확인 후
-
----
-
-## 검증
-
-MUST: 아래 체크리스트를 모두 확인하라.
-
-- [ ] plan 파일 status가 `done`인가? (또는 plan 없으면 스킵)
-- [ ] doing/ 파일이 done/으로 이동되었는가? (또는 관련 백로그 없으면 스킵)
-- [ ] docs/README.md 인덱스가 최신인가?
-- [ ] 사용자가 커밋을 확인했는가?
-- [ ] 진행 안내가 각 단계마다 출력되었는가?
-
-실패 시: 해당 Step으로 돌아가 수정 → 재검증.
+- Do not perform work not in the plan
+- All file modifications are delegated to writer (except git commands)
+- Always commit only after user confirmation
 
 ---
 
-## 주의사항
+## Verification
 
-1. **각 Step은 대상이 없으면 스킵** — 에러가 아님, 정상 흐름
-2. **doc-sync-checker 실패는 wrap을 중단시키지 않음** — 경고 출력 후 계속
-3. **커밋 거부 시 graceful하게 종료** — AskUserQuestion 생략 금지
+MUST: Confirm all items in the checklist below.
+
+- [ ] Is plan file status `done`? (or skip if no plan)
+- [ ] Was doing/ file moved to done/? (or skip if no related backlog)
+- [ ] Is docs/README.md index up to date?
+- [ ] Did the user confirm the commit?
+- [ ] Was progress guidance printed at each step?
+
+If failed: return to the relevant Step, fix, and re-verify.
+
+---
+
+## Cautions
+
+1. **Skip each Step if there is no target** — not an error, normal flow
+2. **doc-sync-checker failure does not halt wrap** — print warning and continue
+3. **Exit gracefully when commit is declined** — do not omit AskUserQuestion

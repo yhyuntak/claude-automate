@@ -1,202 +1,202 @@
 # Agent Delegation Rules
 
-> 컨텍스트 보호를 위한 에이전트 위임 규칙
+> Rules for agent delegation to protect the main context
 
 ---
 
-## 왜 위임하는가?
+## Why delegate?
 
-메인 컨텍스트에서 직접 파일 읽기/쓰기 → 컨텍스트 오염
-에이전트에게 위임 → 결과만 받아서 컨텍스트 깨끗하게 유지
-
----
-
-## ⛔ 절대 원칙
-
-### 1. 파일 읽기
-
-| 상황 | 처리 방식 |
-|------|----------|
-| 처음 보는 파일 | `explore-*` 에이전트 **필수** |
-| 이미 아는 파일 | 직접 Read 가능 |
-
-### 2. 파일 쓰기
-
-| 상황 | 처리 방식 |
-|------|----------|
-| 모든 파일 수정 (Write/Edit) | `writer-*` 에이전트 **필수** |
-
-UI 깔끔함 + 컨텍스트 보호를 위해 **모든 파일 수정은 writer에 위임**한다.
-
-### 3. 명령 실행
-
-| 상황 | 처리 방식 |
-|------|----------|
-| 빌드/테스트/배포 | `Bash` 에이전트 **필수** |
-| 단순 확인 (git status, ls) | 직접 가능 |
-
-**이 원칙은 예외 없이 적용됩니다.**
+Reading/writing files directly in the main context → context pollution
+Delegating to agents → receive only results, keeping the context clean
 
 ---
 
-## 파일 탐색/검색
+## ⛔ Absolute Principles
 
-| 상황 | 에이전트 | 예시 |
-|------|----------|------|
-| 단순 위치 찾기 | `explore-low` | "이 함수 어디있어?" |
-| 구조/관계 파악 | `explore` | "이 모듈 구조 알려줘" |
-| 아키텍처 분석 | `explore-high` | "전체 의존성 분석해줘" |
+### 1. File Reading
 
-### 판단 기준
+| Situation | Approach |
+|-----------|----------|
+| Unfamiliar file | `explore-*` agent **required** |
+| Already known file | Direct Read allowed |
+
+### 2. File Writing
+
+| Situation | Approach |
+|-----------|----------|
+| All file modifications (Write/Edit) | `writer-*` agent **required** |
+
+For clean UI and context protection, **all file modifications must be delegated to writer**.
+
+### 3. Command Execution
+
+| Situation | Approach |
+|-----------|----------|
+| Build/test/deploy | `Bash` agent **required** |
+| Simple checks (git status, ls) | Direct execution allowed |
+
+**These principles apply without exception.**
+
+---
+
+## File Exploration/Search
+
+| Situation | Agent | Example |
+|-----------|-------|---------|
+| Simple location lookup | `explore-low` | "Where is this function?" |
+| Structure/relationship analysis | `explore` | "Show me this module's structure" |
+| Architecture analysis | `explore-high` | "Analyze the full dependency graph" |
+
+### Decision Criteria
 
 ```
 explore-low (Haiku):
-- 특정 함수/클래스 위치 찾기
-- 파일 존재 여부 확인
-- 단순 grep 검색
+- Finding a specific function/class location
+- Checking if a file exists
+- Simple grep searches
 
 explore (Sonnet):
-- 모듈 구조 파악
-- 파일 간 관계 분석
-- 패턴 찾기
+- Understanding module structure
+- Analyzing relationships between files
+- Finding patterns
 
 explore-high (Opus):
-- 전체 아키텍처 분석
-- 복잡한 의존성 그래프
-- 리팩토링 영향도 분석
+- Full architecture analysis
+- Complex dependency graphs
+- Refactoring impact analysis
 ```
 
 ---
 
-## 코드 작성/수정
+## Code Writing/Modification
 
-| 상황 | 처리 방식 |
-|------|----------|
-| 모든 파일 수정 | `writer` **필수** |
-| 복잡한 구현 | `writer-high` **필수** |
+| Situation | Approach |
+|-----------|----------|
+| All file modifications | `writer` **required** |
+| Complex implementations | `writer-high` **required** |
 
-### Writer 2-Tier 구조
+### Writer 2-Tier Structure
 
-| 복잡도 | 에이전트 | 기준 |
-|--------|----------|------|
-| Standard | `writer` (Sonnet) | 일반 코드, CRUD, 단순 로직 |
-| High | `writer-high` (Opus) | 알고리즘, 보안, 아키텍처 |
+| Complexity | Agent | Criteria |
+|------------|-------|----------|
+| Standard | `writer` (Sonnet) | General code, CRUD, simple logic |
+| High | `writer-high` (Opus) | Algorithms, security, architecture |
 
-### writer-high 사용 기준
+### When to use writer-high
 
 ```
 writer-high (Opus):
-- 복잡한 알고리즘 구현 (정렬, 탐색, DP, 그래프)
-- 보안 관련 코드 (인증, 암호화, 권한)
-- 아키텍처 패턴 적용 (Design Pattern 구현)
-- 성능 최적화 코드
-- 여러 파일에 걸친 대규모 리팩토링
+- Complex algorithm implementation (sorting, search, DP, graphs)
+- Security-related code (authentication, encryption, permissions)
+- Architecture pattern implementation (Design Patterns)
+- Performance optimization code
+- Large-scale refactoring spanning multiple files
 ```
 
-### writer 사용 시
+### When using writer
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-{뭘 할지}
+{What to do}
 
 ## Target
-{파일 경로}
+{File path}
 
 ## Requirements
-{요구사항}
+{Requirements}
 
 ## Verification
-{검증 방법 - build, test, lint}
+{Verification method - build, test, lint}
 """
 )
 ```
 
-### writer-high 사용 시
+### When using writer-high
 
 ```
 Task(
   subagent_type="claude-automate:writer-high",
   prompt="""
 ## Task
-{뭘 할지}
+{What to do}
 
 ## Target
-{파일 경로}
+{File path}
 
 ## Requirements
-{요구사항}
+{Requirements}
 
 ## Complexity Reason
-{왜 writer-high가 필요한지 - algorithm/security/architecture/performance/scale}
+{Why writer-high is needed - algorithm/security/architecture/performance/scale}
 
 ## Verification
-{검증 방법 - build, test, lint, security check}
+{Verification method - build, test, lint, security check}
 """
 )
 ```
 
 ---
 
-## 예외 상황
+## Exceptions
 
-### 직접 처리 가능
+### Can be handled directly
 
-- 단순 상태 확인 명령 (git status, ls)
-- 이미 아는 파일의 Read
+- Simple status check commands (git status, ls)
+- Reading already-known files
 
-### 절대 위임 (예외 없음)
+### Always delegate (no exceptions)
 
-- 처음 보는 파일 탐색 → `explore-*`
-- **모든 파일 수정 (Write/Edit)** → `writer-*`
-- 빌드/테스트/배포 → `Bash` 에이전트
-
----
-
-## 병렬 실행
-
-병렬 가능한 작업은 병렬로 실행한다.
-
-- 탐색: 여러 위치/구조 확인 시 동시 호출
-- 구현: 독립 파일은 동시 호출
-- 티어: 기존 기준 따름, 에이전트가 상황에 맞게 판단
-
-### 예시
-
-```
-# 병렬 탐색
-Task(explore-low, "A 위치"), Task(explore-low, "B 위치")
-
-# 병렬 구현
-Task(writer, "A.py 수정"), Task(writer, "B.py 수정")
-```
+- Exploring unfamiliar files → `explore-*`
+- **All file modifications (Write/Edit)** → `writer-*`
+- Build/test/deploy → `Bash` agent
 
 ---
 
-## 호출 예시
+## Parallel Execution
 
-### 파일 찾기
+Run tasks in parallel when possible.
+
+- Exploration: call simultaneously when checking multiple locations/structures
+- Implementation: call simultaneously for independent files
+- Tier: follow existing criteria, agents decide based on situation
+
+### Examples
+
+```
+# Parallel exploration
+Task(explore-low, "Location of A"), Task(explore-low, "Location of B")
+
+# Parallel implementation
+Task(writer, "Modify A.py"), Task(writer, "Modify B.py")
+```
+
+---
+
+## Call Examples
+
+### Finding a file
 
 ```
 Task(
   subagent_type="claude-automate:explore-low",
-  prompt="UserService 클래스가 어디 정의되어 있는지 찾아줘"
+  prompt="Find where the UserService class is defined"
 )
 ```
 
-### 구조 파악
+### Understanding structure
 
 ```
 Task(
   subagent_type="claude-automate:explore",
   prompt="""
 ## Target
-src/auth/ 폴더
+src/auth/ folder
 
 ## Goal
-인증 모듈의 구조와 파일 간 관계 파악
+Understand the structure and relationships between files in the auth module
 
 ## Depth
 Standard
@@ -204,21 +204,21 @@ Standard
 )
 ```
 
-### 코드 작성
+### Writing code
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-UserService에 logout 메서드 추가
+Add a logout method to UserService
 
 ## Target
 src/services/UserService.ts
 
 ## Requirements
-- 세션 무효화
-- 로그 남기기
+- Invalidate session
+- Write to log
 
 ## Verification
 npm run build && npm test

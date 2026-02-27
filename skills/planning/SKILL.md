@@ -1,8 +1,8 @@
 ---
 name: planning
 description: |
-  구현 계획을 수립한다. 모드 자동 감지, 코드베이스 탐색, AC 추출, 검증을 포함.
-  "planning", "계획", "플래닝", "어떻게 만들지" 키워드로 활성화.
+  Creates an implementation plan. Includes automatic mode detection, codebase exploration, AC extraction, and validation.
+  Activated by keywords: "planning", "plan", "how to build", "design".
 argument-hint: "[feature or topic]"
 allowed-tools:
   - Read
@@ -19,235 +19,235 @@ $ARGUMENTS
 
 ---
 
-## 진행 안내 규칙
+## Progress Guidance Rules
 
-각 단계 진입 시 사용자에게 현재 상황을 안내한다.
+Announce the current status to the user when entering each step.
 
-- 진입: "{Direct/Interview} 모드로 진입합니다."
-- 각 단계: "[N/10] {단계명} 실행합니다."
-- 결과: 각 단계 완료 후 요약 한 줄
+- Entry: "Entering {Direct/Interview} mode."
+- Each step: "[N/10] Running {step name}."
+- Result: One-line summary after each step completes
 
-단계 목록:
-- Step 1: "[1/10] 모드 감지"
+Step list:
+- Step 1: "[1/10] Mode Detection"
 - Step 2: "[2/10] Interview"
-- Step 3: "[3/10] Brain 읽기"
-- Step 4: "[4/10] 코드베이스 탐색"
-- Step 5: "[5/10] AC 초안 추출"
-- Step 6: "[6/10] Angel 확장"
-- Step 7: "[7/10] Devil 검증"
-- Step 8: "[8/10] 사용자 확인"
-- Step 9: "[9/10] plan 파일 생성"
-- PARA: "[10/10] PARA 개념 추출"
+- Step 3: "[3/10] Reading Brain"
+- Step 4: "[4/10] Codebase Exploration"
+- Step 5: "[5/10] AC Draft Extraction"
+- Step 6: "[6/10] Angel Expansion"
+- Step 7: "[7/10] Devil Validation"
+- Step 8: "[8/10] User Confirmation"
+- Step 9: "[9/10] Plan File Creation"
+- PARA: "[10/10] PARA Concept Extraction"
 
-## Step 1: 모드 감지
+## Step 1: Mode Detection
 
-MUST: `.claude/state/mode`에 `planning`을 기록하라. (`echo planning > .claude/state/mode`)
+MUST: Write `planning` to `.claude/state/mode`. (`echo planning > .claude/state/mode`)
 
-MUST: refs/mode-detection.md를 읽고 판별 기준을 확인하라.
+MUST: Read refs/mode-detection.md and confirm the detection criteria.
 
-인자와 대화 히스토리를 분석하여 모드를 결정한다.
+Analyze arguments and conversation history to determine the mode.
 
-| 조건 | 모드 |
-|------|------|
-| 구체적 요구사항 있음 (파일명, 기능명, 명확한 동작) | **Direct** → Step 3 |
-| 모호한 요청 (개선, 리팩터링, 뭔가 하고 싶다) | **Interview** → Step 2 |
-| 판단 불가 | AskUserQuestion으로 확인 |
+| Condition | Mode |
+|-----------|------|
+| Specific requirements present (file name, feature name, clear behavior) | **Direct** → Step 3 |
+| Vague request (improve, refactor, want to do something) | **Interview** → Step 2 |
+| Cannot determine | Confirm with AskUserQuestion |
 
-모드 결정 후 사용자에게 안내한다:
-- Direct: "**Direct 모드**로 진입합니다. 구체적 요구사항을 기반으로 계획을 수립합니다."
-- Interview: "**Interview 모드**로 진입합니다. 아이디어를 구체화하기 위해 질문합니다."
+After deciding the mode, inform the user:
+- Direct: "Entering **Direct mode**. Building a plan based on specific requirements."
+- Interview: "Entering **Interview mode**. Asking questions to clarify the idea."
 
-## Step 2: Interview (모호할 때만)
+## Step 2: Interview (only when vague)
 
-사용자의 아이디어를 구체화한다.
+Clarify the user's idea.
 
-규칙:
-- 질문은 **한 번에 하나씩** (AskUserQuestion 사용)
-- 코드베이스에서 확인 가능한 것은 **묻지 말고 explore로 먼저 파악**
-- 각 질문은 이전 답변을 기반으로 발전
-- 충분히 구체화되면 → Step 3으로 진행
+Rules:
+- Ask **one question at a time** (use AskUserQuestion)
+- For things verifiable in the codebase, **use explore first instead of asking**
+- Each question evolves based on the previous answer
+- Once sufficiently clarified → proceed to Step 3
 
-질문 분류:
-| 유형 | 처리 |
-|------|------|
-| 코드베이스 사실 ("어떤 패턴 쓰고 있어?") | explore 에이전트로 확인 → 묻지 않음 |
-| 사용자 선호 ("어떤 방식이 좋아?") | AskUserQuestion |
-| 스코프 결정 ("이것도 포함할까?") | AskUserQuestion |
-| 기술 제약 ("성능 요구사항?") | AskUserQuestion |
+Question classification:
+| Type | Handling |
+|------|----------|
+| Codebase facts ("What pattern are you using?") | Verify with explore agent → do not ask |
+| User preferences ("Which approach do you prefer?") | AskUserQuestion |
+| Scope decisions ("Should this be included?") | AskUserQuestion |
+| Technical constraints ("Performance requirements?") | AskUserQuestion |
 
-## Step 3: Brain 읽기
+## Step 3: Reading Brain
 
-`.claude/brain.md` 인덱스를 읽는다.
+Read the `.claude/brain.md` index.
 
-- brain.md 존재 → 관련 파일 확인 (code-map, patterns, decisions)
-- brain.md 없음 → 스킵, Step 4에서 전체 탐색
+- brain.md exists → check related files (code-map, patterns, decisions)
+- brain.md absent → skip, do full exploration in Step 4
 
-이미 brain에 있는 정보는 Step 4에서 탐색 생략.
+Skip exploration in Step 4 for information already in the brain.
 
-## Step 4: 코드베이스 탐색
+## Step 4: Codebase Exploration
 
-explore 에이전트로 구현에 필요한 코드 구조를 파악한다.
+Use the explore agent to understand the code structure needed for implementation.
 
 ```
 Task(
   subagent_type="claude-automate:explore",
-  prompt="[구현 대상] 관련 코드 구조, 패턴, 의존성 파악"
+  prompt="Understand the code structure, patterns, and dependencies related to [implementation target]"
 )
 ```
 
-탐색 대상:
-- 수정/확장할 기존 코드
-- 관련 패턴 및 컨벤션
-- 의존성 및 영향 범위
+Exploration targets:
+- Existing code to modify/extend
+- Related patterns and conventions
+- Dependencies and impact scope
 
-탐색 결과 중 brain에 기록할 것이 있으면 메모 (Step 9에서 plan에 포함).
+If there is anything worth recording in the brain from the exploration results, make a note (include in plan in Step 9).
 
-## Step 5: AC 초안 추출
+## Step 5: AC Draft Extraction
 
-두 소스에서 AC를 추출한다:
+Extract ACs from two sources:
 
-| 소스 | AC 유형 | 예시 |
-|------|---------|------|
-| 대화/Interview | 사용자 관점 | "로그아웃하면 세션 끊김" |
-| Step 4 탐색 결과 | 기술 관점 | "refresh token도 무효화 필요" |
+| Source | AC Type | Example |
+|--------|---------|---------|
+| Conversation/Interview | User perspective | "Session ends on logout" |
+| Step 4 exploration result | Technical perspective | "Refresh token must also be invalidated" |
 
-AC/TC 작성 기준:
-- AC = 작업 항목 (뭘 할지)
-- TC = 검증 기준 (어떻게 확인할지, AC 하위 항목)
-- TC는 "통과/실패" 판정 가능한 문장
-- 하나의 TC = 하나의 검증 포인트
-- 테스트 불가한 AC는 "(TC 없음)" 표기
-- 모호한 표현 금지 ("잘 동작한다" → "200 응답 반환")
+AC/TC writing criteria:
+- AC = work item (what to do)
+- TC = verification criteria (how to confirm, sub-items of AC)
+- TC must be a statement that can be judged as "pass/fail"
+- One TC = one verification point
+- ACs that cannot be tested are marked "(no TC)"
+- No vague expressions ("works well" → "returns 200 response")
 
-## Step 6: Angel 확장
+## Step 6: Angel Expansion
 
-Angel 에이전트로 AC를 확장한다.
+Expand ACs with the Angel agent.
 
 ```
 Task(
   subagent_type="claude-automate:angel",
-  prompt="현재 AC/TC 목록: [AC/TC 목록]. AC 레벨에서 빠진 작업 항목, TC 레벨에서 빠진 엣지케이스/검증 조건이 있는지 확인해줘."
+  prompt="Current AC/TC list: [AC/TC list]. Check if there are any missing work items at the AC level or missing edge cases/validation conditions at the TC level."
 )
 ```
 
-Angel이 제안한 추가 AC를 초안에 병합한다.
+Merge additional ACs suggested by Angel into the draft.
 
-## Step 7: Devil 검증
+## Step 7: Devil Validation
 
-MUST: refs/devil-usage.md를 읽고 호출 기준을 확인하라.
+MUST: Read refs/devil-usage.md and confirm the invocation criteria.
 
-Devil 에이전트로 AC 전체를 검증한다.
+Validate the entire AC set with the Devil agent.
 
 ```
 Task(
   subagent_type="claude-automate:devil",
-  prompt="AC/TC 목록 검증: [AC/TC 목록]. 모호한 AC, 테스트 불가능한 TC, 빠진 리스크, AC-TC 불일치를 지적해줘."
+  prompt="Validate AC/TC list: [AC/TC list]. Point out ambiguous ACs, untestable TCs, missing risks, and AC-TC mismatches."
 )
 ```
 
-Devil 피드백 기반으로 AC를 수정한다:
-- 모호한 AC → 구체화
-- 테스트 불가 AC → (테스트 불가) 표시
-- 빠진 리스크 → AC 추가
+Revise ACs based on Devil feedback:
+- Ambiguous AC → clarify
+- Untestable AC → mark as (not testable)
+- Missing risks → add as AC
 
-## Step 8: 사용자 확인
+## Step 8: User Confirmation
 
-AskUserQuestion으로 최종 AC 목록을 제시한다.
+Present the final AC list with AskUserQuestion.
 
 ```json
 {
-  "question": "AC 목록을 확인해주세요. 추가/수정/삭제할 것이 있나요?",
-  "header": "AC 확인",
+  "question": "Please review the AC list. Are there any additions, modifications, or deletions?",
+  "header": "AC Confirmation",
   "multiSelect": true,
   "options": [
-    { "label": "이대로 진행", "description": "AC 목록 확정, plan 파일 생성" },
-    { "label": "AC 수정 필요", "description": "AC를 수정/추가/삭제하고 싶다" },
-    { "label": "처음부터 다시", "description": "방향을 바꾸고 싶다" }
+    { "label": "Proceed as is", "description": "Finalize AC list and create plan file" },
+    { "label": "Need to modify ACs", "description": "Want to modify/add/delete ACs" },
+    { "label": "Start over", "description": "Want to change direction" }
   ]
 }
 ```
 
-- "이대로 진행" → Step 9
-- "AC 수정 필요" → 수정 후 Step 8 반복
-- "처음부터 다시" → Step 1로
+- "Proceed as is" → Step 9
+- "Need to modify ACs" → revise then repeat Step 8
+- "Start over" → back to Step 1
 
-## Step 9: plan 파일 생성
+## Step 9: Plan File Creation
 
-MUST: refs/plan-file.md를 읽고 파일 구조를 확인하라.
+MUST: Read refs/plan-file.md and confirm the file structure.
 
-writer 에이전트에게 plan 파일 작성을 위임한다.
+Delegate plan file writing to the writer agent.
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-plan 파일 생성
+Create plan file
 
 ## Target
 .claude/plans/{YYYY-MM-DD}-{slug}.md
 
 ## Content
-{아래 내용을 모두 포함하여 plan 파일을 Write하라}
+Write the plan file including all of the following:
 
-- 요구사항 (Context/What/Why/Scope)
-- Brain 업데이트 (Step 4에서 발견한 기록할 것들)
-- AC 목록 (Step 8에서 확정된 것)
-- 구현 순서 (Brain 업데이트 → AC 순서)
-- 테스트 계획
+- Requirements (Context/What/Why/Scope)
+- Brain updates (things to record discovered in Step 4)
+- AC list (finalized in Step 8)
+- Implementation order (Brain updates → AC order)
+- Test plan
 
 ## Format
-refs/plan-file.md 구조를 따를 것
+Follow the structure in refs/plan-file.md
 """
 )
 ```
 
 ---
 
-## Step 10: PARA 개념 추출
+## Step 10: PARA Concept Extraction
 
-이번 Planning 논의에서 학습할 만한 상위 레벨 개념이 있는지 확인한다.
+Check whether there are any high-level concepts worth learning from this Planning session.
 
-### 스킵 조건
+### Skip Conditions
 
-아래에 해당하면 이 Step을 스킵하고 바로 "다음 행동"으로 진행한다:
+Skip this Step and proceed directly to "Next Action" when:
 
-- 단순 구현/설정/오타 수정 논의만 했을 때
-- 새로운 아키텍처/패턴/원칙 논의가 없었을 때
+- Only simple implementation/configuration/typo fix discussions occurred
+- No new architecture/pattern/principle discussions took place
 
-### 추출 대상
+### Extraction Targets
 
-- 새로 논의된 아키텍처 개념, 디자인 패턴
-- 트레이드오프 분석, 기술 비교/선택 근거
-- 문제 해결에서 도출된 범용 원칙
+- Newly discussed architecture concepts, design patterns
+- Trade-off analysis, technology comparison/selection rationale
+- General principles derived from problem solving
 
-### 실행
+### Execution
 
-1. 이번 대화에서 개념 후보 1~3개 식별 (개념명 + 한 줄 설명)
-2. AskUserQuestion으로 저장 여부 확인:
+1. Identify 1-3 concept candidates from this conversation (concept name + one-line description)
+2. Confirm whether to save with AskUserQuestion:
 
 ```
 AskUserQuestion:
-  "이번 Planning에서 다음 개념들을 PARA에 저장할까요?"
+  "Would you like to save the following concepts from this Planning session to PARA?"
   multiSelect: true
-  각 개념이 option으로 표시
-  description에 추천 카테고리 포함
+  Each concept displayed as an option
+  Recommended category included in description
 ```
 
-3. 선택 없으면 → 스킵
-4. 선택 있으면 → writer에게 위임:
+3. No selection → skip
+4. Selection made → delegate to writer:
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-PARA Resources에 개념 문서 저장
+Save concept documents to PARA Resources
 
 ## Pre-check
-먼저 ~/workspace/mynotes/Resources/ 하위를 탐색하여 동일/유사 개념이 이미 있는지 확인하라.
-- 있으면: 기존 문서에 내용 보강 (Edit)
-- 없으면: 새 문서 생성 (Write)
+First explore ~/workspace/mynotes/Resources/ to check if the same or similar concept already exists.
+- If exists: enhance existing document (Edit)
+- If not: create new document (Write)
 
 ## Target
 ~/workspace/mynotes/Resources/{category}/{slug}.md
@@ -266,63 +266,63 @@ source: claude-session
 
 ---
 
-## 관련 문서
+## Related Documents
 
 -
 
 ## Index Update
-카테고리 README.md에 항목 추가
+Add entry to category README.md
 """
 )
 ```
 
 ---
 
-MUST: AskUserQuestion으로 다음 행동을 확인하라.
+MUST: Confirm next action with AskUserQuestion.
 
 ```json
 {
-  "question": "plan 파일이 생성되었습니다. 다음에 무엇을 할까요?",
-  "header": "다음 행동",
+  "question": "The plan file has been created. What would you like to do next?",
+  "header": "Next Action",
   "multiSelect": true,
   "options": [
-    { "label": "/implement 실행 (Recommended)", "description": "plan 기반으로 바로 구현 시작" },
-    { "label": "plan 수정", "description": "plan 파일을 다시 검토/수정" },
-    { "label": "나중에", "description": "지금은 구현하지 않음" }
+    { "label": "Run /implement (Recommended)", "description": "Start implementation immediately based on the plan" },
+    { "label": "Revise plan", "description": "Review/revise the plan file again" },
+    { "label": "Later", "description": "Do not implement now" }
   ]
 }
 ```
 
 ---
 
-## 제약
+## Constraints
 
-- plan 파일 외 파일 수정 금지
-- 코드 작성 금지 (구현은 /implement에서)
-- brain 파일 수정 금지 (plan에 기록만, implement에서 실행)
-
----
-
-## 검증
-
-MUST: 아래 체크리스트를 모두 확인하라.
-
-- [ ] 모드 감지가 정확한가? (Direct/Interview)
-- [ ] brain을 읽었는가? (없으면 "없음" 명시)
-- [ ] explore로 코드베이스를 탐색했는가?
-- [ ] Angel 확장을 실행했는가?
-- [ ] Devil 검증을 실행했는가?
-- [ ] 사용자 확인을 받았는가?
-- [ ] plan 파일에 필수 섹션이 모두 있는가?
-- [ ] PARA 개념 추출이 실행/스킵되었는가?
-
-실패 시: 해당 Step으로 돌아가 수정 → 재검증.
+- No file modifications other than the plan file
+- No code writing (implementation is done in /implement)
+- No brain file modifications (record only in plan, executed in implement)
 
 ---
 
-## 주의사항
+## Verification
 
-1. **"자유롭게" 금지** — 반드시 Step 순서대로
-2. **explore 먼저, 질문 나중** — 코드에서 알 수 있는 건 묻지 마라
-3. **구현은 하지 않는다** — 계획만
-4. **brain은 plan에 기록만** — 직접 수정하지 않는다
+MUST: Confirm all items in the checklist below.
+
+- [ ] Is mode detection accurate? (Direct/Interview)
+- [ ] Was brain read? (if absent, note "absent")
+- [ ] Was codebase explored with explore?
+- [ ] Was Angel expansion run?
+- [ ] Was Devil validation run?
+- [ ] Was user confirmation obtained?
+- [ ] Does the plan file contain all required sections?
+- [ ] Was PARA concept extraction run/skipped?
+
+If failed: return to the relevant Step, fix, and re-verify.
+
+---
+
+## Cautions
+
+1. **No "freely" allowed** — always follow Step order
+2. **Explore first, ask later** — do not ask about things that can be found in the code
+3. **Do not implement** — planning only
+4. **Record brain in plan only** — do not modify it directly

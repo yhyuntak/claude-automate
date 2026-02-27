@@ -1,27 +1,27 @@
-# save-para 스키마
+# save-para Schema
 
-## 입력
+## Input
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| content | string | O | 저장할 내용 (사용자 입력) |
-| category | string | O | 카테고리 (README.md에서 동적 조회) |
-| title | string | O | 문서 제목 |
-| tags | string[] | X | 태그 목록 |
-
----
-
-## 출력
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| file_path | string | 생성된 파일 경로 |
-| category | string | 저장된 카테고리 |
-| indexes_updated | string[] | 업데이트된 README 목록 |
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| content | string | Y | Content to save (user input) |
+| category | string | Y | Category (dynamically retrieved from README.md) |
+| title | string | Y | Document title |
+| tags | string[] | N | List of tags |
 
 ---
 
-## 파일 템플릿
+## Output
+
+| Field | Type | Description |
+|-------|------|-------------|
+| file_path | string | Path of the created file |
+| category | string | Category where saved |
+| indexes_updated | string[] | List of updated READMEs |
+
+---
+
+## File Template
 
 ```markdown
 ---
@@ -37,33 +37,33 @@ source: claude-session
 
 ---
 
-## 관련 문서
+## Related Documents
 
 -
 ```
 
 ---
 
-## 카테고리 조회 (동적)
+## Category Lookup (Dynamic)
 
-**하드코딩 금지** - 실행 시 README.md에서 조회
+**No hardcoding** - look up from README.md at runtime
 
 ```
-조회 경로: ~/workspace/mynotes/Resources/README.md
-조회 위치: "카테고리" 테이블 또는 "분류 기준" 테이블
+Lookup path: ~/workspace/mynotes/Resources/README.md
+Lookup location: "Categories" table or "Classification Criteria" table
 ```
 
-카테고리 목록은 mynotes에서 관리되며, 이 스킬은 단지 참조만 합니다.
+The category list is managed in mynotes; this skill only references it.
 
 ---
 
-## 태그 가이드
+## Tag Guide
 
-| 태그 | 용도 |
-|------|------|
-| #concurrency | 동시성 관련 |
-| #security | 보안 관련 |
-| #performance | 성능 관련 |
-| #pattern | 디자인 패턴 |
-| #troubleshooting | 문제 해결 |
-| #how-to | 가이드/튜토리얼 |
+| Tag | Usage |
+|-----|-------|
+| #concurrency | Concurrency related |
+| #security | Security related |
+| #performance | Performance related |
+| #pattern | Design patterns |
+| #troubleshooting | Problem solving |
+| #how-to | Guides/tutorials |

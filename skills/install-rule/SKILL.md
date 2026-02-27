@@ -32,7 +32,7 @@ Use Bash tool to create directory and **delete existing files**:
 mkdir -p ~/.claude/rules && rm -f ~/.claude/rules/interaction.md ~/.claude/rules/backlog-rules.md ~/.claude/rules/workflow.md ~/.claude/rules/agent-delegation.md
 ```
 
-**⚠️ 기존 파일이 있어도 무조건 삭제 후 새로 작성합니다.**
+**Existing files are always deleted and rewritten without exception.**
 
 ### Step 2: Install each rule file
 
@@ -56,14 +56,14 @@ After successfully writing all three files, display this confirmation:
 
 ---
 
-## ✅ Rules Installed
+## Rules Installed
 
 Installed to `~/.claude/rules/`:
 
 - **interaction.md** - AskUserQuestion UX rules
 - **backlog-rules.md** - Backlog management (todo/doing/done)
 - **workflow.md** - Git branching and release strategies
-- **agent-delegation.md** - 에이전트 위임 규칙 (explore, writer)
+- **agent-delegation.md** - Agent delegation rules (explore, writer)
 
 **Total:** 4 rules
 
@@ -71,7 +71,7 @@ These rules will apply to all Claude Code sessions.
 
 ---
 
-💡 To update rules, run `/install-rule` again after plugin updates.
+To update rules, run `/install-rule` again after plugin updates.
 
 ---
 
@@ -98,7 +98,7 @@ These rules will apply to all Claude Code sessions.
 - **interaction.md** - AskUserQuestion UX rules
 - **backlog-rules.md** - Backlog management (todo/doing/done)
 - **workflow.md** - Git branching and release strategies
-- **agent-delegation.md** - 에이전트 위임 규칙 (explore, writer)
+- **agent-delegation.md** - Agent delegation rules (explore, writer)
 
 ---
 

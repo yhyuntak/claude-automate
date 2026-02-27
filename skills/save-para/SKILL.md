@@ -1,82 +1,82 @@
 ---
 name: save-para
-description: 대화 중 인사이트를 PARA Resources에 저장. "파라 저장", "리소스에 저장", "지식 저장" 키워드로 자동 활성화.
-argument-hint: "[제목]"
+description: Saves insights from conversations to PARA Resources. Auto-activated by keywords like "save to PARA", "save to resources", "save knowledge".
+argument-hint: "[title]"
 ---
 
 # save-para
 
-> 대화 중 배운 내용을 PARA Resources에 저장
+> Save things learned during a conversation to PARA Resources
 
 ---
 
-## Progressive Disclosure 워크플로우
+## Progressive Disclosure Workflow
 
-이 스킬은 **하드코딩된 구조 없이** README.md를 순차적으로 읽어서 동적으로 작동합니다.
+This skill operates **without hardcoded structures**, reading README.md files sequentially to work dynamically.
 
-### Step 1: PARA 루트 확인
+### Step 1: Confirm PARA Root
 
 ```
 Read: ~/workspace/mynotes/README.md
-→ PARA 구조 이해 (Projects, Areas, Resources, Archive)
-→ Resources/ 폴더로 진입
+→ Understand PARA structure (Projects, Areas, Resources, Archive)
+→ Navigate to Resources/ folder
 ```
 
-### Step 2: Resources 구조 파악
+### Step 2: Understand Resources Structure
 
 ```
 Read: ~/workspace/mynotes/Resources/README.md
-→ "분류 기준" 테이블에서 카테고리 목록 추출
-→ "카테고리" 테이블에서 현재 폴더 구조 확인
+→ Extract category list from "Classification Criteria" table
+→ Confirm current folder structure from "Categories" table
 ```
 
-### Step 3: 사용자 질문 (동적 옵션)
+### Step 3: Ask User (Dynamic Options)
 
-**내용 확인:**
-```
-AskUserQuestion:
-  question: "어떤 내용을 저장할까요?"
-  options:
-    - 최근 논의한 내용 요약 제안
-    - "직접 입력"
-```
-
-**카테고리 선택 (README.md에서 읽은 목록 사용):**
+**Content confirmation:**
 ```
 AskUserQuestion:
-  question: "어느 카테고리에 저장할까요?"
+  question: "What content would you like to save?"
   options:
-    - (Resources/README.md의 "카테고리" 테이블에서 동적으로 생성)
-    - "새 카테고리 생성"
+    - Summary suggestion of recently discussed content
+    - "Enter manually"
 ```
 
-### Step 4: 카테고리 README 확인
+**Category selection (use list read from README.md):**
+```
+AskUserQuestion:
+  question: "Which category would you like to save to?"
+  options:
+    - (Dynamically generated from "Categories" table in Resources/README.md)
+    - "Create new category"
+```
+
+### Step 4: Check Category README
 
 ```
-Read: ~/workspace/mynotes/Resources/{선택한 카테고리}/README.md
-→ 해당 카테고리의 규칙/형식 파악
-→ 기존 문서 목록 확인 (중복 방지)
+Read: ~/workspace/mynotes/Resources/{selected category}/README.md
+→ Understand the rules/format for that category
+→ Check existing document list (to prevent duplicates)
 ```
 
-### Step 5: 제목/파일명 확인
+### Step 5: Confirm Title/Filename
 
 ```
 AskUserQuestion:
-  question: "제목은 '{제안된 제목}'으로 할까요?"
+  question: "Shall we use '{suggested title}' as the title?"
   options:
-    - "네"
-    - "직접 입력"
+    - "Yes"
+    - "Enter manually"
 ```
 
-### Step 6: 저장 실행
+### Step 6: Save
 
-1. **파일 생성**: `~/workspace/mynotes/Resources/{category}/{slug}.md`
-2. **템플릿 적용** (아래 참조)
-3. **인덱스 업데이트** (아래 참조)
+1. **Create file**: `~/workspace/mynotes/Resources/{category}/{slug}.md`
+2. **Apply template** (see below)
+3. **Update index** (see below)
 
 ---
 
-## 템플릿
+## Template
 
 ```markdown
 ---
@@ -92,59 +92,59 @@ source: claude-session
 
 ---
 
-## 관련 문서
+## Related Documents
 
 -
 ```
 
 ---
 
-## 인덱스 업데이트
+## Index Update
 
-### 카테고리 README.md
+### Category README.md
 
-문서 목록 테이블에 새 항목 추가:
+Add new entry to document list table:
 ```markdown
-| [[새문서]] | 첫 문장 | #tag1 #tag2 |
+| [[new-doc]] | First sentence | #tag1 #tag2 |
 ```
 
 ### Resources/README.md
 
-"최근 추가" 테이블 맨 위에 추가:
+Add to the top of the "Recently Added" table:
 ```markdown
-| [[새문서]] | {category} | #tag | {date} |
+| [[new-doc]] | {category} | #tag | {date} |
 ```
 
-"카테고리" 테이블의 문서 수 갱신
+Update document count in the "Categories" table
 
 ---
 
-## 새 카테고리 생성 시
+## When Creating a New Category
 
-1. `Resources/{new-category}/` 폴더 생성
-2. `Resources/{new-category}/README.md` 생성 (기존 카테고리 README 형식 참조)
-3. `Resources/README.md`의 "분류 기준" 및 "카테고리" 테이블 업데이트
+1. Create `Resources/{new-category}/` folder
+2. Create `Resources/{new-category}/README.md` (refer to existing category README format)
+3. Update "Classification Criteria" and "Categories" tables in `Resources/README.md`
 
 ---
 
-## 완료 메시지
+## Completion Message
 
 ```markdown
-## 저장 완료!
+## Saved!
 
-- **파일**: Resources/{category}/{slug}.md
-- **카테고리**: {category}
-- **태그**: {tags}
+- **File**: Resources/{category}/{slug}.md
+- **Category**: {category}
+- **Tags**: {tags}
 
-인덱스가 업데이트되었습니다.
+Index has been updated.
 ```
 
 ---
 
-## 파일명 규칙
+## Filename Rules
 
-- 영문 소문자
-- 공백 → 하이픈 (-)
-- 한글 제목 → 영문 slug 생성
+- Lowercase English letters
+- Spaces → hyphens (-)
+- Non-English titles → generate English slug
 
-예: "Race Condition 해결법" → `race-condition.md`
+Example: "Race Condition Solution" → `race-condition.md`

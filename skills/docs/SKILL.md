@@ -1,10 +1,10 @@
 ---
 name: docs
 description: |
-  프로젝트 문서 CRUD + 인덱스 관리.
-  문서 생성/수정/삭제 + docs/README.md 인덱스 자동 업데이트.
-  "docs", "문서", "document" 키워드로 활성화.
-argument-hint: "[제목 또는 설명]"
+  Project document CRUD + index management.
+  Create/edit/delete documents + auto-update docs/README.md index.
+  Activates on keywords: "docs", "document".
+argument-hint: "[title or description]"
 allowed-tools:
   - Read
   - Glob
@@ -21,247 +21,247 @@ $ARGUMENTS
 
 ---
 
-## 진행 안내 규칙
+## Progress Notification Rules
 
-각 단계 진입 시 사용자에게 현재 상황을 안내한다.
+Notify the user of the current status at each step.
 
-- 진입: "{Direct/Interview} 모드로 문서 작업을 시작합니다."
-- 각 단계: "[N/5] {단계명} 실행합니다."
-- 완료: "문서 작업이 완료되었습니다."
+- Entry: "Starting document work in {Direct/Interview} mode."
+- Each step: "[N/5] Executing {step name}."
+- Completion: "Document work completed."
 
-## Step 1: 모드 감지
+## Step 1: Mode Detection
 
-인자와 대화 히스토리를 분석하여 모드를 결정한다.
+Analyze arguments and conversation history to determine mode.
 
-| 조건 | 모드 |
-|------|------|
-| 구체적 내용 있음 (제목, 파일 경로, 문서화할 대화 히스토리) | **Direct** → Step 2 |
-| `/docs`만 단독 호출, 맥락 없음 | **Interview** → AskUserQuestion |
-| 판단 불가 | AskUserQuestion으로 확인 |
+| Condition | Mode |
+|-----------|------|
+| Specific content available (title, file path, conversation history to document) | **Direct** → Step 2 |
+| `/docs` called alone with no context | **Interview** → AskUserQuestion |
+| Cannot determine | AskUserQuestion to confirm |
 
-Interview 모드 진입 시 무엇을 문서화할지 질문한다:
+On entering Interview mode, ask what to document:
 
 ```json
 {
-  "question": "어떤 문서 작업을 하시겠어요?",
-  "header": "문서 작업 내용",
+  "question": "What document work would you like to do?",
+  "header": "Document Work",
   "multiSelect": false,
   "options": [
-    { "label": "새 문서 작성", "description": "새로운 문서를 작성합니다" },
-    { "label": "기존 문서 수정", "description": "기존 문서를 수정합니다" },
-    { "label": "문서 삭제", "description": "문서를 삭제합니다" },
-    { "label": "인덱스 재생성", "description": "docs/README.md 인덱스를 현재 상태로 재생성합니다" }
+    { "label": "Create new document", "description": "Write a new document" },
+    { "label": "Edit existing document", "description": "Modify an existing document" },
+    { "label": "Delete document", "description": "Delete a document" },
+    { "label": "Regenerate index", "description": "Rebuild docs/README.md index from current state" }
   ]
 }
 ```
 
-모드 결정 후 사용자에게 안내한다:
-- Direct: "**Direct 모드**로 문서 작업을 시작합니다. 제공된 내용을 기반으로 진행합니다."
-- Interview: "**Interview 모드**로 문서 작업을 시작합니다. 질문을 통해 내용을 구체화합니다."
+After determining mode, notify the user:
+- Direct: "Starting in **Direct mode**. Proceeding based on provided content."
+- Interview: "Starting in **Interview mode**. Clarifying content through questions."
 
-## Step 2: 작업 유형 선택
+## Step 2: Select Operation Type
 
-Direct 모드에서 작업 유형이 이미 명확하면 이 단계를 스킵한다.
+Skip this step in Direct mode if the operation type is already clear.
 
-작업 유형이 불명확한 경우 AskUserQuestion으로 확인한다:
+If the operation type is unclear, confirm via AskUserQuestion:
 
 ```json
 {
-  "question": "어떤 작업을 할까요?",
-  "header": "작업 유형 선택",
+  "question": "What operation would you like to perform?",
+  "header": "Select Operation Type",
   "multiSelect": false,
   "options": [
-    { "label": "새 문서 작성", "description": "새로운 문서를 docs/ 에 추가합니다" },
-    { "label": "기존 문서 수정", "description": "이미 있는 문서를 수정합니다" },
-    { "label": "문서 삭제", "description": "문서를 삭제하고 인덱스에서 제거합니다" },
-    { "label": "인덱스 재생성", "description": "docs/README.md를 현재 파일 구조 기준으로 재생성합니다" }
+    { "label": "Create new document", "description": "Add a new document to docs/" },
+    { "label": "Edit existing document", "description": "Modify an existing document" },
+    { "label": "Delete document", "description": "Delete a document and remove from index" },
+    { "label": "Regenerate index", "description": "Rebuild docs/README.md from current file structure" }
   ]
 }
 ```
 
-## Step 3: docs/ 탐색 + 위치 결정
+## Step 3: Explore docs/ + Determine Location
 
-explore 에이전트로 docs/ 구조를 파악한다.
+Use explore agent to understand the docs/ structure.
 
 ```
 Task(
   subagent_type="claude-automate:explore",
-  prompt="docs/ 폴더 전체 구조와 README.md 인덱스 현황 파악"
+  prompt="Understand the full structure of docs/ folder and current state of README.md index"
 )
 ```
 
-작업 유형별 처리:
+Handle by operation type:
 
-| 유형 | 처리 |
-|------|------|
-| 새 문서 작성 | 기존 구조 기반으로 적절한 위치 2~3개 AskUserQuestion으로 추천 |
-| 기존 문서 수정 | 대상 파일 경로 확인 |
-| 문서 삭제 | 대상 파일 경로 확인 |
-| 인덱스 재생성 | 현재 docs/ 파일 목록 수집 |
+| Type | Action |
+|------|--------|
+| Create new document | Recommend 2-3 appropriate locations based on existing structure via AskUserQuestion |
+| Edit existing document | Confirm target file path |
+| Delete document | Confirm target file path |
+| Regenerate index | Collect current docs/ file list |
 
-새 문서 작성 시 위치 추천 예시:
+Example location recommendations for new documents:
 
 ```json
 {
-  "question": "문서를 어디에 저장할까요?",
-  "header": "저장 위치 선택",
+  "question": "Where would you like to save the document?",
+  "header": "Select Save Location",
   "multiSelect": false,
   "options": [
-    { "label": "docs/references/", "description": "참고 자료 및 외부 문서" },
-    { "label": "docs/backlogs/", "description": "백로그 작업 문서" },
-    { "label": "docs/ (루트)", "description": "최상위 문서" }
+    { "label": "docs/references/", "description": "Reference materials and external documents" },
+    { "label": "docs/backlogs/", "description": "Backlog task documents" },
+    { "label": "docs/ (root)", "description": "Top-level documents" }
   ]
 }
 ```
 
-## Step 4: 실행
+## Step 4: Execute
 
-작업 유형에 맞게 writer 에이전트에게 위임한다. 모든 파일 수정은 writer가 처리한다.
+Delegate to writer agent based on operation type. All file modifications are handled by writer.
 
-**새 문서 작성:**
+**Create new document:**
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-{제목} 문서 생성
+Create {title} document
 
 ## Target
-{결정된 경로}/{파일명}.md (신규 생성)
+{determined path}/{filename}.md (new file)
 
 ## Requirements
-- 제목: {제목}
-- 내용: {대화 히스토리 또는 사용자 제공 내용}
-- 기존 docs/ 문서 스타일 준수
+- Title: {title}
+- Content: {conversation history or user-provided content}
+- Follow existing docs/ document style
 
 ## Verification
-파일 존재 여부 확인
+Confirm file exists
 """
 )
 ```
 
-**기존 문서 수정:**
+**Edit existing document:**
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-{파일명} 문서 수정
+Edit {filename} document
 
 ## Target
-{대상 파일 경로}
+{target file path}
 
 ## Requirements
-- 수정 내용: {수정할 내용}
-- 기존 문서 구조 유지
+- Changes: {content to modify}
+- Preserve existing document structure
 
 ## Verification
-파일 변경 내용 확인
+Confirm file changes
 """
 )
 ```
 
-**문서 삭제:**
+**Delete document:**
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-{파일명} 삭제
+Delete {filename}
 
 ## Target
-{대상 파일 경로}
+{target file path}
 
 ## Requirements
-- Bash로 파일 삭제: rm {파일 경로}
+- Delete file via Bash: rm {file path}
 
 ## Verification
-파일 미존재 확인
+Confirm file no longer exists
 """
 )
 ```
 
-**인덱스 재생성:**
+**Regenerate index:**
 
 ```
 Task(
   subagent_type="claude-automate:writer",
   prompt="""
 ## Task
-docs/README.md 인덱스 재생성
-
-## Target
-docs/README.md
-
-## Requirements
-- docs/ 하위 모든 .md 파일을 Glob으로 수집
-- 현재 파일 목록 기준으로 인덱스 테이블 재작성
-- 기존 README.md 구조 유지
-
-## Verification
-README.md 존재 + 내용 확인
-"""
-)
-```
-
-## Step 5: 인덱스 업데이트
-
-Step 4가 인덱스 재생성이었으면 이 단계를 스킵한다.
-
-문서 생성/수정/삭제 시 docs/README.md 인덱스를 업데이트한다. 변경이 없으면 스킵한다.
-
-```
-Task(
-  subagent_type="claude-automate:writer",
-  prompt="""
-## Task
-docs/README.md 인덱스 업데이트
+Regenerate docs/README.md index
 
 ## Target
 docs/README.md
 
 ## Requirements
-- 변경 유형: {생성/수정/삭제}
-- 대상 파일: {파일 경로}
-- 생성: 인덱스 테이블에 새 항목 추가
-- 수정: 해당 항목 설명 업데이트
-- 삭제: 해당 항목 제거
+- Collect all .md files under docs/ using Glob
+- Rewrite index table based on current file list
+- Preserve existing README.md structure
 
 ## Verification
-README.md에 변경 반영 확인
+Confirm README.md exists and has correct content
+"""
+)
+```
+
+## Step 5: Update Index
+
+Skip this step if Step 4 was index regeneration.
+
+Update the docs/README.md index after creating/editing/deleting documents. Skip if no changes were made.
+
+```
+Task(
+  subagent_type="claude-automate:writer",
+  prompt="""
+## Task
+Update docs/README.md index
+
+## Target
+docs/README.md
+
+## Requirements
+- Change type: {create/edit/delete}
+- Target file: {file path}
+- Create: Add new entry to index table
+- Edit: Update description for the entry
+- Delete: Remove the entry
+
+## Verification
+Confirm changes are reflected in README.md
 """
 )
 ```
 
 ---
 
-## 제약
+## Constraints
 
-- docs/ 외 파일은 수정하지 않는다
-- 모든 파일 수정은 writer에 위임한다
-- 코드 파일은 다루지 않는다 (문서만)
-- `.claude/state/mode`에 기록하지 않는다 (planning/implement 루프와 독립)
-
----
-
-## 검증
-
-MUST: 아래 체크리스트를 모두 확인하라.
-
-- [ ] 문서 파일이 정상 생성/수정/삭제되었는가?
-- [ ] docs/README.md 인덱스가 최신 상태인가?
-- [ ] 진행 안내가 각 단계마다 출력되었는가?
-
-실패 시: 해당 Step으로 돌아가 수정 → 재검증.
+- Do not modify files outside docs/
+- Delegate all file modifications to writer
+- Handle documents only (not code files)
+- Do not write to `.claude/state/mode` (independent from planning/implement loop)
 
 ---
 
-## 주의사항
+## Verification
 
-1. **Direct 모드에서는 대화 히스토리 적극 활용** — 문서화할 내용을 히스토리에서 추출
-2. **Interview 모드에서는 질문 한 번에 하나씩** — AskUserQuestion으로 순차 진행
-3. **위치 추천 시 기존 docs/ 구조 존중** — 임의로 새 폴더 생성하지 않음
-4. **인덱스 업데이트는 항상 마지막에** — 파일 작업 완료 후 인덱스 갱신
+MUST: Confirm all items in the checklist below.
+
+- [ ] Was the document file successfully created/edited/deleted?
+- [ ] Is the docs/README.md index up to date?
+- [ ] Was progress notification output at each step?
+
+On failure: Return to the relevant step, fix, and re-verify.
+
+---
+
+## Notes
+
+1. **In Direct mode, actively use conversation history** — Extract content to document from history
+2. **In Interview mode, ask one question at a time** — Progress sequentially via AskUserQuestion
+3. **Respect existing docs/ structure when recommending locations** — Do not arbitrarily create new folders
+4. **Always update index last** — Update index after completing file operations

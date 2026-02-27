@@ -1,130 +1,130 @@
-# 백로그 관리 규칙
+# Backlog Management Rules
 
-> Task 기반 백로그 시스템
+> Task-based backlog system
 
 ---
 
-## 폴더 구조
+## Folder Structure
 
 ```
 docs/backlogs/
-├── README.md           # 전체 현황 대시보드
-├── todo/               # 대기 중인 작업
-├── doing/              # 진행 중인 작업 (1개만!)
-└── done/               # 완료된 작업
+├── README.md           # Overall status dashboard
+├── todo/               # Pending tasks
+├── doing/              # Tasks in progress (1 only!)
+└── done/               # Completed tasks
 ```
 
 ---
 
-## 파일명 규칙
+## Filename Rules
 
 ```
 phase{N}-{ID}-{slug}.md
 
-예: phase1-001-user-auth.md
-    phase1-002-api-setup.md
-    phase2-001-dashboard.md
+Example: phase1-001-user-auth.md
+         phase1-002-api-setup.md
+         phase2-001-dashboard.md
 ```
 
-- **phase{N}**: 단계 번호 (phase1, phase2, ...)
-- **{ID}**: 3자리 숫자 (001, 002, ...)
-- **{slug}**: 영문 소문자, 하이픈으로 연결
+- **phase{N}**: Phase number (phase1, phase2, ...)
+- **{ID}**: 3-digit number (001, 002, ...)
+- **{slug}**: Lowercase English, connected with hyphens
 
 ---
 
-## 상태 관리
+## Status Management
 
-### 상태 종류
+### Status Types
 
-| 상태 | 폴더 | 설명 |
-|------|------|------|
-| Todo | `todo/` | 대기 중, 아직 시작 안 함 |
-| Doing | `doing/` | **현재 작업 중 (1개만!)** |
-| Done | `done/` | 완료됨 |
+| Status | Folder | Description |
+|--------|--------|-------------|
+| Todo | `todo/` | Pending, not started yet |
+| Doing | `doing/` | **Currently in progress (1 only!)** |
+| Done | `done/` | Completed |
 
-### 상태 변경 방법
+### How to Change Status
 
 ```bash
-# 작업 시작: todo → doing
+# Start task: todo -> doing
 mv docs/backlogs/todo/phase1-001-user-auth.md \
    docs/backlogs/doing/
 
-# 작업 완료: doing → done
+# Complete task: doing -> done
 mv docs/backlogs/doing/phase1-001-user-auth.md \
    docs/backlogs/done/
 ```
 
-### Claude 자동 처리
+### Claude Automatic Handling
 
-**작업 시작 트리거**:
-- "진행한다", "시작하자", "할게", "해보자"
-- → Task 파일을 `doing/`으로 이동
+**Task start trigger**:
+- "proceed", "let's start", "I'll do it", "let's try"
+- -> Move Task file to `doing/`
 
-**작업 완료 트리거**:
-- Task의 모든 Acceptance Criteria 충족 시
-- → Task 파일을 `done/`으로 이동
+**Task completion trigger**:
+- When all Acceptance Criteria of a Task are met
+- -> Move Task file to `done/`
 
 ---
 
-## README.md 업데이트
+## README.md Updates
 
-상태 변경 시 README.md도 함께 업데이트:
+Also update README.md when status changes:
 
-1. **현황 개수**: Todo/Doing/Done 개수 갱신
-2. **Task 링크**: 새 경로로 업데이트
-3. **상태 표시**: 이모지 변경
+1. **Status counts**: Refresh Todo/Doing/Done counts
+2. **Task links**: Update to new paths
+3. **Status display**: Change emoji
 
-### 예시
+### Example
 
 ```markdown
-# 변경 전
-| 1 | 001 | [사용자 인증](todo/phase1-001-user-auth.md) | Todo |
+# Before change
+| 1 | 001 | [User Authentication](todo/phase1-001-user-auth.md) | Todo |
 
-# 변경 후 (작업 시작)
-| 1 | 001 | [사용자 인증](doing/phase1-001-user-auth.md) | 🔄 Doing |
+# After change (task started)
+| 1 | 001 | [User Authentication](doing/phase1-001-user-auth.md) | 🔄 Doing |
 
-# 변경 후 (작업 완료)
-| 1 | 001 | [사용자 인증](done/phase1-001-user-auth.md) | ✅ Done |
+# After change (task completed)
+| 1 | 001 | [User Authentication](done/phase1-001-user-auth.md) | ✅ Done |
 ```
 
 ---
 
-## Task 템플릿
+## Task Template
 
 ```markdown
-# {제목}
+# {Title}
 
-> {한 줄 설명}
+> {One-line description}
 
 ---
 
 ## User Story
 
-사용자가 [행동]하면, [결과]를 얻는다.
+When a user [action], they get [result].
 
 ## Acceptance Criteria
 
-- [ ] 기준 1
-- [ ] 기준 2
-- [ ] 기준 3
+- [ ] Criteria 1
+- [ ] Criteria 2
+- [ ] Criteria 3
 
-## 비기능 요구사항
+## Non-functional Requirements
 
-- 성능: ...
-- 보안: ...
+- Performance: ...
+- Security: ...
 
 ## Dependencies
 
-- phase1-xxx 완료 후 시작 가능
+- Can start after phase1-xxx is complete
 
 ---
 
-## 구현 노트 (작업 중 추가)
+## Implementation Notes (added during work)
 
-### 기술 결정
+### Technical Decisions
 - ...
 
-### 이슈/해결
+### Issues/Resolutions
 - ...
 
 ---
@@ -134,37 +134,37 @@ mv docs/backlogs/doing/phase1-001-user-auth.md \
 
 ---
 
-## 백로그 작성 원칙
+## Backlog Writing Principles
 
-> CLAUDE.md의 "백로그/스토리 작성 원칙" 참조
+> See "Backlog/Story Writing Principles" in CLAUDE.md
 
-### 포함할 것
+### Include
 - User Story (As a user, I want to...)
 - Acceptance Criteria
-- 비기능 요구사항
-- 우선순위
-- 의존성
+- Non-functional requirements
+- Priority
+- Dependencies
 
-### 포함하지 말 것
-- 구체적인 코드 예시
-- 세부 아키텍처
-- 기술 스택 선택
-- 구현 방법
-- 파일/폴더 구조
+### Do Not Include
+- Specific code examples
+- Detailed architecture
+- Technology stack choices
+- Implementation methods
+- File/folder structure
 
-### 이유
+### Reason
 ```
-"설계와 구현은 함께 고민하면서 성장하는 과정"
+"Design and implementation grow together through the process of thinking"
 
-미리 다 정해놓으면:
-- 고민할 기회가 없어짐
-- 상황에 맞지 않는 결정이 될 수 있음
-- 유연성이 떨어짐
+Deciding everything upfront:
+- Removes opportunity to think it through
+- May result in decisions that don't fit the situation
+- Reduces flexibility
 
-구현 시점에 결정하면:
-- 최선의 선택 가능
-- 현재 상황에 맞는 결정
-- 학습과 성장 기회
+Deciding at implementation time:
+- Best choices possible
+- Decisions fit the current situation
+- Opportunity to learn and grow
 ```
 
 ---

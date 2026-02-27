@@ -1,38 +1,38 @@
-# 모드 감지 기준
+# Mode Detection Criteria
 
-## Direct 모드 (구체적)
+## Direct Mode (Specific)
 
-다음 중 하나라도 해당하면 Direct:
+Use Direct if any of the following apply:
 
-- 특정 파일명이 언급됨 ("UserService.ts를 수정해")
-- 구체적 기능명이 있음 ("로그아웃 기능 추가")
-- 명확한 동작이 정의됨 ("버튼 클릭 시 세션 종료")
-- 이전 대화에서 이미 충분히 구체화됨
+- A specific filename is mentioned ("modify UserService.ts")
+- A specific feature name is given ("add logout feature")
+- A clear action is defined ("end session on button click")
+- Already sufficiently detailed from previous conversation
 
-## Interview 모드 (모호)
+## Interview Mode (Ambiguous)
 
-다음 중 하나라도 해당하면 Interview:
+Use Interview if any of the following apply:
 
-- 모호한 동사 사용 ("개선", "리팩터링", "최적화")
-- 3개 이상 영역에 걸침 ("전반적으로 고치고 싶어")
-- 구체적 파일/기능 언급 없음
-- "뭔가 하고 싶은데" 류의 표현
+- Vague verbs used ("improve", "refactor", "optimize")
+- Spans 3 or more areas ("I want to fix things overall")
+- No specific file or feature mentioned
+- Expressions like "I want to do something"
 
-## 인자 없음
+## No Arguments
 
-대화 히스토리를 분석:
-- 이전 대화에서 구체적 아이디어가 나옴 → Direct
-- 이전 대화가 모호하거나 없음 → Interview
-- 판단 불가 → AskUserQuestion
+Analyze conversation history:
+- Specific ideas emerged in previous conversation → Direct
+- Previous conversation is ambiguous or absent → Interview
+- Cannot determine → AskUserQuestion
 
 ```json
 {
-  "question": "어떤 작업을 계획할까요?",
+  "question": "What task would you like to plan?",
   "header": "Planning",
   "multiSelect": false,
   "options": [
-    { "label": "이전 대화 이어가기", "description": "방금 논의한 내용을 plan으로" },
-    { "label": "새로운 작업", "description": "새로운 기능/개선 계획" }
+    { "label": "Continue previous conversation", "description": "Turn recent discussion into a plan" },
+    { "label": "New task", "description": "Plan a new feature or improvement" }
   ]
 }
 ```

@@ -1,84 +1,84 @@
-# Plan 파일 규칙
+# Plan File Rules
 
-## 경로
+## Path
 
 `.claude/plans/{YYYY-MM-DD}-{slug}.md`
 
-예시: `.claude/plans/2026-02-22-user-auth.md`
+Example: `.claude/plans/2026-02-22-user-auth.md`
 
 ---
 
-## 상태 관리
+## Status Management
 
 ```
-draft       → planning에서 생성 (구현 시작 전)
-in_progress → /implement 시작 시
-done        → /implement에서 모든 AC 완료 시
+draft       → created during planning (before implementation starts)
+in_progress → when /implement begins
+done        → when all ACs are completed in /implement
 ```
 
-abandoned 없음 — 안 할 거면 파일 삭제.
+No `abandoned` — if not doing it, delete the file.
 
 ---
 
-## 파일 구조
+## File Structure
 
 ```markdown
 ---
 status: draft
 created: {YYYY-MM-DD}
 slug: {feature-name}
-test-command: {프로젝트 테스트 커맨드 예: npm test, pytest, go test}
+test-command: {project test command e.g. npm test, pytest, go test}
 ---
 
 # Plan: {feature-name}
 
-## 요구사항
+## Requirements
 
-### Context (배경)
-- {대화에서 가져옴}
+### Context (Background)
+- {taken from conversation}
 
-### What (무엇을)
-- {핵심 기능}
+### What
+- {core feature}
 
-### Why (왜)
-- {목표/가치}
+### Why
+- {goal/value}
 
 ### Scope
-- ✅ In: {이번에 할 것}
-- ❌ Out: {안 할 것}
+- ✅ In: {what to do this time}
+- ❌ Out: {what not to do}
 
-## Brain 업데이트
+## Brain Update
 
-- code-map: {구조 변경 사항}
-- patterns: {새 패턴 또는 변경}
-- decisions: {아키텍처 결정 사항}
+- code-map: {structural changes}
+- patterns: {new patterns or changes}
+- decisions: {architecture decisions}
 
-(implement 시 제일 먼저 실행. 해당 없으면 "없음" 명시.)
+(Run first during implement. Write "none" if not applicable.)
 
 <!--
-AC = 작업 항목 (진행 추적, 체크박스 = 상태)
-TC = 검증 기준 (TDD 테스트 대상, AC별 하위 항목)
+AC = work item (progress tracking, checkbox = status)
+TC = verification criteria (TDD test target, sub-items per AC)
 -->
 
-## AC 목록
+## AC List
 
-- [ ] AC-1: {작업 항목}
-  - TC: {검증 조건 1}
-  - TC: {검증 조건 2}
-- [ ] AC-2: {작업 항목}
-  - TC: {검증 조건}
-- [ ] AC-3: {작업 항목} (TC 없음)
+- [ ] AC-1: {work item}
+  - TC: {verification condition 1}
+  - TC: {verification condition 2}
+- [ ] AC-2: {work item}
+  - TC: {verification condition}
+- [ ] AC-3: {work item} (no TC)
 
-## 구현 순서
+## Implementation Order
 
-1. Brain 업데이트
-2. [병렬] AC-1 → {파일 목록} / AC-2 → {파일 목록}
-3. [순차] AC-3 → {파일 목록} (AC-1과 {파일} 겹침)
+1. Brain update
+2. [Parallel] AC-1 → {file list} / AC-2 → {file list}
+3. [Sequential] AC-3 → {file list} (overlaps {file} with AC-1)
 
 <!--
-[병렬] = 수정 파일이 겹치지 않아 동시 실행 가능
-[순차] = 수정 파일이 겹쳐 선행 AC 완료 후 실행
-planning Step 4 탐색 결과 기반으로 결정
+[Parallel] = no overlapping files, can run simultaneously
+[Sequential] = overlapping files, run after preceding AC completes
+Determined based on exploration results from planning Step 4
 -->
 ```
 
@@ -86,17 +86,17 @@ planning Step 4 탐색 결과 기반으로 결정
 
 ## test-command
 
-Stop Hook이 implement 중 자동으로 실행하는 테스트 커맨드.
-- planning 단계에서 설정
-- 프로젝트에 맞는 커맨드 사용 (npm test, pytest, go test 등)
-- 비어있으면 테스트 스킵
+The test command that Stop Hook runs automatically during implement.
+- Set during the planning phase
+- Use the appropriate command for the project (npm test, pytest, go test, etc.)
+- If empty, tests are skipped
 
 ---
 
-## start-work에서의 판단
+## Judgment in start-work
 
-| 날짜 | status | 액션 |
-|------|--------|------|
-| 최근 | in_progress | "이어갈까요?" |
-| 오래됨 | in_progress | "아직 할 건가요?" |
-| - | draft | "시작할까요?" |
+| Date | Status | Action |
+|------|--------|--------|
+| Recent | in_progress | "Continue?" |
+| Old | in_progress | "Still doing this?" |
+| - | draft | "Ready to start?" |

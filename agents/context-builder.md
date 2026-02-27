@@ -87,7 +87,7 @@ Structure the received information:
 
 ## Output Format
 
-세션 파일 내용 생성:
+Generate session file content:
 
 ```xml
 <context_file>

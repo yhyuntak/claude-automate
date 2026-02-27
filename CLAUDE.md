@@ -1,293 +1,293 @@
 # CLAUDE.md
 
-> claude-automate 프로젝트의 핵심 원칙과 작업 지침
+> Core principles and working guidelines for the claude-automate project
 
 ---
 
-## 1. 프로젝트 정체성
+## 1. Project Identity
 
-### 핵심 목표
+### Core Goals
 
-1. **코드를 보지 않고 개발** - 아키텍처/패턴/아이디어 레벨에 집중
-2. **성장하는 시스템** - 만들면서 배우고, 배운 것을 축적
-3. **나만의 Harness** - 직접 수정 가능한 확장 시스템
-4. **단순함 유지** - 필요한 것부터 하나씩
+1. **Develop without reading code** - Focus at the architecture/pattern/idea level
+2. **A growing system** - Learn while building, accumulate what is learned
+3. **Your own Harness** - An extensible system you can modify directly
+4. **Keep it simple** - Start with what is needed, one thing at a time
 
-### 하지 않는 것 (Anti-Goals)
+### Anti-Goals
 
-- 복잡한 설정 없이는 사용 불가능한 시스템
-- 모든 기능을 미리 구현하려는 시도
-- 이해하지 못한 채 복사하는 것
-- 코드 레벨에서 모든 것을 통제하려는 것
+- A system that cannot be used without complex configuration
+- Attempting to implement all features up front
+- Copying things without understanding them
+- Trying to control everything at the code level
 
-### Harness란?
+### What is a Harness?
 
-개발자(Driver)가 AI(Engine)를 제어하는 **연결 장치**입니다.
+A **connector** that lets the Developer (Driver) control the AI (Engine).
 
 ```
-Driver (당신)    →    Harness (claude-automate)    →    Engine (Claude)
-아키텍처/의사결정       명령/에이전트/스킬               코드 실행
+Driver (You)    →    Harness (claude-automate)    →    Engine (Claude)
+Architecture/Decisions    Commands/Agents/Skills         Code Execution
 ```
 
-### 진화 원칙
+### Evolution Principle
 
-이 문서 자체도 더 나은 아이디어가 생기면 **재정의 가능**합니다.
-경험을 통해 발전하는 살아있는 문서입니다.
+This document itself can be **redefined** whenever a better idea emerges.
+It is a living document that evolves through experience.
 
 ---
 
-## 2. 아키텍처 원칙
+## 2. Architecture Principles
 
-### 레이어 매핑 (시작점)
+### Layer Mapping (Starting Point)
 
-토스테크 Software 3.0 모델을 기반으로 합니다:
+Based on the TossTech Software 3.0 model:
 
 ```
-Commands    =  Controller       (진입점, 사용자 인터페이스)
-Agents      =  Service Layer    (비즈니스 로직, 분석/검증)
-Skills      =  Domain Component (단일 책임, 재사용 가능)
-Hooks       =  Middleware       (자동 검증, 세션 가드)
-MCP         =  Infrastructure   (외부 연동, 어댑터)
-CLAUDE.md   =  package.json     (프로젝트 정체성)
-rules/*.md  =  eslint.config    (세부 규칙)
+Commands    =  Controller       (Entry point, user interface)
+Agents      =  Service Layer    (Business logic, analysis/validation)
+Skills      =  Domain Component (Single responsibility, reusable)
+Hooks       =  Middleware       (Automatic validation, session guard)
+MCP         =  Infrastructure   (External integration, adapters)
+CLAUDE.md   =  package.json     (Project identity)
+rules/*.md  =  eslint.config    (Detailed rules)
 ```
 
-**중요**: 이 매핑은 **시작점**이지 고정된 것이 아닙니다.
-더 좋은 모델이 생기면 언제든 재정의하세요.
+**Important**: This mapping is a **starting point**, not fixed.
+Redefine it whenever a better model emerges.
 
-### 설계 원칙
+### Design Principles
 
-1. **SRP (Single Responsibility)**: 하나의 에이전트/스킬 = 하나의 책임
-2. **추상화 경계**: 레이어 간 명확한 역할 분리
-3. **Progressive Disclosure**: 필요할 때만 상세 정보 로드
-4. **위임**: 실행은 에이전트에게, 의사결정은 사람에게
+1. **SRP (Single Responsibility)**: One agent/skill = one responsibility
+2. **Abstraction boundaries**: Clear separation of roles between layers
+3. **Progressive Disclosure**: Load detailed information only when needed
+4. **Delegation**: Execution to agents, decisions to humans
 
 ---
 
-## 3. 기술 스택 & 컨벤션
+## 3. Tech Stack & Conventions
 
-### 언어
+### Languages
 
-- **Markdown**: 모든 문서, 명령, 에이전트 정의
-- **Bash**: 자동화 스크립트, 훅
-- **JSON**: 설정 파일 (plugin.json, hooks.json)
+- **Markdown**: All documents, commands, and agent definitions
+- **Bash**: Automation scripts, hooks
+- **JSON**: Configuration files (plugin.json, hooks.json)
 
-### 폴더 구조
+### Folder Structure
 
 ```
 claude-automate/
-├── commands/           # Controller (진입점)
+├── commands/           # Controller (entry points)
 ├── agents/             # Service Layer
 ├── skills/             # Domain Components
 │   └── {skill-name}/
-│       ├── SKILL.md    # 스킬 정의
-│       ├── schema.md   # 입출력 스키마
-│       └── refs/       # 참고 자료 (지연 로딩)
-├── hooks/              # Hook 스크립트 + 설정
-│   ├── hooks.json      # 플러그인 hooks 등록
-│   └── session-stop.sh # Stop Hook 스크립트
-├── rules/              # 세부 규칙 (eslint.config 역할)
-├── templates/          # 프로젝트 템플릿
+│       ├── SKILL.md    # Skill definition
+│       ├── schema.md   # Input/output schema
+│       └── refs/       # Reference materials (lazy-loaded)
+├── hooks/              # Hook scripts + configuration
+│   ├── hooks.json      # Plugin hooks registration
+│   └── session-stop.sh # Stop hook script
+├── rules/              # Detailed rules (acts as eslint.config)
+├── templates/          # Project templates
 ├── docs/
-│   ├── references/     # 외부 참고 자료
-│   └── backlogs/       # 백로그 (todo/doing/done)
+│   ├── references/     # External reference materials
+│   └── backlogs/       # Backlogs (todo/doing/done)
 ├── .claude/
-│   ├── rules/          # 프로젝트별 규칙
-│   ├── context/        # 세션 컨텍스트 (자동 생성)
-│   ├── plans/          # 구현 계획 파일
-│   └── brain/          # 프로젝트 brain 시스템
-└── CLAUDE.md           # 이 문서
+│   ├── rules/          # Project-specific rules
+│   ├── context/        # Session context (auto-generated)
+│   ├── plans/          # Implementation plan files
+│   └── brain/          # Project brain system
+└── CLAUDE.md           # This document
 ```
 
-### 파일 명명 규칙
+### File Naming Conventions
 
-| 유형 | 규칙 | 예시 |
-|------|------|------|
+| Type | Rule | Example |
+|------|------|---------|
 | Command | `{action}.md` | `wrap.md`, `start-work.md` |
 | Agent | `{role}.md`, `{role}-high.md` | `pattern-checker.md` |
 | Skill | `{name}/SKILL.md` | `backlog/SKILL.md` |
 | Backlog | `phase{N}-{ID}-{slug}.md` | `phase1-001-review-agents.md` |
 
-### 버전 관리
+### Version Management
 
 Semantic Versioning: `v{MAJOR}.{MINOR}.{PATCH}`
 
-- MAJOR: 호환성 깨지는 변경
-- MINOR: 새 기능 추가
-- PATCH: 버그 수정
+- MAJOR: Breaking changes
+- MINOR: New feature additions
+- PATCH: Bug fixes
 
 ---
 
-## 4. 에이전트/스킬 설계 원칙
+## 4. Agent/Skill Design Principles
 
-### 에이전트 생성 규칙
+### Agent Creation Rules
 
-**언제 새 에이전트를 만드는가?**
+**When to create a new agent:**
 
-1. 명확히 분리된 책임이 있을 때
-2. 다른 모델 Tier가 필요할 때 (Haiku vs Sonnet vs Opus)
-3. 병렬 실행의 이점이 있을 때
+1. When there is a clearly separated responsibility
+2. When a different model Tier is needed (Haiku vs Sonnet vs Opus)
+3. When there is a benefit to parallel execution
 
-**만들지 말아야 할 때:**
+**When not to create one:**
 
-- 기존 에이전트의 파라미터로 해결 가능할 때
-- 책임이 모호할 때
-- 한 번만 사용될 로직일 때
+- When it can be solved with parameters of an existing agent
+- When the responsibility is ambiguous
+- When the logic will only be used once
 
-### 모델 선택 3-Tier
+### Model Selection 3-Tier
 
-| Tier | 모델 | 용도 |
-|------|------|------|
-| Low | Haiku | 데이터 수집, 단순 패턴 매칭, 빠른 응답 |
-| Medium | Sonnet | 분석, 의사결정, 표준 에이전트 작업 |
-| High | Opus | 복잡한 충돌 해결, 전략적 결정, 창의적 작업 |
+| Tier | Model | Use Case |
+|------|-------|----------|
+| Low | Haiku | Data collection, simple pattern matching, fast responses |
+| Medium | Sonnet | Analysis, decision-making, standard agent tasks |
+| High | Opus | Complex conflict resolution, strategic decisions, creative work |
 
-### 에이전트 템플릿
+### Agent Template
 
 ```markdown
 # {agent-name}
 
-> {한 줄 설명}
+> {One-line description}
 
-## 역할
+## Role
 
-{이 에이전트가 하는 일}
+{What this agent does}
 
-## 입력
+## Input
 
 - {input 1}
 - {input 2}
 
-## 출력
+## Output
 
-{출력 형식}
+{Output format}
 
-## 사용 조건
+## Usage Conditions
 
-- {언제 이 에이전트를 사용하는가}
+- {When to use this agent}
 ```
 
-### 스킬 생성 규칙
+### Skill Creation Rules
 
-**언제 새 스킬을 만드는가?**
+**When to create a new skill:**
 
-1. 재사용 가능한 도메인 로직이 있을 때
-2. 명확한 입출력 스키마가 정의될 때
-3. 여러 에이전트/커맨드에서 사용될 때
+1. When there is reusable domain logic
+2. When a clear input/output schema can be defined
+3. When it will be used across multiple agents/commands
 
-### Progressive Disclosure 적용
+### Progressive Disclosure Application
 
 ```
-CLAUDE.md (항상 로드)
-    ↓ 필요시
-rules/*.md (세부 규칙)
-    ↓ 필요시
-docs/references/*.md (참고 자료)
-    ↓ 필요시
-skills/*/references/*.md (스킬 상세)
+CLAUDE.md (always loaded)
+    ↓ when needed
+rules/*.md (detailed rules)
+    ↓ when needed
+docs/references/*.md (reference materials)
+    ↓ when needed
+skills/*/references/*.md (skill details)
 ```
 
 ---
 
-## 5. 안티패턴 경고
+## 5. Anti-Pattern Warnings
 
 ### God Skill
 
 ```
-❌ 하나의 스킬이 모든 것을 처리
-✅ 책임별로 분리된 여러 스킬
+❌ One skill handles everything
+✅ Multiple skills separated by responsibility
 ```
 
 ### Spaghetti CLAUDE.md
 
 ```
-❌ 모든 상세 정보가 CLAUDE.md에
-✅ 원칙만 CLAUDE.md에, 상세는 rules/*.md에
+❌ All detailed information crammed into CLAUDE.md
+✅ Only principles in CLAUDE.md, details in rules/*.md
 ```
 
 ### Copy-Paste Configuration
 
 ```
-❌ oh-my-claudecode 설정을 그대로 복사
-✅ 원리를 이해하고 내 상황에 맞게 수정
+❌ Copying oh-my-claudecode configuration as-is
+✅ Understand the principles and adapt to your own situation
 ```
 
 ### Premature Optimization
 
 ```
-❌ 사용하지 않을 기능을 미리 구현
-✅ 필요할 때 필요한 것만
+❌ Implementing features you will not use yet
+✅ Only what is needed, when it is needed
 ```
 
-### 코드 스멜 (에이전트 버전)
+### Code Smells (Agent Version)
 
-| 스멜 | 증상 | 해결 |
-|------|------|------|
-| 너무 큰 에이전트 | 프롬프트가 500줄 이상 | 책임 분리 |
-| 중복 에이전트 | 비슷한 역할의 여러 에이전트 | 통합 또는 파라미터화 |
-| Tier 불일치 | Haiku에 복잡한 분석 | 적절한 Tier로 변경 |
+| Smell | Symptom | Resolution |
+|-------|---------|------------|
+| Oversized agent | Prompt exceeds 500 lines | Separate responsibilities |
+| Duplicate agents | Multiple agents with similar roles | Consolidate or parameterize |
+| Tier mismatch | Complex analysis assigned to Haiku | Switch to appropriate Tier |
 
 ---
 
-## 6. 작업 방식
+## 6. Working Style
 
-### 기본 워크플로우
+### Basic Workflow
 
 ```bash
-/start-work    # 세션 시작 (컨텍스트 로드)
-# ... 작업 ...
-/wrap          # 세션 종료 (검증 + 저장)
+/start-work    # Start session (load context)
+# ... work ...
+/wrap          # End session (validate + save)
 ```
 
-### 코드 변경 전 필수
+### Required Before Code Changes
 
-1. **설명 먼저**: 무엇을, 왜 변경하는지 설명
-2. **확인 후 실행**: 동의를 얻은 후 구현
-3. **작은 단위**: 한 번에 하나의 변경
+1. **Explain first**: Describe what and why you are changing
+2. **Confirm then execute**: Implement only after agreement
+3. **Small units**: One change at a time
 
-### 에이전트 호출 원칙
+### Agent Invocation Principles
 
-- 병렬 가능한 작업은 **동시에 호출**
-- 의존성이 있는 작업은 **순차적으로 호출**
-- 결과를 **통합하여 보고**
+- Tasks that can run in parallel should be **invoked simultaneously**
+- Tasks with dependencies should be **invoked sequentially**
+- **Consolidate and report** results
 
-### 완료 전 검증
+### Pre-Completion Checklist
 
-- [ ] 패턴 검증 통과
-- [ ] 문서 동기화 확인
-- [ ] 세션 컨텍스트 저장
-
----
-
-## 7. 문서 관리
-
-### 문서 위치 원칙
-
-| 문서 유형 | 위치 | 이유 |
-|----------|------|------|
-| 핵심 원칙 | CLAUDE.md | 항상 로드 |
-| 세부 규칙 | rules/*.md | 필요시 로드 |
-| 외부 참조 | docs/references/*.md | 배경 지식 |
-| 스킬 상세 | skills/*/references/*.md | 스킬 사용시 |
-
-### 변경 시 업데이트 규칙
-
-1. **Command 변경** → README.md 업데이트
-2. **Agent 추가** → README.md + CLAUDE.md 업데이트
-3. **Skill 추가** → README.md 업데이트
-4. **원칙 변경** → CLAUDE.md 업데이트
+- [ ] Pattern validation passed
+- [ ] Document sync confirmed
+- [ ] Session context saved
 
 ---
 
-## 8. 참고 문서
+## 7. Document Management
 
-상세 정보는 아래 문서에서 확인:
+### Document Location Principles
 
-- [README.md](README.md) - 비전, 철학, 로드맵
-- [rules/backlog-rules.md](rules/backlog-rules.md) - 백로그 관리 규칙
-- [rules/workflow.md](rules/workflow.md) - Git 워크플로우
-- [rules/interaction.md](rules/interaction.md) - 사용자 상호작용 규칙
-- [docs/references/](docs/references/) - 참고 자료 모음
+| Document Type | Location | Reason |
+|--------------|----------|--------|
+| Core principles | CLAUDE.md | Always loaded |
+| Detailed rules | rules/*.md | Loaded when needed |
+| External references | docs/references/*.md | Background knowledge |
+| Skill details | skills/*/references/*.md | Loaded when skill is used |
+
+### Update Rules on Change
+
+1. **Command change** → Update README.md
+2. **Agent added** → Update README.md + CLAUDE.md
+3. **Skill added** → Update README.md
+4. **Principle change** → Update CLAUDE.md
+
+---
+
+## 8. Reference Documents
+
+For detailed information, see the documents below:
+
+- [README.md](README.md) - Vision, philosophy, roadmap
+- [rules/backlog-rules.md](rules/backlog-rules.md) - Backlog management rules
+- [rules/workflow.md](rules/workflow.md) - Git workflow
+- [rules/interaction.md](rules/interaction.md) - User interaction rules
+- [docs/references/](docs/references/) - Collection of reference materials
 
 ---
 
