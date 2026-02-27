@@ -24,8 +24,20 @@ $ARGUMENTS
 각 단계 진입 시 사용자에게 현재 상황을 안내한다.
 
 - 진입: "{Direct/Interview} 모드로 진입합니다."
-- 각 단계: "[N/9] {단계명} 실행합니다."
+- 각 단계: "[N/10] {단계명} 실행합니다."
 - 결과: 각 단계 완료 후 요약 한 줄
+
+단계 목록:
+- Step 1: "[1/10] 모드 감지"
+- Step 2: "[2/10] Interview"
+- Step 3: "[3/10] Brain 읽기"
+- Step 4: "[4/10] 코드베이스 탐색"
+- Step 5: "[5/10] AC 초안 추출"
+- Step 6: "[6/10] Angel 확장"
+- Step 7: "[7/10] Devil 검증"
+- Step 8: "[8/10] 사용자 확인"
+- Step 9: "[9/10] plan 파일 생성"
+- PARA: "[10/10] PARA 개념 추출"
 
 ## Step 1: 모드 감지
 
@@ -190,7 +202,83 @@ refs/plan-file.md 구조를 따를 것
 )
 ```
 
-생성 후 MUST: AskUserQuestion으로 다음 행동을 확인하라.
+---
+
+## Step 10: PARA 개념 추출
+
+이번 Planning 논의에서 학습할 만한 상위 레벨 개념이 있는지 확인한다.
+
+### 스킵 조건
+
+아래에 해당하면 이 Step을 스킵하고 바로 "다음 행동"으로 진행한다:
+
+- 단순 구현/설정/오타 수정 논의만 했을 때
+- 새로운 아키텍처/패턴/원칙 논의가 없었을 때
+
+### 추출 대상
+
+- 새로 논의된 아키텍처 개념, 디자인 패턴
+- 트레이드오프 분석, 기술 비교/선택 근거
+- 문제 해결에서 도출된 범용 원칙
+
+### 실행
+
+1. 이번 대화에서 개념 후보 1~3개 식별 (개념명 + 한 줄 설명)
+2. AskUserQuestion으로 저장 여부 확인:
+
+```
+AskUserQuestion:
+  "이번 Planning에서 다음 개념들을 PARA에 저장할까요?"
+  multiSelect: true
+  각 개념이 option으로 표시
+  description에 추천 카테고리 포함
+```
+
+3. 선택 없으면 → 스킵
+4. 선택 있으면 → writer에게 위임:
+
+```
+Task(
+  subagent_type="claude-automate:writer",
+  prompt="""
+## Task
+PARA Resources에 개념 문서 저장
+
+## Pre-check
+먼저 ~/workspace/mynotes/Resources/ 하위를 탐색하여 동일/유사 개념이 이미 있는지 확인하라.
+- 있으면: 기존 문서에 내용 보강 (Edit)
+- 없으면: 새 문서 생성 (Write)
+
+## Target
+~/workspace/mynotes/Resources/{category}/{slug}.md
+
+## Template
+---
+title: {title}
+created: {YYYY-MM-DD}
+tags: [{tags}]
+source: claude-session
+---
+
+# {title}
+
+{content}
+
+---
+
+## 관련 문서
+
+-
+
+## Index Update
+카테고리 README.md에 항목 추가
+"""
+)
+```
+
+---
+
+MUST: AskUserQuestion으로 다음 행동을 확인하라.
 
 ```json
 {
@@ -226,6 +314,7 @@ MUST: 아래 체크리스트를 모두 확인하라.
 - [ ] Devil 검증을 실행했는가?
 - [ ] 사용자 확인을 받았는가?
 - [ ] plan 파일에 필수 섹션이 모두 있는가?
+- [ ] PARA 개념 추출이 실행/스킵되었는가?
 
 실패 시: 해당 Step으로 돌아가 수정 → 재검증.
 
