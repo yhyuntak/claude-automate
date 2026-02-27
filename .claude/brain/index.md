@@ -22,7 +22,7 @@
 
 | 항목 | 설명 | 상세 |
 |------|------|------|
-| Code Map | 프로젝트 구조, 주요 파일, 모듈 관계 | [→ code-map.md](brain/code-map.md) |
+| Code Map | 프로젝트 구조, 주요 파일, 모듈 관계 | [→ code-map.md](./code-map.md) |
 
 ---
 
@@ -30,9 +30,9 @@
 
 | 패턴 | 설명 | 상세 |
 |------|------|------|
-| Agent Design | 에이전트 구조와 작성 규칙 | [→ patterns/agent-design.md](brain/patterns/agent-design.md) |
-| Command Structure | 커맨드 구조와 작성 규칙 | [→ patterns/command-structure.md](brain/patterns/command-structure.md) |
-| Skill Structure | 스킬 구조와 작성 규칙 | [→ patterns/skill-structure.md](brain/patterns/skill-structure.md) |
+| Agent Design | 에이전트 구조와 작성 규칙 | [→ patterns/agent-design.md](./patterns/agent-design.md) |
+| Command Structure | 커맨드 구조와 작성 규칙 | [→ patterns/command-structure.md](./patterns/command-structure.md) |
+| Skill Structure | 스킬 구조와 작성 규칙 | [→ patterns/skill-structure.md](./patterns/skill-structure.md) |
 
 ---
 
@@ -40,7 +40,7 @@
 
 | 항목 | 설명 | 상세 |
 |------|------|------|
-| Architecture Decisions | 아키텍처 결정과 근거 기록 | [→ decisions.md](brain/decisions.md) |
+| Architecture Decisions | 아키텍처 결정과 근거 기록 | [→ decisions.md](./decisions.md) |
 
 ---
 

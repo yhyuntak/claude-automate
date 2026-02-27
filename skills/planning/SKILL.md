@@ -77,10 +77,10 @@ Question classification:
 
 ## Step 3: Reading Brain
 
-Read the `.claude/brain.md` index.
+Read the `.claude/brain/index.md` index.
 
-- brain.md exists → check related files (code-map, patterns, decisions)
-- brain.md absent → skip, do full exploration in Step 4
+- index.md exists → check related files (code-map, patterns, decisions)
+- index.md absent → do full exploration in Step 4, then include brain bootstrap (index.md + initial files) in the plan's Brain update section
 
 Skip exploration in Step 4 for information already in the brain.
 

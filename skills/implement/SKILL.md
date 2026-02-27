@@ -54,7 +54,7 @@ Execute the "Brain update" section from the plan.
 ```
 Task(
   subagent_type="claude-automate:writer",
-  prompt="Brain update: {brain section content from plan}. Target: files under .claude/brain/"
+  prompt="Brain update: {brain section content from plan}. Target: files under .claude/brain/ (always update index.md to reflect changes)"
 )
 ```
 

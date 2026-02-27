@@ -20,6 +20,10 @@
 - Copying things without understanding them
 - Trying to control everything at the code level
 
+### Universal Harness Principle
+
+claude-automate is a **universal harness** designed to work across any project, not just this repository. When making design decisions, always think: "Will this work for a TypeScript project? A Python project? A Go project?" Never dismiss a feature or concern just because it does not apply to this Markdown+Bash codebase.
+
 ### What is a Harness?
 
 A **connector** that lets the Developer (Driver) control the AI (Engine).
