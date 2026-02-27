@@ -10,7 +10,7 @@
 |------|------|
 | Todo | 14 |
 | Doing | 1 |
-| Done | 11 |
+| Done | 12 |
 
 ---
 
@@ -63,6 +63,14 @@
 
 ---
 
+## Phase 2: 스킬 정리 + 문서 시스템
+
+| Phase | ID | Task | Status |
+|-------|-----|------|--------|
+| 2 | 001 | [스킬 정리 + 문서 시스템 구축](done/phase2-001-skill-cleanup-and-docs.md) | ✅ Done |
+
+---
+
 ## Doing
 
 (없음)
@@ -71,7 +79,7 @@
 
 ## Done
 
-(없음)
+- [스킬 정리 + 문서 시스템 구축](done/phase2-001-skill-cleanup-and-docs.md) (phase2-001)
 
 ---
 
@@ -86,4 +94,4 @@
 
 ---
 
-**Last Updated**: 2026-02-22
+**Last Updated**: 2026-02-27

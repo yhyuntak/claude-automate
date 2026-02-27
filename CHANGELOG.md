@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.32.0 (2026-02-27)
+
+### Added
+- docs 스킬 신규 생성 (docs/ CRUD + 인덱스 관리, Direct/Interview 모드)
+- docs/README.md 인덱스 생성 (discovery-based 문서 인덱스)
+
+### Changed
+- wrap 스킬 재설계 (4단계: plan 확인 → 백로그 → doc 싱크 체크 → 커밋)
+- wrap에 진행 안내 규칙 추가 ([N/4] 형태)
+- wrap에서 컨텍스트 저장 제거 (PreCompact hook이 대체)
+
+### Removed
+- save-context 스킬 삭제 (PreCompact hook이 대체)
+- start-work 스킬 삭제 (각 스킬 직접 호출로 대체)
+- wrap의 refs/completion-context.md 삭제
+
 ## v0.31.0 (2026-02-27)
 
 ### Added
