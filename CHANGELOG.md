@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.31.0 (2026-02-27)
+
+### Added
+- `rules/skill-writing.md` - 스킬 작성 규칙 추가
+
+### Changed
+- `rules/agent-delegation.md` - 글로벌 최신 버전 동기화 (모든 파일 수정 writer 위임 정책 강화)
+
 ## [0.30.0] - 2026-02-27
 
 ### Added
