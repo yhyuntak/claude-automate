@@ -3,6 +3,8 @@
 # Role: Code Quality & Bug Detection Expert
 # Usage: ./codex-advisor.sh "user prompt" [project_path]
 
+export PATH="/Users/yoohyuntak/.nvm/versions/node/v20.19.0/bin:$PATH"
+
 # CLI check
 if ! command -v codex &> /dev/null; then
   echo "ERROR: Codex CLI not found. Run: npm install -g @openai/codex" >&2
@@ -35,10 +37,17 @@ cd "$PROJECT_PATH" || exit 1
 # Timeout (default 60s, override with ADVISOR_TIMEOUT env var)
 TIMEOUT="${ADVISOR_TIMEOUT:-60}"
 
-# Execute with timeout, separate stderr
-RESULT=$(timeout "${TIMEOUT}" codex exec --skip-git-repo-check "${SYSTEM_PROMPT}
+# macOS/Linux 호환 timeout 명령 감지
+if command -v timeout &> /dev/null; then
+  TIMEOUT_CMD="timeout ${TIMEOUT}"
+elif command -v gtimeout &> /dev/null; then
+  TIMEOUT_CMD="gtimeout ${TIMEOUT}"
+else
+  TIMEOUT_CMD=""  # timeout 없으면 그냥 실행
+fi
 
-${USER_PROMPT}" 2>/tmp/codex-advisor-stderr.txt)
+# Execute with timeout, separate stderr
+RESULT=$(${TIMEOUT_CMD} codex exec --skip-git-repo-check "${SYSTEM_PROMPT}\n\n${USER_PROMPT}" 2>/tmp/codex-advisor-stderr.txt)
 EXIT_CODE=$?
 
 # Error handling

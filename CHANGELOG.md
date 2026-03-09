@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.33.1 (2026-03-09)
+
+### Fixed
+- codex-advisor.sh: PATH에 nvm 경로 추가 (codex 바이너리 인식 문제 해결)
+- codex-advisor.sh: macOS timeout 호환성 수정 (timeout → gtimeout 감지)
+
 ## v0.33.0 (2026-03-09)
 
 ### Added
