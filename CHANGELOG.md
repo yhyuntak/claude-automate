@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.33.0 (2026-03-09)
+
+### Added
+- gemini-advisor agent: Gemini CLI를 통한 UI/UX 디자인 관점 어드바이저
+- codex-advisor agent: Codex CLI를 통한 코드 품질/버그 탐지 어드바이저
+- agents/scripts/ 폴더: 외부 CLI 호출 셸 스크립트 (gemini-advisor.sh, codex-advisor.sh)
+- multi-review skill: 3모델(Claude + Gemini + Codex) 동시 리뷰 + 비교 분석
+- .claude/brain/ 초기화 (index.md, code-map.md)
+
 ## v0.32.1 (2026-02-27)
 
 ### Changed
