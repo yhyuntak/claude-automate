@@ -33,8 +33,8 @@
                     │    claude-automate │
                     │  (Harness 2.0)     │
                     │  11 Commands       │
-                    │  15 Agents         │
-                    │  12 Skills         │
+                    │  17 Agents         │
+                    │  13 Skills         │
                     └─────────┬─────────┘
                               │
      ┌──────────┬─────────────┼─────────────┬──────────┐
@@ -103,7 +103,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `/install-rule` | 프로젝트 규칙을 글로벌 rules에 설치 |
 | `/extract-brain` | 대화에서 사고 포인트 추출 |
 
-### Agents (Service Layer) — 15개, 3-Tier
+### Agents (Service Layer) — 17개, 3-Tier
 
 | Agent | Tier | 역할 |
 |-------|------|------|
@@ -122,8 +122,10 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `test-planner` | Sonnet | 테스트 시나리오 설계 |
 | `verify-web-ui` | Sonnet | Web UI 테스트 실행 |
 | `verify-web-ui-orchestrator` | Sonnet | Web UI 검증 오케스트레이션 |
+| `gemini-advisor` | Sonnet | UI/UX 관점 외부 LLM 어드바이저 (Gemini CLI) |
+| `codex-advisor` | Sonnet | 코드 품질/버그 탐지 외부 LLM 어드바이저 (Codex CLI) |
 
-### Skills (Domain Component) — 12개
+### Skills (Domain Component) — 13개
 
 **Core 6개** (Harness 2.0 워크플로우):
 
@@ -136,7 +138,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `wrap` | 세션 종료 워크플로우 |
 | `backlog` | 백로그 CRUD 및 상태 관리 |
 
-**Utility 6개**:
+**Utility 7개**:
 
 | Skill | 역할 |
 |-------|------|
@@ -146,6 +148,7 @@ CLAUDE.md   =  package.json (프로젝트 정체성, 원칙)
 | `project-init` | 프로젝트 템플릿 생성 |
 | `install-rule` | 글로벌 규칙 설치 |
 | `verify-web-ui` | Web UI 검증 오케스트레이터 |
+| `multi-review` | 3개 LLM(Claude/Gemini/Codex) 동시 리뷰 및 비교 종합 |
 
 ### Hooks
 

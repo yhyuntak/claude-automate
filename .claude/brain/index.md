@@ -48,9 +48,10 @@
 
 | 날짜 | 결정 | 상세 |
 |------|------|------|
+| 2026-03-08 | Multi-LLM Advisor | Gemini=UI/디자인, Codex=코드/버그, 외부 CLI 셸 스크립트 패턴 |
 | 2026-02-25 | Harness 2.1 재설계 | planning 9-step + brain 활성화 |
 | 2026-02-03 | Brain 도입 | 규칙 → 예시 중심 전환 |
 
 ---
 
-**Last Updated**: 2026-02-25
+**Last Updated**: 2026-03-09

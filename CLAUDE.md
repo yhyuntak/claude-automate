@@ -82,6 +82,7 @@ Redefine it whenever a better model emerges.
 claude-automate/
 ├── commands/           # Controller (entry points)
 ├── agents/             # Service Layer
+│   └── scripts/        # External CLI call scripts (Gemini, Codex)
 ├── skills/             # Domain Components
 │   └── {skill-name}/
 │       ├── SKILL.md    # Skill definition
