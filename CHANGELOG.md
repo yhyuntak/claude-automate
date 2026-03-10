@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.34.0 (2026-03-10)
+
+### Added
+- planning 스킬: Structure Analysis 단계 추가 (Step 5) - AC 추출 전 SRP 위반/구조 문제 분석
+- implement 스킬: TDD 루프 내 testability checkpoint 추가 (mock 5개+ 시 리팩토링 AC 삽입)
+
+### Changed
+- planning/implement 역할 분리: Planning은 구조적 사실(SRP), Implement는 런타임 테스터빌리티 검증
+
 ## v0.33.1 (2026-03-09)
 
 ### Fixed
