@@ -28,16 +28,17 @@ Announce the current status to the user when entering each step.
 - Result: One-line summary after each step completes
 
 Step list:
-- Step 1: "[1/10] Mode Detection"
-- Step 2: "[2/10] Interview"
-- Step 3: "[3/10] Reading Brain"
-- Step 4: "[4/10] Codebase Exploration"
-- Step 5: "[5/10] AC Draft Extraction"
-- Step 6: "[6/10] Angel Expansion"
-- Step 7: "[7/10] Devil Validation"
-- Step 8: "[8/10] User Confirmation"
-- Step 9: "[9/10] Plan File Creation"
-- PARA: "[10/10] PARA Concept Extraction"
+- Step 1: "[1/11] Mode Detection"
+- Step 2: "[2/11] Interview"
+- Step 3: "[3/11] Reading Brain"
+- Step 4: "[4/11] Codebase Exploration"
+- Step 5: "[5/11] Structure Analysis"
+- Step 6: "[6/11] AC Draft Extraction"
+- Step 7: "[7/11] Angel Expansion"
+- Step 8: "[8/11] Devil Validation"
+- Step 9: "[9/11] User Confirmation"
+- Step 10: "[10/11] Plan File Creation"
+- PARA: "[11/11] PARA Concept Extraction"
 
 ## Step 1: Mode Detection
 
@@ -100,16 +101,52 @@ Exploration targets:
 - Related patterns and conventions
 - Dependencies and impact scope
 
-If there is anything worth recording in the brain from the exploration results, make a note (include in plan in Step 9).
+If there is anything worth recording in the brain from the exploration results, make a note (include in plan in Step 10).
 
-## Step 5: AC Draft Extraction
+## Step 5: Structure Analysis
 
-Extract ACs from two sources:
+Analyze the files that will be modified (identified in Step 4) for structural issues that warrant refactoring as part of the plan.
+
+### Analysis Criteria
+
+Evaluate each target file against these three signals, **in priority order**:
+
+| Priority | Signal | Question | Indicator |
+|----------|--------|----------|-----------|
+| 1 | **Responsibility (SRP)** | Does this file handle more than one independent responsibility? | Multiple unrelated classes/functions, mixed concerns (e.g., data access + business logic + presentation) |
+| 2 | **Testability** | Would writing tests for this file require excessive setup or mocking? | Many dependencies to mock, complex test fixtures, tests that break when unrelated code changes |
+| 3 | **Size (secondary)** | Is this file large enough to warrant closer inspection? | Use as a triage signal to prioritize which files to analyze for #1 and #2 — not as a splitting criterion by itself |
+
+**Important**: Line count alone is NOT a reason to split. A 500-line file with a single cohesive responsibility is fine. A 100-line file with two tangled responsibilities should be split.
+
+### Execution
+
+1. List the files that will be modified or extended in this plan
+2. For files flagged by the criteria above, describe:
+   - What responsibilities are mixed
+   - Why testability would suffer
+   - Proposed split structure (which responsibilities become separate files)
+3. If splitting is needed → include as AC(s) **before** the feature ACs in Step 6, so the codebase is restructured first
+
+### Skip Conditions
+
+- All target files have clear single responsibilities
+- Target files are small and cohesive
+- Changes are documentation-only or configuration-only
+
+If no structural issues found, report "No structural issues detected" and proceed.
+
+## Step 6: AC Draft Extraction
+
+Extract ACs from three sources:
 
 | Source | AC Type | Example |
 |--------|---------|---------|
 | Conversation/Interview | User perspective | "Session ends on logout" |
 | Step 4 exploration result | Technical perspective | "Refresh token must also be invalidated" |
+| Step 5 structure analysis | Refactoring prerequisite | "Split UserService into UserAuth + UserProfile before feature work" |
+
+**Order**: Refactoring ACs (from Step 5) come first, then feature ACs. The codebase should be restructured before new features are added on top.
 
 AC/TC writing criteria:
 - AC = work item (what to do)
@@ -119,7 +156,7 @@ AC/TC writing criteria:
 - ACs that cannot be tested are marked "(no TC)"
 - No vague expressions ("works well" → "returns 200 response")
 
-## Step 6: Angel Expansion
+## Step 7: Angel Expansion
 
 Expand ACs with the Angel agent.
 
@@ -132,7 +169,7 @@ Task(
 
 Merge additional ACs suggested by Angel into the draft.
 
-## Step 7: Devil Validation
+## Step 8: Devil Validation
 
 MUST: Read refs/devil-usage.md and confirm the invocation criteria.
 
@@ -150,7 +187,7 @@ Revise ACs based on Devil feedback:
 - Untestable AC → mark as (not testable)
 - Missing risks → add as AC
 
-## Step 8: User Confirmation
+## Step 9: User Confirmation
 
 Present the final AC list with AskUserQuestion.
 
@@ -167,11 +204,11 @@ Present the final AC list with AskUserQuestion.
 }
 ```
 
-- "Proceed as is" → Step 9
-- "Need to modify ACs" → revise then repeat Step 8
+- "Proceed as is" → Step 10
+- "Need to modify ACs" → revise then repeat Step 9
 - "Start over" → back to Step 1
 
-## Step 9: Plan File Creation
+## Step 10: Plan File Creation
 
 MUST: Read refs/plan-file.md and confirm the file structure.
 
@@ -204,7 +241,7 @@ Follow the structure in refs/plan-file.md
 
 ---
 
-## Step 10: PARA Concept Extraction
+## Step 11: PARA Concept Extraction
 
 Check whether there are any high-level concepts worth learning from this Planning session.
 
@@ -310,6 +347,7 @@ MUST: Confirm all items in the checklist below.
 - [ ] Is mode detection accurate? (Direct/Interview)
 - [ ] Was brain read? (if absent, note "absent")
 - [ ] Was codebase explored with explore?
+- [ ] Was structure analysis run? (SRP + testability check)
 - [ ] Was Angel expansion run?
 - [ ] Was Devil validation run?
 - [ ] Was user confirmation obtained?
