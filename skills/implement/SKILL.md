@@ -73,9 +73,13 @@ Follow the notation in the implementation order:
 ### AC with TC → TDD Loop
 
 1. writer: write tests (based on TC)
-2. Bash: run tests → confirm red
-3. writer: implement
-4. Bash: run tests → green?
+2. **Testability checkpoint** (before proceeding to red confirmation):
+   - If the test code requires **5+ mocks/stubs** or disproportionately complex setup relative to the logic being tested → this is a testability signal
+   - Action: Add a refactoring AC to split the target file/module, insert it before the current AC, and process it first
+   - Report to user: "Testability issue detected in {file}. Adding refactoring AC before continuing."
+3. Bash: run tests → confirm red
+4. writer: implement
+5. Bash: run tests → green?
    - green → check AC ✅
    - red → retry
 

@@ -109,15 +109,16 @@ Analyze the files that will be modified (identified in Step 4) for structural is
 
 ### Analysis Criteria
 
-Evaluate each target file against these three signals, **in priority order**:
+Evaluate each target file against these two signals, **in priority order**:
 
 | Priority | Signal | Question | Indicator |
 |----------|--------|----------|-----------|
 | 1 | **Responsibility (SRP)** | Does this file handle more than one independent responsibility? | Multiple unrelated classes/functions, mixed concerns (e.g., data access + business logic + presentation) |
-| 2 | **Testability** | Would writing tests for this file require excessive setup or mocking? | Many dependencies to mock, complex test fixtures, tests that break when unrelated code changes |
-| 3 | **Size (secondary)** | Is this file large enough to warrant closer inspection? | Use as a triage signal to prioritize which files to analyze for #1 and #2 — not as a splitting criterion by itself |
+| 2 | **Size (secondary)** | Is this file large enough to warrant closer inspection? | Use as a triage signal to prioritize which files to analyze for #1 — not as a splitting criterion by itself |
 
 **Important**: Line count alone is NOT a reason to split. A 500-line file with a single cohesive responsibility is fine. A 100-line file with two tangled responsibilities should be split.
+
+**Note on testability**: Actual testability issues (excessive mocking, complex fixtures) are detected during the TDD loop in `/implement`, not here. This step focuses on structural facts visible from code analysis. See implement skill [3/5] for the testability checkpoint.
 
 ### Execution
 
@@ -347,7 +348,7 @@ MUST: Confirm all items in the checklist below.
 - [ ] Is mode detection accurate? (Direct/Interview)
 - [ ] Was brain read? (if absent, note "absent")
 - [ ] Was codebase explored with explore?
-- [ ] Was structure analysis run? (SRP + testability check)
+- [ ] Was structure analysis run? (SRP check)
 - [ ] Was Angel expansion run?
 - [ ] Was Devil validation run?
 - [ ] Was user confirmation obtained?
